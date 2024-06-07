@@ -10,6 +10,7 @@ class UserManager extends AbstractManager {
       user.title,
     ]);
   }
+  
 
   update(user) {
     return this.database.query(
