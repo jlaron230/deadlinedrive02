@@ -6,9 +6,9 @@ class UserManager extends AbstractManager {
   }
 
   insert(user) {
-    return this.database.query(`INSERT INTO ${this.table} 
+    return this.database.query(`insert into ${this.table} 
       (firstName, lastName, email, password, birthday) 
-      VALUES (?, ?, ?, ?, ?)`, [
+      values (?, ?, ?, ?, ?)`, [
       user.firstName,
       user.lastName,
       user.email,
@@ -19,13 +19,13 @@ class UserManager extends AbstractManager {
 
   update(user) {
     return this.database.query(
-      `UPDATE ${this.table} SET 
+      `update ${this.table} SET 
       firstName = ?, 
       lastName = ?, 
       email = ?, 
       password = ?, 
       birthday = ? 
-      WHERE id = ?`,
+      where id = ?`,
       [user.firstName, user.lastName, user.email, user.password, user.birthday, user.id]
     );
   }
