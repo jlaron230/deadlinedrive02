@@ -44,6 +44,11 @@ const DeadlineManager = require("./DeadlineManager");
 models.deadline = new DeadlineManager();
 models.deadline.setDatabase(pool);
 
+const Quote_CategoryManager = require("./Quote_CategoryManager");
+
+models.quote_category = new Quote_CategoryManager();
+models.quote_category.setDatabase(pool);
+
 // bonus: use a proxy to personalize error message,
 // when asking for a non existing model
 
