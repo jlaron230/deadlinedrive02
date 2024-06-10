@@ -7,6 +7,7 @@ class QuoteManager extends AbstractManager {
 
     insert(quote) {
         return this.database.query(`insert into ${this.table} (author, type, text, vote,) values (?, ?, ?, ?, ?)`, [
+            quote.id,
             quote.author,
             quote.type,
             quote.text,
@@ -18,12 +19,11 @@ class QuoteManager extends AbstractManager {
         return this.database.query(
             `update ${this.table} set title = ?, author = ?, type = ?, text = ?, vote = ? where id = ?`, 
             [
-                quote.title,
+                quote.id,
                 quote.author,
                 quote.type,
                 quote.text,
                 quote.vote,
-                quote.id
             ]
         );
     }
