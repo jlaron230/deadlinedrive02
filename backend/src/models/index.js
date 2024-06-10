@@ -39,6 +39,10 @@ const UserManager = require("./UserManager");
 models.user = new UserManager();
 models.user.setDatabase(pool);
 
+const CategoryManager = require("./CategoryManager");
+
+models.category = new CategoryManager();
+models.category.setDatabase(pool);
 const QuoteManager = require("./QuoteManager");
 
 models.quote = new QuoteManager();

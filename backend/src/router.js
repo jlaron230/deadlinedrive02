@@ -10,6 +10,14 @@ router.put("/users/:id", userControllers.edit);
 router.post("/users", userControllers.add);
 router.delete("/users/:id", userControllers.destroy);
 
+const categoryControllers = require("./controllers/categoryControllers");
+
+router.get("/categories", categoryControllers.browse);
+router.get("/categories/:id", categoryControllers.read);
+router.put("/categories/:id", categoryControllers.edit);
+router.post("/categories", categoryControllers.add);
+router.delete("/categories/:id", categoryControllers.destroy);
+
 const quoteControllers = require("./controllers/quoteControllers");
 
 router.get("/quotes", quoteControllers.browse);
