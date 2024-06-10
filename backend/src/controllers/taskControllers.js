@@ -1,85 +1,85 @@
 const models = require("../models");
+const { validationResult } = require('express-validator');
 
-const browse = (req, res) => {
-  models.task
-    .findAll()
-    .then(([rows]) => {
-      res.send(rows);
-    })
-    .catch((err) => {
-      console.error(err);
-      res.sendStatus(500);
-    });
+// Fetch all tasks from the database
+const browse = async (req, res) => {
+  try {
+    const [rows] = await models.task.findAll();
+    res.send(rows);
+  } catch (err) {
+    console.error(err);
+    res.sendStatus(500); // Internal Server Error
+  }
 };
 
-const read = (req, res) => {
-  models.task
-    .find(req.params.id)
-    .then(([rows]) => {
-      if (rows[0] == null) {
-        res.sendStatus(404);
-      } else {
-        res.send(rows[0]);
-      }
-    })
-    .catch((err) => {
-      console.error(err);
-      res.sendStatus(500);
-    }); 
+// Fetch a specific task by its ID
+const read = async (req, res) => {
+  try {
+    const [rows] = await models.task.find(req.params.id);
+    if (!rows.length) {
+      return res.sendStatus(404); // Not Found
+    }
+    res.send(rows[0]);
+  } catch (err) {
+    console.error(err);
+    res.sendStatus(500); // Internal Server Error
+  }
 };
 
-const edit = (req, res) => {
+// Update a specific task by its ID
+const edit = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() }); // Bad Request
+  }
+
   const task = req.body;
-
-  // TODO validations (length, format...)
-
   task.id = parseInt(req.params.id, 10);
+  task.id_user = req.user.id; // Associate task with the current user
 
-  models.task
-    .update(task)
-    .then(([result]) => {
-      if (result.affectedRows === 0) {
-        res.sendStatus(404);
-      } else {
-        res.sendStatus(204);
-      }
-    })
-    .catch((err) => {
-      console.error(err);
-      res.sendStatus(500);
-    });
+  try {
+    const [result] = await models.task.update(task);
+    if (result.affectedRows === 0) {
+      return res.sendStatus(404); // Not Found
+    }
+    res.sendStatus(204); // No Content
+  } catch (err) {
+    console.error(err);
+    res.sendStatus(500); // Internal Server Error
+  }
 };
 
-const add = (req, res) => {
+// Add a new task to the database
+const add = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() }); // Bad Request
+  }
+
   const task = req.body;
+  task.id_user = req.user.id; // Associate task with the current user
 
-  // TODO validations (length, format...)
-
-  models.task
-    .insert(task)
-    .then(([result]) => {
-      res.location(`/tasks/${result.insertId}`).sendStatus(201);
-    })
-    .catch((err) => {
-      console.error(err);
-      res.sendStatus(500);
-    });
+  try {
+    const [result] = await models.task.insert(task);
+    res.location(`/tasks/${result.insertId}`).sendStatus(201); // Created
+  } catch (err) {
+    console.error(err);
+    res.sendStatus(500); // Internal Server Error
+  }
 };
 
-const destroy = (req, res) => {
-  models.task
-    .delete(req.params.id)
-    .then(([result]) => {
-      if (result.affectedRows === 0) {
-        res.sendStatus(404);
-      } else {
-        res.sendStatus(204);
-      }
-    })
-    .catch((err) => {
-      console.error(err);
-      res.sendStatus(500);
-    });
+// Delete a specific task by its ID
+const destroy = async (req, res) => {
+  try {
+    const [result] = await models.task.delete(req.params.id);
+    if (result.affectedRows === 0) {
+      return res.sendStatus(404); // Not Found
+    }
+    res.sendStatus(204); // No Content
+  } catch (err) {
+    console.error(err);
+    res.sendStatus(500); // Internal Server Error
+  }
 };
 
 module.exports = {
