@@ -3,7 +3,7 @@ const models = require("../models");
 const browse = (req, res) => {
   models.category
     .findAll()
-    .then((rows) => {
+    .then(([rows]) => {
       res.send(rows);
     })
     .catch((err) => {
@@ -15,7 +15,7 @@ const browse = (req, res) => {
 const read = (req, res) => {
   models.category
     .find(req.params.id)
-    .then((row) => {
+    .then(([row]) => {
       if (!row) {
         res.sendStatus(404);
       } else {
