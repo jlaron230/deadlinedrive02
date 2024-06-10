@@ -34,7 +34,7 @@ const edit = async (req, res) => {
         res.sendStatus(204);
     } catch (error) {
         console.error(error);
-        if (error.message === "Donnée invalide." || error.message === "Aucun champ à modifier.") {
+        if (error.message === "Donnée invalide." || error.message === "Aucun champ n'a été modifié.") {
             res.status(400).send({ error: error.message });
         } else {
             res.sendStatus(500);
