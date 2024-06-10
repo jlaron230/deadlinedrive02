@@ -18,4 +18,8 @@ router.put("/users/:id", userControllers.edit);
 router.post("/users", userControllers.add);
 router.delete("/users/:id", userControllers.destroy);
 
+const quoteControllers = require("./controllers/quoteControllers");
+
+router.get("/quotes", quoteControllers.browse);
+
 module.exports = router;
