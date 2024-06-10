@@ -52,6 +52,11 @@ models.quote_category.setDatabase(pool);
 // bonus: use a proxy to personalize error message,
 // when asking for a non existing model
 
+const TaskManager = require("./TaskManager");
+
+models.task = new TaskManager();
+models.task.setDatabase(pool);
+
 const handler = {
   get(obj, prop) {
     if (prop in obj) {
