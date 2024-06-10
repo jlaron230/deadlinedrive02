@@ -21,5 +21,9 @@ router.delete("/users/:id", userControllers.destroy);
 const quoteControllers = require("./controllers/quoteControllers");
 
 router.get("/quotes", quoteControllers.browse);
+router.get("/quotes/:id", quoteControllers.read);
+router.put("/quotes/:id", quoteControllers.edit);
+router.post("/quotes", quoteControllers.add);
+router.delete("/quotes/:id", quoteControllers.destroy);
 
 module.exports = router;
