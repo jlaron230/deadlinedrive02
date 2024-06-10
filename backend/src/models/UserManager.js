@@ -16,6 +16,7 @@ class UserManager extends AbstractManager {
       user.birthday
     ]);
   }
+  
 
   update(user) {
     return this.database.query(

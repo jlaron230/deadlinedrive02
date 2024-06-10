@@ -43,9 +43,27 @@ const CategoryManager = require("./CategoryManager");
 
 models.category = new CategoryManager();
 models.category.setDatabase(pool);
+const QuoteManager = require("./QuoteManager");
+
+models.quote = new QuoteManager();
+models.quote.setDatabase(pool);
+const DeadlineManager = require("./DeadlineManager");
+
+models.deadline = new DeadlineManager();
+models.deadline.setDatabase(pool);
+
+const Quote_CategoryManager = require("./Quote_CategoryManager");
+
+models.quote_category = new Quote_CategoryManager();
+models.quote_category.setDatabase(pool);
 
 // bonus: use a proxy to personalize error message,
 // when asking for a non existing model
+
+const TaskManager = require("./TaskManager");
+
+models.task = new TaskManager();
+models.task.setDatabase(pool);
 
 const handler = {
   get(obj, prop) {
