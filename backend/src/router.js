@@ -2,14 +2,6 @@ const express = require("express");
 
 const router = express.Router();
 
-const itemControllers = require("./controllers/itemControllers");
-
-router.get("/items", itemControllers.browse);
-router.get("/items/:id", itemControllers.read);
-router.put("/items/:id", itemControllers.edit);
-router.post("/items", itemControllers.add);
-router.delete("/items/:id", itemControllers.destroy);
-
 const userControllers = require("./controllers/userControllers");
 
 router.get("/users", userControllers.browse);
@@ -18,13 +10,22 @@ router.put("/users/:id", userControllers.edit);
 router.post("/users", userControllers.add);
 router.delete("/users/:id", userControllers.destroy);
 
-const userControllers = require("./controllers/taskControllers");
+const quoteControllers = require("./controllers/quoteControllers");
+
+router.get("/quotes", quoteControllers.browse);
+router.get("/quotes/:id", quoteControllers.read);
+router.put("/quotes/:id", quoteControllers.edit);
+router.post("/quotes", quoteControllers.add);
+router.delete("/quotes/:id", quoteControllers.destroy);
+
+const taskControllers = require("./controllers/taskControllers");
 
 router.get("/tasks", taskControllers.browse);
 router.get("/tasks/:id", taskControllers.read);
 router.put("/tasks/:id", taskControllers.edit);
 router.post("/tasks", taskControllers.add);
 router.delete("/tasks/:id", taskControllers.destroy);
+
 const deadlineControllers = require("./controllers/deadlineControllers");
 
 router.get("/deadline", deadlineControllers.browse);

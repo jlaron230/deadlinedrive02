@@ -39,6 +39,10 @@ const UserManager = require("./UserManager");
 models.user = new UserManager();
 models.user.setDatabase(pool);
 
+const QuoteManager = require("./QuoteManager");
+
+models.quote = new QuoteManager();
+models.quote.setDatabase(pool);
 const DeadlineManager = require("./DeadlineManager");
 
 models.deadline = new DeadlineManager();
