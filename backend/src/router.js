@@ -18,8 +18,12 @@ router.put("/users/:id", userControllers.edit);
 router.post("/users", userControllers.add);
 router.delete("/users/:id", userControllers.destroy);
 
-const quoteControllers = require("./controllers/quoteControllers");
+const deadlineControllers = require("./controllers/deadlineControllers");
 
-router.get("/quotes", quoteControllers.browse);
+router.get("/deadline", deadlineControllers.browse);
+router.get("/deadline/:id", deadlineControllers.read);
+router.put("/deadline/:id", deadlineControllers.edit);
+router.post("/deadline", deadlineControllers.add);
+router.delete("/deadline/:id", deadlineControllers.destroy);
 
 module.exports = router;
