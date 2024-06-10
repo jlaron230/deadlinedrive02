@@ -47,7 +47,7 @@ class QuoteManager extends AbstractManager {
         }
 
         if (fields.length === 0) {
-            throw new Error("Aucun champ à modifier.");
+            throw new Error("Aucun champ n'a été modifié.");
         }
 
         values.push(quote.id);
