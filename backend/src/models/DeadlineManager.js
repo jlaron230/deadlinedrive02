@@ -9,7 +9,7 @@ class DeadlineManager extends AbstractManager {
   insert(deadline) {
     return this.database.query(`INSERT INTO ${this.table} 
       (description, title, debut, end, statut, id_user) 
-      VALUES (?, ?, ?, ?, ?, ?)`, [
+      VALUES (?, ?, ?, ?, ?)`, [
         deadline.description,
         deadline.title,
         deadline.debut,
