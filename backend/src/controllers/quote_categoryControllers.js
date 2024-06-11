@@ -1,33 +1,36 @@
 const models = require("../models");
 
+// Function to retrieve all quote_category
 const browse = (req, res) => {
   models.quote_category
     .findAll()
     .then(([rows]) => {
-      res.send(rows);
+      res.send(rows); // Sends all quote_category in response
     })
     .catch((err) => {
-      console.error(err);
-      res.sendStatus(500);
+      console.error(err); // Logs the error to the console
+      res.sendStatus(500); // Sends a server error response
     });
 };
 
+// Function to retrieve a specific quote_category by its ID
 const read = (req, res) => {
   models.quote_category
     .find(req.params.id)
     .then(([rows]) => {
       if (rows[0] == null) {
-        res.sendStatus(404);
+        res.sendStatus(404); // Sends a 404 response if the quote_category is not found
       } else {
-        res.send(rows[0]);
+        res.send(rows[0]); // Sends the found quote_category in response
       }
     })
     .catch((err) => {
-      console.error(err);
-      res.sendStatus(500);
+      console.error(err); // Logs the error to the console
+      res.sendStatus(500); // Sends a server error response
     });
 };
 
+// Function to update an existing quote_category
 const edit = (req, res) => {
   const quote_category = req.body;
 
@@ -39,17 +42,18 @@ const edit = (req, res) => {
     .update(quote_category)
     .then(([result]) => {
       if (result.affectedRows === 0) {
-        res.sendStatus(404);
+        res.sendStatus(404); // Sends a 404 response if the quote_category to be updated is not found
       } else {
-        res.sendStatus(204);
+        res.sendStatus(204); // Sends a 204 response to indicate the update was successful
       }
     })
     .catch((err) => {
-      console.error(err);
-      res.sendStatus(500);
+      console.error(err); // Logs the error to the console
+      res.sendStatus(500); // Sends a server error response
     });
 };
 
+// Function to add a new quote_category
 const add = (req, res) => {
   const quote_category = req.body;
 
@@ -58,34 +62,35 @@ const add = (req, res) => {
   models.quote_category
     .insert(quote_category)
     .then(([result]) => {
-      res.location(`/quote_categorys/${result.insertId}`).sendStatus(201);
+      res.location(`/quote_categorys/${result.insertId}`).sendStatus(201); // Sends a 201 response with the location of the new quote_category
     })
     .catch((err) => {
-      console.error(err);
-      res.sendStatus(500);
+      console.error(err); // Logs the error to the console
+      res.sendStatus(500); // Sends a server error response
     });
 };
 
+// Function to delete an existing quote_category by its ID
 const destroy = (req, res) => {
   models.quote_category
     .delete(req.params.id)
     .then(([result]) => {
       if (result.affectedRows === 0) {
-        res.sendStatus(404);
+        res.sendStatus(404); // Sends a 404 response if the quote_category to be deleted is not found
       } else {
-        res.sendStatus(204);
+        res.sendStatus(204); // Sends a 204 response to indicate the deletion was successful
       }
     })
     .catch((err) => {
-      console.error(err);
-      res.sendStatus(500);
+      console.error(err); // Logs the error to the console
+      res.sendStatus(500); // Sends a server error response
     });
 };
 
 module.exports = {
-  browse,
-  read,
-  edit,
-  add,
-  destroy,
+  browse,  // Exports the browse function
+  read,    // Exports the read function
+  edit,    // Exports the edit function
+  add,     // Exports the add function
+  destroy, // Exports the destroy function
 };
