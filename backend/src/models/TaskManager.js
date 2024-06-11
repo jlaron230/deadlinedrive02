@@ -2,23 +2,38 @@ const AbstractManager = require("./AbstractManager");
 
 class TaskManager extends AbstractManager {
   constructor() {
-    super({ table: "task" }); // Call the constructor of the parent class AbstractManager and pass the table name "task"
+    super({ table: "task" }); // Call the constructor of the parent class AbstractManager passing the table name "task"
   }
 
   // Method to validate the task object
   validateTask(task) {
-    // Check if the task properties are of the correct types
-    if (
-      typeof task.title !== "string" || // Check if title is a string
-      typeof task.description !== "string" || // Check if description is a string
-      typeof task.status !== "string" || // Check if status is a string
-      typeof task.deadline !== 'date' || // Check if deadline is a Date object
-      typeof task.id_user !== "number" // Check if id_user is a number
-    ) {
-      return false; // If any validation fails, return false
+    console.log('Validating task:', task);
+    
+    // Convert the deadline string to a Date object if it's a string
+    if (typeof task.deadline === 'string') {
+      task.deadline = new Date(task.deadline);
     }
-    return true; // Otherwise, return true
+    
+    // Validate the task properties
+    if (
+      typeof task.title !== "string" || 
+      typeof task.description !== 'string' || 
+      typeof task.status !== "string" || 
+      !(task.deadline instanceof Date) || isNaN(task.deadline.getTime()) || // Check if deadline is a valid Date object
+      typeof task.id_user !== "number"
+    ) {
+      console.log('Validation failed:', {
+        title: typeof task.title,
+        description: typeof task.description,
+        status: typeof task.status,
+        deadline: task.deadline instanceof Date && !isNaN(task.deadline.getTime()),
+        id_user: typeof task.id_user
+      });
+      return false;
+    }
+    return true;
   }
+  
 
   // Method to insert a new task into the database
   insert(task) {
@@ -27,7 +42,7 @@ class TaskManager extends AbstractManager {
       throw new Error("Invalid data."); // If not, throw an error
     }
 
-    // Destructure task object to get its properties
+    // Destructure the task object to get its properties
     const { title, description, status, deadline, id_user } = task;
     // Execute the SQL INSERT query
     return this.database.query(

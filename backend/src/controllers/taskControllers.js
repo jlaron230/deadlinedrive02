@@ -35,7 +35,7 @@ const edit = async (req, res) => {
 
   const task = req.body;
   task.id = parseInt(req.params.id, 10);
-  task.id_user = req.user.id; // Associate task with the current user
+  
 
   try {
     const [result] = await models.task.update(task);
@@ -57,7 +57,17 @@ const add = async (req, res) => {
   }
 
   const task = req.body;
-  task.id_user = req.user.id; // Associate task with the current user
+
+   // Convert the deadline string to a Date object if it's a string
+   if (typeof task.deadline === 'string') {
+    task.deadline = new Date(task.deadline);
+  }
+
+  // Validate the task
+  if (!models.task.validateTask(task)) {
+    return res.status(400).json({ message: 'Invalid data' }); // Bad Request
+  }
+
 
   try {
     const [result] = await models.task.insert(task);
