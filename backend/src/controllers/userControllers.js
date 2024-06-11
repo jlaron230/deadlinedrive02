@@ -1,4 +1,5 @@
 const models = require("../models"); // Import the models from the specified path
+const hashPassword = require("../auth");
 
 // Function to handle browsing (getting all users)
 const browse = (req, res) => {
@@ -54,10 +55,13 @@ const edit = (req, res) => {
 };
 
 // Function to handle adding a new user
-const add = (req, res) => {
+const add = async(req, res) => {
   const user = req.body; // Get the user data from the request body
 
   // TODO: Add validations for user data (length, format, etc.)
+  const hashedPassword = await hashPassword(user.password);
+  console.log(hashedPassword);
+  user.password = hashedPassword;
 
   models.user
     .insert(user) // Insert a new user
