@@ -17,7 +17,7 @@ class QuoteManager extends AbstractManager {
 
     insert(quote) {
         if (!this.validateQuote(quote)) {
-            throw new Error("Donnée invalide.");
+            throw new Error("Invalid data.");
         }
 
         const { author, type, text, vote, id_user } = quote;
@@ -29,11 +29,11 @@ class QuoteManager extends AbstractManager {
 
     update(quote) {
         if (!quote.id) {
-            throw new Error("L'ID est requis pour mettre à jour.");
+            throw new Error("ID is required to update.");
         }
 
         if (!this.validateQuote(quote)) {
-            throw new Error("Donnée invalide.");
+            throw new Error("Invalid data.");
         }
 
         const fields = [];
@@ -47,7 +47,7 @@ class QuoteManager extends AbstractManager {
         }
 
         if (fields.length === 0) {
-            throw new Error("Aucun champ n'a été modifié.");
+            throw new Error("No fields have been modified.");
         }
 
         values.push(quote.id);

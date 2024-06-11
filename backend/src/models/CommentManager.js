@@ -28,7 +28,7 @@ class CommentManager extends AbstractManager {
 
     insert(comment) {
         if (!this.validateComment(comment)) {
-            throw new Error("Donnée invalide.");
+            throw new Error("Invalid data.");
         }
 
         const { content, created_at, updated_at, id_user, id_quote, id_task } = comment;
@@ -43,11 +43,11 @@ class CommentManager extends AbstractManager {
 
     update(comment) {
         if (!comment.id) {
-            throw new Error("L'ID est requis pour mettre à jour.");
+            throw new Error("ID is required to update.");
         }
 
         if (!this.validateComment(comment)) {
-            throw new Error("Donnée invalide.");
+            throw new Error("Invalid data.");
         }
 
         const fields = [];
@@ -61,7 +61,7 @@ class CommentManager extends AbstractManager {
         }
 
         if (fields.length === 0) {
-            throw new Error("Aucun champ n'a été modifié.");
+            throw new Error("No fields have been modified.");
         }
 
         if (comment.created_at instanceof Date) {

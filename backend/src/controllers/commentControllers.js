@@ -29,7 +29,7 @@ const edit = async (req, res) => {
     comment.id = parseInt(req.params.id, 10);
 
     if (!comment.id_quote && !comment.id_task) {
-        return res.status(400).send({ error: "Un commentaire doit être associé soit à une citation soit à une tâche."})
+        return res.status(400).send({ error: "A comment must be associated with either a quote or a task."})
     }
 
     try {
@@ -37,7 +37,7 @@ const edit = async (req, res) => {
         res.sendStatus(204);
     } catch (error) {
         console.error(error);
-        if (error.message === "Donnée invalide." || error.message === "Aucun champ n'a été modifié.") {
+        if (error.message === "Invalid data." || error.message === "No fields have been modified.") {
             res.status(400).send({ error: error.message });
         } else {
             res.sendStatus(500);
@@ -53,7 +53,7 @@ const add = async (req, res) => {
         res.location(`comments/${result.insertId}`).sendStatus(201);
     } catch (error) {
         console.error(error);
-        if (error.message === "Donnée invalide.") {
+        if (error.message === "Invalid data.") {
             res.status(400).send({ error: error.message });
         } else {
             res.sendStatus(500);

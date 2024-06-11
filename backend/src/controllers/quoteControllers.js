@@ -34,7 +34,7 @@ const edit = async (req, res) => {
         res.sendStatus(204);
     } catch (error) {
         console.error(error);
-        if (error.message === "Donnée invalide." || error.message === "Aucun champ n'a été modifié.") {
+        if (error.message === "Invalid data." || error.message === "No fields have been modified.") {
             res.status(400).send({ error: error.message });
         } else {
             res.sendStatus(500);
@@ -51,7 +51,7 @@ const add = async (req, res) => {
         res.location(`quotes/${result.insertId}`).sendStatus(201);
     } catch (error) {
         console.error(error);
-        if (error.message === "Donnée invalide.") {
+        if (error.message === "Invalid data.") {
             res.status(400).send({ error: error.message });
         } else {
             res.sendStatus(500);
