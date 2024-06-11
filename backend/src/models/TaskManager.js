@@ -2,10 +2,10 @@ const AbstractManager = require("./AbstractManager");
 
 class TaskManager extends AbstractManager {
   constructor() {
-    super({ table: "task" }); // Appel du constructeur de la classe parente AbstractManager en passant le nom de la table "task"
+    super({ table: "task" }); // Call the constructor of the parent class AbstractManager passing the table name "task"
   }
 
-  // Méthode pour valider l'objet task
+  // Method to validate the task object
   validateTask(task) {
     console.log('Validating task:', task);
     
@@ -35,16 +35,16 @@ class TaskManager extends AbstractManager {
   }
   
 
-  // Méthode pour insérer une nouvelle tâche dans la base de données
+  // Method to insert a new task into the database
   insert(task) {
-    // Vérifier si la tâche est valide
+    // Check if the task is valid
     if (!this.validateTask(task)) {
-      throw new Error("Invalid data."); // Si non, lever une erreur
+      throw new Error("Invalid data."); // If not, throw an error
     }
 
-    // Déstructurer l'objet task pour obtenir ses propriétés
+    // Destructure the task object to get its properties
     const { title, description, status, deadline, id_user } = task;
-    // Exécuter la requête SQL INSERT
+    // Execute the SQL INSERT query
     return this.database.query(
       `INSERT INTO ${this.table} 
       (title, description, status, deadline, id_user)  
@@ -53,19 +53,19 @@ class TaskManager extends AbstractManager {
     );
   }
 
-  // Méthode pour mettre à jour une tâche existante dans la base de données
+  // Method to update an existing task in the database
   update(task) {
-    // Vérifier si la tâche a un ID
+    // Check if the task has an ID
     if (!task.id) {
-      throw new Error("ID is required for update."); // Si non, lever une erreur
+      throw new Error("ID is required for update."); // If not, throw an error
     }
 
-    // Vérifier si la tâche est valide
+    // Check if the task is valid
     if (!this.validateTask(task)) {
-      throw new Error("Invalid data."); // Si non, lever une erreur
+      throw new Error("Invalid data."); // If not, throw an error
     }
 
-    // Exécuter la requête SQL UPDATE
+    // Execute the SQL UPDATE query
     return this.database.query(
       `UPDATE ${this.table} SET 
       title = ?, 
@@ -78,5 +78,4 @@ class TaskManager extends AbstractManager {
   }
 }
 
-module.exports = TaskManager; // Exporter la classe TaskManager
-
+module.exports = TaskManager; // Export the TaskManager class
