@@ -56,10 +56,15 @@ class QuoteManager extends AbstractManager {
     }
 
     delete(id) {
-        return this.database.query(
-            `DELETE FROM ${this.table} WHERE id = ?`, 
-            [id]
-        );
+        try {
+            return this.database.query(
+                `DELETE FROM ${this.table} WHERE id = ?`,
+                [id]
+            );
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
     }
 }
 
