@@ -2,34 +2,49 @@ const AbstractManager = require("./AbstractManager");
 
 class TaskManager extends AbstractManager {
   constructor() {
-    super({ table: "task" }); // Call the constructor of the parent class AbstractManager and pass the table name "task"
+    super({ table: "task" }); // Appel du constructeur de la classe parente AbstractManager en passant le nom de la table "task"
   }
 
-  // Method to validate the task object
+  // Méthode pour valider l'objet task
   validateTask(task) {
-    // Check if the task properties are of the correct types
+    console.log('Validating task:', task);
+    
+    // Convert the deadline string to a Date object if it's a string
+    if (typeof task.deadline === 'string') {
+      task.deadline = new Date(task.deadline);
+    }
+    
+    // Validate the task properties
     if (
-      typeof task.title !== "string" || // Check if title is a string
-      typeof task.description !== "string" || // Check if description is a string
-      typeof task.status !== "string" || // Check if status is a string
-      typeof task.deadline !== 'date' || // Check if deadline is a Date object
-      typeof task.id_user !== "number" // Check if id_user is a number
+      typeof task.title !== "string" || 
+      typeof task.description !== 'string' || 
+      typeof task.status !== "string" || 
+      !(task.deadline instanceof Date) || isNaN(task.deadline.getTime()) || // Check if deadline is a valid Date object
+      typeof task.id_user !== "number"
     ) {
-      return false; // If any validation fails, return false
+      console.log('Validation failed:', {
+        title: typeof task.title,
+        description: typeof task.description,
+        status: typeof task.status,
+        deadline: task.deadline instanceof Date && !isNaN(task.deadline.getTime()),
+        id_user: typeof task.id_user
+      });
+      return false;
     }
-    return true; // Otherwise, return true
+    return true;
   }
+  
 
-  // Method to insert a new task into the database
+  // Méthode pour insérer une nouvelle tâche dans la base de données
   insert(task) {
-    // Check if the task is valid
+    // Vérifier si la tâche est valide
     if (!this.validateTask(task)) {
-      throw new Error("Invalid data."); // If not, throw an error
+      throw new Error("Invalid data."); // Si non, lever une erreur
     }
 
-    // Destructure task object to get its properties
+    // Déstructurer l'objet task pour obtenir ses propriétés
     const { title, description, status, deadline, id_user } = task;
-    // Execute the SQL INSERT query
+    // Exécuter la requête SQL INSERT
     return this.database.query(
       `INSERT INTO ${this.table} 
       (title, description, status, deadline, id_user)  
@@ -38,19 +53,19 @@ class TaskManager extends AbstractManager {
     );
   }
 
-  // Method to update an existing task in the database
+  // Méthode pour mettre à jour une tâche existante dans la base de données
   update(task) {
-    // Check if the task has an ID
+    // Vérifier si la tâche a un ID
     if (!task.id) {
-      throw new Error("ID is required for update."); // If not, throw an error
+      throw new Error("ID is required for update."); // Si non, lever une erreur
     }
 
-    // Check if the task is valid
+    // Vérifier si la tâche est valide
     if (!this.validateTask(task)) {
-      throw new Error("Invalid data."); // If not, throw an error
+      throw new Error("Invalid data."); // Si non, lever une erreur
     }
 
-    // Execute the SQL UPDATE query
+    // Exécuter la requête SQL UPDATE
     return this.database.query(
       `UPDATE ${this.table} SET 
       title = ?, 
@@ -63,4 +78,5 @@ class TaskManager extends AbstractManager {
   }
 }
 
-module.exports = TaskManager; // Export the TaskManager class
+module.exports = TaskManager; // Exporter la classe TaskManager
+
