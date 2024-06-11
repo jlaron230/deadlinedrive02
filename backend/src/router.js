@@ -48,4 +48,12 @@ router.put("/quote_category/:id", quote_categoryControllers.edit);
 router.post("/quote_category", quote_categoryControllers.add);
 router.delete("/quote_category/:id", quote_categoryControllers.destroy);
 
-module.exports = router; // Export the router containing all the defined routes
+const commentControllers = require("./controllers/commentControllers");
+
+router.get("/comments", commentControllers.browse);
+router.get("/comment/:id", commentControllers.read);
+router.put("/comment/:id", commentControllers.edit);
+router.post("/comment", commentControllers.add);
+router.delete("/comment/:id", commentControllers.destroy);
+
+module.exports = router;

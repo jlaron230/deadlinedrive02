@@ -58,11 +58,19 @@ models.quote_category = new Quote_CategoryManager();
 models.quote_category.setDatabase(pool);
 
 // Import and set up the TaskManager
+
 const TaskManager = require("./TaskManager");
 models.task = new TaskManager();
 models.task.setDatabase(pool);
 
 // Use a proxy to personalize error messages when asking for a non-existing model
+const CommentManager = require("./CommentManager");
+models.comment = new CommentManager();
+models.comment.setDatabase(pool);
+
+// bonus: use a proxy to personalize error message,
+// when asking for a non existing model
+
 const handler = {
   get(obj, prop) {
     if (prop in obj) {
