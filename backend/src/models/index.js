@@ -1,11 +1,11 @@
-require("dotenv").config();
+require("dotenv").config(); // Load environment variables from a .env file
 
-const mysql = require("mysql2/promise");
+const mysql = require("mysql2/promise"); // Import the mysql2 library with promise support
 
-// create a connection pool to the database
-
+// Destructure environment variables for database connection
 const { DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME } = process.env;
 
+// Create a connection pool to the database
 const pool = mysql.createPool({
   host: DB_HOST,
   port: DB_PORT,
@@ -14,8 +14,7 @@ const pool = mysql.createPool({
   database: DB_NAME,
 });
 
-// try a connection
-
+// Try to get a connection to the database
 pool.getConnection().catch(() => {
   console.warn(
     "Warning:",
@@ -25,50 +24,49 @@ pool.getConnection().catch(() => {
   );
 });
 
-// declare and fill models: that's where you should register your own managers
-
+// Declare and fill models: this is where you register your own managers
 const models = {};
 
+// Import and set up the ItemManager
 const ItemManager = require("./ItemManager");
-
 models.item = new ItemManager();
 models.item.setDatabase(pool);
 
+// Import and set up the UserManager
 const UserManager = require("./UserManager");
-
 models.user = new UserManager();
 models.user.setDatabase(pool);
 
+// Import and set up the CategoryManager
 const CategoryManager = require("./CategoryManager");
-
 models.category = new CategoryManager();
 models.category.setDatabase(pool);
-const QuoteManager = require("./QuoteManager");
 
+// Import and set up the QuoteManager
+const QuoteManager = require("./QuoteManager");
 models.quote = new QuoteManager();
 models.quote.setDatabase(pool);
-const DeadlineManager = require("./DeadlineManager");
 
+// Import and set up the DeadlineManager
+const DeadlineManager = require("./DeadlineManager");
 models.deadline = new DeadlineManager();
 models.deadline.setDatabase(pool);
 
+// Import and set up the Quote_CategoryManager
 const Quote_CategoryManager = require("./Quote_CategoryManager");
-
 models.quote_category = new Quote_CategoryManager();
 models.quote_category.setDatabase(pool);
 
-// bonus: use a proxy to personalize error message,
-// when asking for a non existing model
-
+// Import and set up the TaskManager
 const TaskManager = require("./TaskManager");
-
 models.task = new TaskManager();
 models.task.setDatabase(pool);
 
+// Use a proxy to personalize error messages when asking for a non-existing model
 const handler = {
   get(obj, prop) {
     if (prop in obj) {
-      return obj[prop];
+      return obj[prop]; // Return the model if it exists
     }
 
     const pascalize = (string) =>
@@ -78,8 +76,8 @@ const handler = {
       `models.${prop} is not defined. Did you create ${pascalize(
         prop
       )}Manager.js, and did you register it in backend/src/models/index.js?`
-    );
+    ); // Throw a custom error message if the model is not defined
   },
 };
 
-module.exports = new Proxy(models, handler);
+module.exports = new Proxy(models, handler); // Export the models object wrapped in a proxy
