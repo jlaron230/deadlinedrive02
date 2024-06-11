@@ -2,7 +2,7 @@ const models = require("../models");
 
 const browse = async (req, res) => {
     try {
-        const [rows] = await models.quote.findAll();
+        const [rows] = await models.comment.findAll();
         res.send(rows);
     } catch (error) {
         console.error(error);
@@ -12,7 +12,7 @@ const browse = async (req, res) => {
 
 const read = async (req, res) => {
     try {
-        const [rows] = await models.quote.find(req.params.id);
+        const [rows] = await models.comment.find(req.params.id);
         if (rows[0] == null) {
             res.sendStatus(404);
         } else {
@@ -25,12 +25,15 @@ const read = async (req, res) => {
 };
 
 const edit = async (req, res) => {
-    const quote = req.body;
-    quote.id = parseInt(req.params.id, 10);
-    quote.id_user = req.user.id;
+    const comment = req.body;
+    comment.id = parseInt(req.params.id, 10);
+
+    if (!comment.id_quote && !comment.id_task) {
+        return res.status(400).send({ error: "A comment must be associated with either a quote or a task."})
+    }
 
     try {
-        await models.quote.update(quote);
+        await models.comment.update(comment);
         res.sendStatus(204);
     } catch (error) {
         console.error(error);
@@ -43,12 +46,11 @@ const edit = async (req, res) => {
 };
 
 const add = async (req, res) => {
-    const quote = req.body;
-    quote.id_user = req.user.id;
+    const comment = req.body;
 
     try {
-        const [result] = await models.quote.insert(quote);
-        res.location(`quotes/${result.insertId}`).sendStatus(201);
+        const [result] = await models.comment.insert(comment);
+        res.location(`comments/${result.insertId}`).sendStatus(201);
     } catch (error) {
         console.error(error);
         if (error.message === "Invalid data.") {
@@ -61,7 +63,7 @@ const add = async (req, res) => {
 
 const destroy = async (req, res) => {
     try {
-        const [result] = await models.quote.delete(req.params.id);
+        const [result] = await models.comment.delete(req.params.id);
         if (result.affectedRows === 0) {
             res.sendStatus(404);
         } else {
