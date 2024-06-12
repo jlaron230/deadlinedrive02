@@ -2,6 +2,10 @@ const express = require("express"); // Import the Express framework
 
 const router = express.Router(); // Create an instance of Express router
 
+const {
+    verifyPassword,
+  } = require("./auth");
+
 // Import user controller functions
 const userControllers = require("./controllers/userControllers");
 
@@ -55,5 +59,23 @@ router.get("/comment/:id", commentControllers.read);
 router.put("/comment/:id", commentControllers.edit);
 router.post("/comment", commentControllers.add);
 router.delete("/comment/:id", commentControllers.destroy);
+
+// LOGIN
+
+
+router.get("/users", userControllers.browse);
+router.get("/users/:id", userControllers.read);
+router.put("/users/:id", userControllers.edit);
+router.post("/users", userControllers.add);
+router.delete("/users/:id", userControllers.destroy);
+
+router.post(
+  "/users/login",
+  userControllers.getUserByEmailWithPasswordAndPassToNext,
+  userControllers.generateToken
+);
+
+module.exports = router;
+
 
 module.exports = router;

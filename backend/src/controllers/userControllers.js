@@ -1,101 +1,135 @@
-const models = require("../models"); // Import the models from the specified path
-const hashPassword = require("../auth");
+const models = require("../models");
+const { hashPassword, verifyPasswordHash } = require("../auth");
+const argon2 = require("argon2");
 
-// Function to handle browsing (getting all users)
 const browse = (req, res) => {
   models.user
-    .findAll() // Find all users
+    .findAll()
     .then(([rows]) => {
-      res.send(rows); // Send the rows as the response
+      res.send(rows);
     })
     .catch((err) => {
-      console.error(err); // Log the error to the console
-      res.sendStatus(500); // Send a 500 Internal Server Error status
+      console.error(err);
+      res.sendStatus(500);
     });
 };
 
-// Function to handle reading a specific user by ID
 const read = (req, res) => {
   models.user
-    .find(req.params.id) // Find a user by the provided ID
+    .find(req.params.id)
     .then(([rows]) => {
       if (rows[0] == null) {
-        res.sendStatus(404); // Send a 404 Not Found status if user is not found
+        res.sendStatus(404);
       } else {
-        res.send(rows[0]); // Send the user data as the response
+        res.send(rows[0]);
       }
     })
     .catch((err) => {
-      console.error(err); // Log the error to the console
-      res.sendStatus(500); // Send a 500 Internal Server Error status
+      console.error(err);
+      res.sendStatus(500);
     });
 };
 
-// Function to handle editing a user's information
 const edit = (req, res) => {
-  const user = req.body; // Get the user data from the request body
-
-  // TODO: Add validations for user data (length, format, etc.)
-
-  user.id = parseInt(req.params.id, 10); // Parse the user ID from the request parameters
+  const user = req.body;
+  user.id = parseInt(req.params.id, 10);
 
   models.user
-    .update(user) // Update the user information
+    .update(user)
     .then(([result]) => {
       if (result.affectedRows === 0) {
-        res.sendStatus(404); // Send a 404 Not Found status if no rows were affected
+        res.sendStatus(404);
       } else {
-        res.sendStatus(204); // Send a 204 No Content status on success
+        res.sendStatus(204);
       }
     })
     .catch((err) => {
-      console.error(err); // Log the error to the console
-      res.sendStatus(500); // Send a 500 Internal Server Error status
+      console.error(err);
+      res.sendStatus(500);
     });
 };
 
-// Function to handle adding a new user
-const add = async(req, res) => {
-  const user = req.body; // Get the user data from the request body
+const add = async (req, res) => {
+  const user = req.body;
+  try {
+    const hashedPassword = await hashPassword(user.password);
+    user.password = hashedPassword;
 
-  // TODO: Add validations for user data (length, format, etc.)
-  const hashedPassword = await hashPassword(user.password);
-  console.log(hashedPassword);
-  user.password = hashedPassword;
-
-  models.user
-    .insert(user) // Insert a new user
-    .then(([result]) => {
-      res.location(`/users/${result.insertId}`).sendStatus(201); // Set the Location header and send a 201 Created status
-    })
-    .catch((err) => {
-      console.error(err); // Log the error to the console
-      res.sendStatus(500); // Send a 500 Internal Server Error status
-    });
+    models.user
+      .insert(user)
+      .then(([result]) => {
+        res.location(`/users/${result.insertId}`).sendStatus(201);
+      })
+      .catch((err) => {
+        console.error(err);
+        res.sendStatus(500);
+      });
+  } catch (err) {
+    res.status(500).send("Error hashing password");
+  }
 };
 
-// Function to handle deleting a user by ID
 const destroy = (req, res) => {
   models.user
-    .delete(req.params.id) // Delete the user by the provided ID
+    .delete(req.params.id)
     .then(([result]) => {
       if (result.affectedRows === 0) {
-        res.sendStatus(404); // Send a 404 Not Found status if no rows were affected
+        res.sendStatus(404);
       } else {
-        res.sendStatus(204); // Send a 204 No Content status on success
+        res.sendStatus(204);
       }
     })
     .catch((err) => {
-      console.error(err); // Log the error to the console
-      res.sendStatus(500); // Send a 500 Internal Server Error status
+      console.error(err);
+      res.sendStatus(500);
     });
 };
 
-// Export the functions for use in other parts of the application
+const getUserByEmailWithPasswordAndPassToNext = (req, res, next) => {
+  const { email, password } = req.body;
+  models.user
+    .findUserByEmail(email)
+    .then(([users]) => {
+      if (users[0] != null) {
+        const [firstUser] = users;
+        verifyPasswordHash(firstUser.password, password)
+          .then(match => {
+            if (match) {
+              req.user = firstUser;
+              next();
+            } else {
+              res.sendStatus(401);
+            }
+          })
+          .catch(err => {
+            console.error(err);
+            res.sendStatus(500);
+          });
+      } else {
+        res.sendStatus(401);
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send("Error retrieving data from database");
+    });
+};
+
+const generateToken = (req, res) => {
+  const token = jwt.sign(
+    { id: req.user.id },
+    process.env.JWT_SECRET,
+    { expiresIn: '1h' }
+  );
+  res.json({ token });
+};
+
 module.exports = {
   browse,
   read,
   edit,
   add,
   destroy,
+  getUserByEmailWithPasswordAndPassToNext,
+  generateToken,
 };
