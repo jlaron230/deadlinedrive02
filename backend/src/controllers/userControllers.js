@@ -1,6 +1,5 @@
 const models = require("../models");
-const { hashPassword, verifyPasswordHash } = require("../auth");
-const argon2 = require("argon2");
+
 
 const browse = (req, res) => {
   models.user
@@ -50,22 +49,16 @@ const edit = (req, res) => {
 };
 
 const add = async (req, res) => {
-  const user = req.body;
+  
   try {
-    const hashedPassword = await hashPassword(user.password);
-    user.password = hashedPassword;
+    const user = req.body;
+    const result = await models.user.insert(user);
 
-    models.user
-      .insert(user)
-      .then(([result]) => {
+
+  
         res.location(`/users/${result.insertId}`).sendStatus(201);
-      })
-      .catch((err) => {
-        console.error(err);
-        res.sendStatus(500);
-      });
-  } catch (err) {
-    res.status(500).send("Error hashing password");
+  } catch(err){
+    console.log(err);
   }
 };
 
@@ -86,25 +79,14 @@ const destroy = (req, res) => {
 };
 
 const getUserByEmailWithPasswordAndPassToNext = (req, res, next) => {
-  const { email, password } = req.body;
+  const { email } = req.body;
   models.user
     .findUserByEmail(email)
     .then(([users]) => {
       if (users[0] != null) {
         const [firstUser] = users;
-        verifyPasswordHash(firstUser.password, password)
-          .then(match => {
-            if (match) {
-              req.user = firstUser;
-              next();
-            } else {
-              res.sendStatus(401);
-            }
-          })
-          .catch(err => {
-            console.error(err);
-            res.sendStatus(500);
-          });
+        req.user = firstUser;
+        next();
       } else {
         res.sendStatus(401);
       }
@@ -113,16 +95,17 @@ const getUserByEmailWithPasswordAndPassToNext = (req, res, next) => {
       console.error(err);
       res.status(500).send("Error retrieving data from database");
     });
-};
+}; 
 
-const generateToken = (req, res) => {
-  const token = jwt.sign(
-    { id: req.user.id },
-    process.env.JWT_SECRET,
-    { expiresIn: '1h' }
-  );
-  res.json({ token });
-};
+
+// const generateToken = (req, res) => {
+//   const token = jwt.sign(
+//     { id: req.user.id },
+//     process.env.JWT_SECRET,
+//     { expiresIn: '1h' }
+//   );
+//   res.json({ token });
+// };
 
 module.exports = {
   browse,
@@ -131,5 +114,6 @@ module.exports = {
   add,
   destroy,
   getUserByEmailWithPasswordAndPassToNext,
-  generateToken,
+
+  // generateToken,
 };

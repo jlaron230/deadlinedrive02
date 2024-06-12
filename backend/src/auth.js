@@ -1,26 +1,69 @@
 const argon2 = require("argon2");
+const jwt = require("jsonwebtoken");
 
-const verifyPasswordHash = async (hashedPassword, password) => {
-  try {
-    const isMatch = await argon2.verify(hashedPassword, password);
-    return isMatch;
-  } catch (err) {
-    console.error("Error verifying password:", err);
-    throw err;
-  }
+const hashPassword = async (req,res,next) => {
+ argon2.hash(req.body.password)
+ .then((hashedPassword)=>{
+  console.log("asmaa plus forte que vous")
+  req.body.password= hashedPassword;
+  next();
+ })
+ .catch((err)=>{
+  console.error(err);
+  res.sendStatus(500);
+ })
 };
 
-const hashPassword = async (password) => {
+const verifyPassword = (req, res) => {
+console.log( "testr2:",req.user.password, req.body.password);
+  argon2
+ .verify( req.user.password, req.body.password)
+    .then((isVerified) => {
+      if (isVerified) {
+        console.log("acceptée");
+        const payload = { sub: req.user.id };
+
+        const token = jwt.sign(payload, process.env.JWT_SECRET, {
+          expiresIn: "4h",
+        });
+
+        delete req.user.hashedPassword;
+        res.send({ user: req.user, token: token });
+      } else {
+        res.sendStatus(401);
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+      res.sendStatus(500);
+    });
+};
+
+const verifyToken = (req, res, next) => {
   try {
-    const hashedPassword = await argon2.hash(password);
-    return hashedPassword;
+    const authorizationHeader = req.get("Authorization");
+
+    if (authorizationHeader == null) {
+      throw new Error("Authorization header is missing");
+    }
+
+    const [type, token] = authorizationHeader.split(" ");
+
+    if (type !== "Bearer") {
+      throw new Error("Authorization header has not the 'Bearer' type");
+    }
+
+    req.payload = jwt.verify(token, process.env.JWT_SECRET);
+
+    next();
   } catch (err) {
-    console.error("Error hashing password");
-    throw err;
+    console.error(err);
+    res.sendStatus(401);
   }
 };
 
 module.exports = {
   hashPassword,
-  verifyPasswordHash,
+  verifyPassword,
+  verifyToken
 };

@@ -2,18 +2,27 @@ const express = require("express"); // Import the Express framework
 
 const router = express.Router(); // Create an instance of Express router
 
-const {
-    verifyPassword,
-  } = require("./auth");
-
 // Import user controller functions
 const userControllers = require("./controllers/userControllers");
+
+const {
+    verifyPassword,hashPassword,verifyToken
+  } = require("./auth");
+  
+  router.post(
+    "/users/login",
+    userControllers.getUserByEmailWithPasswordAndPassToNext,verifyPassword
+  );
+  
+// authentication wall : verifyToken is activated for each route after this line
+router.use(verifyToken);  
+
 
 // Define routes for user operations
 router.get("/users", userControllers.browse); // Route to browse all users
 router.get("/users/:id", userControllers.read); // Route to read a specific user by ID
 router.put("/users/:id", userControllers.edit); // Route to edit a user by ID
-router.post("/users", userControllers.add); // Route to add a new user
+router.post("/users", hashPassword, userControllers.add); // Route to add a new user
 router.delete("/users/:id", userControllers.destroy); // Route to delete a user by ID
 
 // Similar setup for categories, quotes, tasks, deadlines, and quote categories
@@ -60,22 +69,14 @@ router.put("/comment/:id", commentControllers.edit);
 router.post("/comment", commentControllers.add);
 router.delete("/comment/:id", commentControllers.destroy);
 
-// LOGIN
+// // LOGIN
+// router.get("/users", userControllers.browse);
+// router.get("/users/:id", userControllers.read);
+// router.put("/users/:id", userControllers.edit);
+// router.post("/users",hashPassword, userControllers.add);
+// router.delete("/users/:id", userControllers.destroy);
 
 
-router.get("/users", userControllers.browse);
-router.get("/users/:id", userControllers.read);
-router.put("/users/:id", userControllers.edit);
-router.post("/users", userControllers.add);
-router.delete("/users/:id", userControllers.destroy);
-
-router.post(
-  "/users/login",
-  userControllers.getUserByEmailWithPasswordAndPassToNext,
-  userControllers.generateToken
-);
-
-module.exports = router;
 
 
 module.exports = router;
