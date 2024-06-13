@@ -41,6 +41,15 @@ class UserManager extends AbstractManager {
       ] // Array of values to be updated and the user ID
     );
   }
+ 
+
+  // Method to find a user by their email
+  findUserByEmail(email) {
+    return this.database.query(
+      `select * from ${this.table} where email = ?`, // SQL query to find a user by email
+      [email] // Array of values to be used in the query
+    );
+  }
 }
 
 module.exports = UserManager; // Export the UserManager class
