@@ -27,7 +27,7 @@ const verifyPassword = (req, res) => {
         const payload = { sub: req.user.id }; // Create a JWT payload with the user's ID
 
         const token = jwt.sign(payload, process.env.JWT_SECRET, {
-          expiresIn: "4h", // Set the token to expire in 4 hours
+          expiresIn: "99h", // Set the token to expire in 99 hours
         });
 
         delete req.user.hashedPassword; // Remove the hashed password from the user object for security
