@@ -1,17 +1,21 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { ChevronDownIcon } from "@heroicons/react/24/solid"
 
 function ChooseAuthor() {
   const [quotes, setQuotes] = useState([]);
   const [authors, setAuthors] = useState([]);
+  const [filteredAuthors, setFilteredAuthors] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const fetchData = async () => {
     try {
       const res = await axios.get("http://localhost:5000/quotes");
       setQuotes(res.data);
-      console.log(quotes);
       const uniqueAuthors = [...new Set(res.data.map((quote) => quote.author))];
       setAuthors(uniqueAuthors);
+      setFilteredAuthors(uniqueAuthors);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -21,18 +25,62 @@ function ChooseAuthor() {
     fetchData();
   }, []);
 
+  const handleSearchChange = (e) => {
+    const searchValue = e.target.value;
+    setSearchTerm(searchValue);
+    if (searchValue) {
+      setFilteredAuthors(
+        authors.filter((author) =>
+          author.toLowerCase().includes(searchValue.toLowerCase())
+        )
+      );
+    } else {
+      setFilteredAuthors(authors);
+    }
+  };
+
+  const handleAuthorSelect = (author) => {
+    setSearchTerm(author);
+    setIsDropdownOpen(false);
+  };
+
+  const handleInputFocus = () => {
+    setIsDropdownOpen(true);
+  };
+
+  const handleIconClick = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
   return (
     <>
-      <select className="p-4 bg-orange-400 rounded-lg mb-6 max-w-96">
-        <option value="none" disabled selected hidden>
-          Auteur
-        </option>
-        {authors.map((author, index) => (
-          <option key={index} value={author}>
-            {author}
-          </option>
-        ))}
-      </select>
+    <div className="relative max-w-96">
+      <input
+        type="text"
+        value={searchTerm}
+        onChange={handleSearchChange}
+        onFocus={handleInputFocus}
+        placeholder="Sélectionner ou saisir un auteur"
+        className="p-4 bg-orange-400 rounded-lg w-96 placeholder:text-gray-800"
+      />
+      <ChevronDownIcon
+          className="h-5 w-5 absolute right-3 top-1/2 transform -translate-y-2/4 cursor-pointer text-gray-600"
+          onClick={handleIconClick}
+        />
+      {isDropdownOpen && (
+        <ul className="absolute z-10 w-full bg-orange-400 border border-gray-300 rounded-lg max-h-60 overflow-y-auto">
+          {filteredAuthors.map((author, index) => (
+            <li
+              key={index}
+              onClick={() => handleAuthorSelect(author)}
+              className="p-2 hover:bg-orange-300 cursor-pointer"
+            >
+              {author}
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
     </>
   );
 }
