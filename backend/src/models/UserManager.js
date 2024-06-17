@@ -22,7 +22,7 @@ class UserManager extends AbstractManager {
   }
   
   // Method to update an existing user in the database
-  update(user) {
+  update(user) { 
     return this.database.query(
       `update ${this.table} SET 
       firstName = ?, 
