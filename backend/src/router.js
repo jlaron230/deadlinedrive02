@@ -40,6 +40,7 @@ router.delete("/categories/:id", categoryControllers.destroy);
 router.get("/quotes", quoteControllers.browse);
 router.get("/quotes/:id", quoteControllers.read);
 router.put("/quotes/:id", quoteControllers.edit);
+router.post("/quotes", quoteControllers.add);
 router.delete("/quotes/:id", quoteControllers.destroy);
 
 router.get("/tasks", taskControllers.browse);

@@ -27,8 +27,7 @@ const read = async (req, res) => {
 const edit = async (req, res) => {
     const quote = req.body;
     quote.id = parseInt(req.params.id, 10);
-    quote.id_user = req.user.id;
-
+    
     try {
         await models.quote.update(quote);
         res.sendStatus(204);
@@ -44,7 +43,6 @@ const edit = async (req, res) => {
 
 const add = async (req, res) => {
     const quote = req.body;
-    quote.id_user = req.user.id;
 
     try {
         const [result] = await models.quote.insert(quote);
