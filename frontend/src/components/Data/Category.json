@@ -1,0 +1,38 @@
+[
+    {
+      "id": 1,
+      "name": "sport"
+    },
+    {
+      "id": 2,
+      "name": "personalities"
+    },
+    {
+      "id": 3,
+      "name": "manga"
+    },
+    {
+      "id": 4,
+      "name": "cinema"
+    },
+    {
+      "id": 5,
+      "name": "anime"
+    },
+    {
+      "id": 6,
+      "name": "poetry"
+    },
+    {
+      "id": 7,
+      "name": "series"
+    },
+    {
+      "id": 8,
+      "name": "history"
+    },
+    {
+      "id": 9,
+      "name": "authors"
+    }
+  ]
