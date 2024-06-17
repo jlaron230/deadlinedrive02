@@ -15,10 +15,9 @@ const quotePerDays = () => {
     <div>
       {isLoggedIn ? (
         <div class=" p-4  flex flex-col items-center bg-amber-500 m-3 rounded-full">
-          <p> Le premier Savoir est le savoir de mon ignorance </p>
+          <p> Le premier Savoir est le savoir de mon ignorance : c’est le début de l’intelligence </p>
           <h3 class="font-semibold" > Socrates</h3>
           <p>Choissisez un thème différent</p>
-          {/* <button onClick={handleLogout}>Logout</button> */}
         </div>
       ) : (
         <div>
