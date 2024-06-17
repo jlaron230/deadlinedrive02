@@ -1,3 +1,23 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root{
+--theme1: #C97D50;
+}
+
+@layer base {
+    h1, h2, h3, h4, h5, h6{
+      font-family: "Laila", sans-serif;
+      color: theme1;
+    }
+    html{
+        font-family: "Imprima", sans-serif;
+    }
+    .bg-404{
+        background-image: url("../src/assets/Imagehommequimarche-ezgif.com-png-to-webp-converter.webp");
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+    }
+  }
