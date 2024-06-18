@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
 
-function ChooseTheme() {
+function ChooseTheme({ selectedTheme, onSelectTheme }) {
   const [categories, setCategories] = useState([]);
   const [filteredCategories, setFilteredCategories] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -39,6 +39,7 @@ function ChooseTheme() {
   const handleCategorySelect = (category) => {
     setSearchTerm(category.name);
     setIsDropdownOpen(false);
+    onSelectTheme(category.id);
   };
 
   const handleInputFocus = () => {
@@ -47,7 +48,6 @@ function ChooseTheme() {
 
   const handleIconClick = () => {
     setIsDropdownOpen((prev) => !prev);
-    // Update filteredCategories when opening the dropdown
     if (!isDropdownOpen) {
       setFilteredCategories(categories);
     }

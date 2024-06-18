@@ -1,13 +1,12 @@
 import ChooseTheme from "@components/ChooseTheme/ChooseTheme";
 import ChooseAuthor from "@components/ChooseAuthor/ChooseAuthor";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 
 export default function CustomizeQuotes() {
   const [categories, setCategories] = useState([]);
   const [quotes, setQuotes] = useState([]);
-  const [newQuote, setNewQuote] = useState({ text: "" });
-  const [newAuthor, setNewAuthor] = useState({ author: "" });
+  const [newQuote, setNewQuote] = useState({ author:"", text: "", type:"" });
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -24,12 +23,21 @@ export default function CustomizeQuotes() {
     }
   };
 
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   const addQuote = async (newQuote) => {
+    const id_user = 10;
     try {
       const res = await axios.post("http://localhost:5000/quotes", 
         {
+        author: newQuote.author,
         text: newQuote.text,
+        id_user: newQuote.id_user,
+        id_category: newQuote.id_category
         });
+
       setQuotes([...quotes, res.data]);
       setSuccessMessage(
         "Votre citation a été postée avec succès, retrouvez-là dans vos citations postées"
@@ -74,18 +82,34 @@ export default function CustomizeQuotes() {
                 })
               }
               placeholder="Personnaliser une nouvelle citation"
-              className="px-4 py-1 border border-gray-400 rounded-md focus:outline-none focus:border-gray-800 min-h-32 w-full"
+              className="px-4 py-1 border border-gray-400 rounded-md focus:outline-none focus:border-gray-800 min-h-32 w-full bg-orange-400"
             />
-            <ChooseAuthor />
+            <ChooseAuthor
+            selectedAuthor={newQuote.author}
+            onSelectAuthor={(author) =>
+                setNewQuote({
+                    ...newQuote,
+                    author: author,
+                })
+            }
+            />
             <input
               type="text"
               placeholder="Si auteur non répertorié"
-              className="px-4 py-1 border border-gray-400 rounded-md focus:outline-none focus:border-gray-800 w-full"
+              className="px-4 py-1 border border-gray-400 rounded-md focus:outline-none focus:border-gray-800 w-full bg-orange-400"
             />
-            <ChooseTheme />
+            <ChooseTheme
+            selectedTheme={newQuote.id_category}
+            onSelectTheme={(id_category) =>
+                setNewQuote({
+                    ...newQuote,
+                    id_category: id_category,
+            })
+        }
+            />
             <button
               type="submit"
-              className="px-4 py-1 bg-sky-600 text-white rounded hover:bg-sky-700"
+              className="px-4 py-1 bg-sky-600 text-white rounded hover:bg-orange-700"
             >
               Créer
             </button>

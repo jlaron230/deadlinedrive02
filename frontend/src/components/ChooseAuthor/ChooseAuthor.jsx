@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { ChevronDownIcon } from "@heroicons/react/24/solid"
 
-function ChooseAuthor() {
+function ChooseAuthor({ selectedAuthor, onSelectAuthor }) {
   const [quotes, setQuotes] = useState([]);
   const [authors, setAuthors] = useState([]);
   const [filteredAuthors, setFilteredAuthors] = useState([]);
@@ -42,6 +42,7 @@ function ChooseAuthor() {
   const handleAuthorSelect = (author) => {
     setSearchTerm(author);
     setIsDropdownOpen(false);
+    onSelectAuthor(author);
   };
 
   const handleInputFocus = () => {
