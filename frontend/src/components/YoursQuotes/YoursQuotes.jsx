@@ -22,11 +22,11 @@ const App = () => {
   return (
     <div class="p-8">
       <h3 class=" flex flex-col items-center font-semibold " >Citations tendances</h3>
-       <div class="flex flex-row items-center p-4 bg-amber-500 m-3 rounded-lg">
+       <div class="grid md:grid-cols-3  gap-5 p-4 justify-center	 bg-custom-main-orange m-3 rounded-lg">
         {quotes.map((quote, index) => (
             <div key={index} >
     
-            <p class="text-center max-w-3xl ">{quote.text}</p>
+            <p class="text-center ">{quote.text}</p>
             <p class="font-semibold text-center"> {quote.author}</p>
             </div>
       ))}  
