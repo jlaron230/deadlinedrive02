@@ -46,7 +46,7 @@ export default function LegalNotice (){
               L'utilisateur est informé des réglementations concernant la communication marketing, la loi du 21 Juin 2014 pour la confiance dans l'Économie Numérique, la Loi Informatique et Liberté du 06 Août 2004 ainsi que du Règlement Général sur la Protection des Données (RGPD : n° 2016-679).
             </p>
             <p className="mt-2">
-              Pour plus d'informations, veuillez consulter notre <a href="/politique-de-confidentialite" className="text-blue-600 hover:underline">politique de confidentialité</a>.
+              Pour plus d'informations, veuillez consulter notre <a href="/PrivacyPolicy" className="text-blue-600 hover:underline">politique de confidentialité</a>.
             </p>
           </section>
     
