@@ -8,11 +8,13 @@ module.exports = {
   theme: {
     extend: {    
       colors: {
-        theme1: '#CF9845',
-        theme2: '#C97D50',
-        themeBlack: '#080808',
-        themeWhite: '#FFFFFF',
-        themeGray: '#697077'
+        'custom-main-orange': '#CF9845',
+        'custom-black' : '#080808',
+        'hover-dark' : ' #140e05',
+        'african-violet' : '#C98BB9',
+        'butterscotch' : '#CF9845',
+        'caramel' : '#C97D50',
+        'ivory' : 'FFFFF0',
       },
       fontFamily: {
         serif: ['Laila', 'serif'],

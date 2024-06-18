@@ -37,19 +37,19 @@ function App() {
       <Routes>
 
         {/* Define routes for each page */}
-        <Route path="/" element={<Home />} />  // Route for the home page
-        <Route path="/personnaliser-citations" element={<CustomizeQuotes />} />  // Route for customizing quotes page
-        <Route path="/citations" element={<Quotes />} />  // Route for quotes page
-        <Route path="/recuperation-mot-de-passe" element={<PasswordRecovery />} />  // Route for password recovery page
-        <Route path="/connexion" element={<Login />} />  // Route for login page
-        <Route path="/inscription" element={<Signup />} />  // Route for signup page
-        <Route path="/a-propos" element={<About />} />  // Route for about page
-        <Route path="/calendrier" element={<Calendar />} />  // Route for calendar page
-        <Route path="/compte-user" element={<UserAccount />} />  // Route for user account page
-        <Route path="/politique-de-confidentialite" element={<PrivacyPolicy />} />  // Route for privacy policy page
-        <Route path="/mentions-legales" element={<LegalNotice />} />  // Route for legal notice page
+        <Route path="/" element={<Home />} />  {/* Route for the home page */}
+        <Route path="/CustomizeQuotes" element={<CustomizeQuotes />} />  {/* Route for customizing quotes page */}
+        <Route path="/Quotes" element={<Quotes />} />  {/* Route for quotes page */}
+        <Route path="/PasswordRecovery" element={<PasswordRecovery />} />  {/* Route for password recovery page */}
+        <Route path="/Signup" element={<Signup />} />  {/* Route for login page */}
+        <Route path="/Login" element={<Login />} />  {/* Route for signup page */}
+        <Route path="/About" element={<About />} />  {/* Route for about page */}
+        <Route path="/Calendar" element={<Calendar />} />  {/* Route for calendar page */}
+        <Route path="/UserAccount" element={<UserAccount />} />  {/* Route for user account page */}
+        <Route path="/PrivacyPolicy" element={<PrivacyPolicy />} />  {/* Route for privacy policy page */}
+        <Route path="/LegalNotice" element={<LegalNotice />} />  {/* Route for legal notice page */}
         <Route path="/Contact" element={<Contact />} />  // Route for legal notice page
-        <Route path="*" element={<NotFound />} />  // Route for handling 404 Not Found
+        <Route path="*" element={<NotFound />} />  {/* Route for handling 404 Not Found */}
       </Routes>
     </Router>
     
