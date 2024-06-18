@@ -46,6 +46,8 @@ const reactIndexFile = path.join(
   "index.html"
 );
 
+
+
 if (fs.existsSync(reactIndexFile)) {
   // serve REACT resources
 
@@ -57,6 +59,7 @@ if (fs.existsSync(reactIndexFile)) {
     res.sendFile(reactIndexFile);
   });
 }
+
 
 // ready to export
 

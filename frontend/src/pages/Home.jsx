@@ -1,11 +1,11 @@
 import React from 'react';
 import quotePerDays from '@components/QuotePerDays/QuotePerDays';
-
+import YourQuotes from '@components/YoursQuotes/YoursQuotes';
 
 export default function Home() {
   return (
     <div className=''>
-      <header className="">
+      <header class="">
         <h1 class=" p-8 font-semibold text-xl flex justify-center	">Bienvenue sur Deadline Drive, votre allié pour rester motiver</h1>
       </header>
 
@@ -49,6 +49,10 @@ export default function Home() {
           <h3 class="font-semibold" > Socrates</h3>
           <p>Choissisez un thème différent</p>
           {/* <button onClick={handleLogout}>Logout</button> */}
+        </div>
+
+        <div className="container mx-auto p-4">
+            <YourQuotes />
         </div>
 
       </main>
