@@ -14,7 +14,7 @@ export default function Home() {
 
       <WelcomeHome />
         
-      <quotePerDays />
+      <quotePerDays /> 
         <div class="flex flex-col items-center">
             <button  class="font-semibold p-4  bg-custom-main-orange  rounded-lg">
               Appuyez ici pour vous connecter ou vous enregistrer !
