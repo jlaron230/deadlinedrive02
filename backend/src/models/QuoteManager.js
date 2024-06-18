@@ -10,7 +10,7 @@ class QuoteManager extends AbstractManager {
 
     validateQuote(quote) {
         // REVIEW the development phase requires that testing be done only on a certain type of restrictions
-        // if (typeof quote.author !== 'string' || typeof quote.type !== 'string' || typeof quote.text !== 'string' || typeof quote.vote !== 'number' || typeof quote.id_user !== 'number') {
+        // if (typeof quote.author !== 'string' || typeof quote.text !== 'string' || typeof quote.vote !== 'number' || typeof quote.id_user !== 'number') {
             if (typeof quote.text !== 'string') {
             return false;
         }
@@ -22,15 +22,10 @@ class QuoteManager extends AbstractManager {
             throw new Error("Invalid data.");
         }
         // REVIEW the development phase requires that testing be done only on a certain type of restrictions
-        // const { author, type, text, vote, id_user } = quote;
-        // return this.database.query(
-        //     `INSERT INTO ${TABLE_NAME} (author, type, text, vote, id_user) VALUES (?, ?, ?, ?, ?)`,
-        //     [author, type, text, vote, id_user]
-        // );
-        const { text } = quote;
+        const { author, text, id_user } = quote;
         return this.database.query(
-            `INSERT INTO ${TABLE_NAME} (text) VALUES (?)`,
-            [text]
+            `INSERT INTO ${TABLE_NAME} (author, text, id_user) VALUES (?, ?, ?)`,
+            [author, text, id_user]
         );
 
     }

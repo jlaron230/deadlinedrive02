@@ -1,4 +1,5 @@
 const models = require("../models");
+const { validationResult } = require("express-validator");
 
 const browse = async (req, res) => {
     try {
@@ -27,7 +28,7 @@ const read = async (req, res) => {
 const edit = async (req, res) => {
     const quote = req.body;
     quote.id = parseInt(req.params.id, 10);
-    
+
     try {
         await models.quote.update(quote);
         res.sendStatus(204);
@@ -42,18 +43,24 @@ const edit = async (req, res) => {
 };
 
 const add = async (req, res) => {
+    // FIXME const errors = validationResult(req);
+    // console.log(errors);
+    // if (!errors.isEmpty()) {
+    //     return res.status(400).json({ errors: errors.array() }); // Bad Request
+    // }
     const quote = req.body;
-
     try {
         const [result] = await models.quote.insert(quote);
-        res.location(`quotes/${result.insertId}`).sendStatus(201);
-    } catch (error) {
-        console.error(error);
-        if (error.message === "Invalid data.") {
-            res.status(400).send({ error: error.message });
-        } else {
-            res.sendStatus(500);
+        const quoteId = result.insertId;
+
+        if (quote.id_category) {
+            await models.quote_category.insert({ id_quote: quoteId, id_category: quote.category_id });
         }
+
+        res.location(`quotes/${quoteId}`).sendStatus(201);
+    } catch (error) {
+        console.error("Error when adding quotes : ", error);
+        res.sendStatus(500);
     }
 };
 
