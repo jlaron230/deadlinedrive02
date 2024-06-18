@@ -25,6 +25,10 @@ function ChooseAuthor({ selectedAuthor, onSelectAuthor }) {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    setSearchTerm(selectedAuthor);
+  }, [selectedAuthor]);
+
   const handleSearchChange = (e) => {
     const searchValue = e.target.value;
     setSearchTerm(searchValue);

@@ -6,7 +6,8 @@ import axios from "axios";
 export default function CustomizeQuotes() {
   const [categories, setCategories] = useState([]);
   const [quotes, setQuotes] = useState([]);
-  const [newQuote, setNewQuote] = useState({ author:"", text: "", type:"" });
+  const [newQuote, setNewQuote] = useState({ author:"", text: "", id_category:"" });
+  const [customAuthor, setCustomAuthor] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -30,9 +31,11 @@ export default function CustomizeQuotes() {
   const addQuote = async (newQuote) => {
     const id_user = 10;
     try {
+      const author = customAuthor || newQuote.author;
+
       const res = await axios.post("http://localhost:5000/quotes", 
         {
-        author: newQuote.author,
+        author: author,
         text: newQuote.text,
         id_user: newQuote.id_user,
         id_category: newQuote.id_category
@@ -95,6 +98,8 @@ export default function CustomizeQuotes() {
             />
             <input
               type="text"
+              value={customAuthor}
+              onChange={(e) => setCustomAuthor(e.target.value)}
               placeholder="Si auteur non répertorié"
               className="px-4 py-1 border border-gray-400 rounded-md focus:outline-none focus:border-gray-800 w-full bg-orange-400"
             />
