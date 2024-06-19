@@ -70,7 +70,7 @@ export default function CalendarComponents() {
   }
 
   return (
-    <div class="flex min-h-full text-sm">
+    <div class="flex min-h-full text-sm ">
       <Sidebar
         weekendsVisible={weekendsVisible}
         handleWeekendsToggle={handleWeekendsToggle}
@@ -121,26 +121,27 @@ function renderEventContent(eventInfo) {
 function Sidebar({ weekendsVisible, handleWeekendsToggle, currentEvents }) {
   return (
     <div class = "w-72 leading-6 border-solid border-r-2">
+      
       <div class="p-8">
-        <h2>Instructions</h2>
+        <h2 class="font-semibold">Instructions</h2>
         <ul>
-          <li>Select dates and you will be prompted to create a new event</li>
-          <li>Drag, drop, and resize events</li>
-          <li>Click an event to delete it</li>
+          <li>Cliquez sur une date pour rajouter un évènement</li>
+          <li>Fonctionnalités drag and drop disponible</li>
+          <li>Cliquez sur un évènement pour le supprimer</li>
         </ul>
       </div>
       <div class="p-8">
-        <label>
+        <label class="font-semibold">
           <input
             type='checkbox'
             checked={weekendsVisible}
             onChange={handleWeekendsToggle}
           ></input>
-          toggle weekends
+          Avec les weekends
         </label>
       </div>
       <div class="p-8">
-        <h2>All Events ({currentEvents.length})</h2>
+        <h2 class="font-semibold">All Events ({currentEvents.length})</h2>
         <ul>
           {currentEvents.map((event) => (
             <SidebarEvent key={event.id} event={event} />

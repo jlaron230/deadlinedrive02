@@ -41,7 +41,7 @@ const App = () => {
       <div class="grid md:grid-cols-3 gap-5 p-4 justify-center bg-custom-main-orange m-3 rounded-lg">
         {/* Map over the quotes array and render each quote in a div */}
         {quotes.map((quote, index) => (
-          <div key={index} class="">
+          <div key={index}>
             {/* Paragraph for the quote text, centered */}
             <p class="text-center">{quote.text}</p>
             {/* Paragraph for the quote author, bold and centered */}

@@ -35,16 +35,18 @@ const YoursEvents = () => {
     <div>
       <h2 class="p-8 font-semibold text-xl flex justify-center">Vos évènements</h2>
       {/* Map over the tasks array and render each task */}
+      <div class=" grid md:grid-cols-3 ">
       {tasks.map((task, index) => (
-        <div key={index} class="flex flex-col">
+        <div key={index} class=" border-solid border-2 border-caramel rounded-lg m-6 p-4 ">
           {/* Display the task title, centered */}
-          <p className="text-center">{task.title}</p>
+          <p className="font-semibold text-align">{task.title}</p>
           {/* Display the task deadline, formatted as a date, bold and centered */}
-          <p className="font-semibold text-center">{new Date(task.deadline).toLocaleDateString()}</p>
+          <p className=" text-align">{new Date(task.deadline).toLocaleDateString()}</p>
 
-          <p className="text-center">{task.description}</p>
+          <p className="text-align">{task.description}</p>
         </div>
       ))}
+      </div>
     </div>
   );
 };
