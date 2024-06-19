@@ -23,8 +23,6 @@ router.post("/quotes", quoteControllers.add);
 router.post("/users", hashPassword, userControllers.add); // Route to add a new user
 router.get("/users", userControllers.browse); // Route to browse all users
   
-// authentication wall : verifyToken is activated for each route after this line
-router.use(verifyToken);  
 
 
 // Define routes for user operations
@@ -42,6 +40,7 @@ router.delete("/categories/:id", categoryControllers.destroy);
 router.get("/quotes", quoteControllers.browse);
 router.get("/quotes/:id", quoteControllers.read);
 router.put("/quotes/:id", quoteControllers.edit);
+router.post("/quotes", quoteControllers.add);
 router.delete("/quotes/:id", quoteControllers.destroy);
 
 router.get("/tasks", taskControllers.browse);
@@ -68,5 +67,8 @@ router.get("/comment/:id", commentControllers.read);
 router.put("/comment/:id", commentControllers.edit);
 router.post("/comment", commentControllers.add);
 router.delete("/comment/:id", commentControllers.destroy);
+
+// authentication wall : verifyToken is activated for each route after this line
+router.use(verifyToken);  
 
 module.exports = router;
