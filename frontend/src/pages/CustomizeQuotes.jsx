@@ -85,7 +85,7 @@ export default function CustomizeQuotes() {
                 })
               }
               placeholder="Personnaliser une nouvelle citation"
-              className="px-4 py-1 border border-gray-400 rounded-md focus:outline-none focus:border-gray-800 min-h-32 w-full bg-orange-400"
+              className="px-4 py-1 border border-gray-400 rounded-md focus:outline-none focus:border-gray-800 min-h-32 w-full bg-orange-400 placeholder:text-slate-100"
             />
             <ChooseAuthor
             selectedAuthor={newQuote.author}
@@ -101,7 +101,7 @@ export default function CustomizeQuotes() {
               value={customAuthor}
               onChange={(e) => setCustomAuthor(e.target.value)}
               placeholder="Si auteur non répertorié"
-              className="px-4 py-1 border border-gray-400 rounded-md focus:outline-none focus:border-gray-800 w-full bg-orange-400"
+              className="px-4 py-1 border border-gray-400 rounded-md focus:outline-none focus:border-gray-800 w-full bg-orange-400 placeholder:text-slate-100"
             />
             <ChooseTheme
             selectedTheme={newQuote.id_category}
@@ -114,7 +114,7 @@ export default function CustomizeQuotes() {
             />
             <button
               type="submit"
-              className="px-4 py-1 bg-sky-600 text-white rounded hover:bg-orange-700"
+              className="px-4 py-1 bg-amber-300 text-white font-semibold rounded hover:bg-amber-200"
             >
               Créer
             </button>

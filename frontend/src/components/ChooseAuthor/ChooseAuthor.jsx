@@ -66,7 +66,7 @@ function ChooseAuthor({ selectedAuthor, onSelectAuthor }) {
         onChange={handleSearchChange}
         onFocus={handleInputFocus}
         placeholder="Sélectionner ou saisir un auteur"
-        className="px-4 py-2 bg-orange-400 rounded-lg w-96 placeholder:text-gray-800"
+        className="px-4 py-2 bg-orange-400 rounded-lg w-96 placeholder:text-gray-800 font-semibold"
       />
       <ChevronDownIcon
           className="h-5 w-5 absolute right-3 top-1/2 transform -translate-y-2/4 cursor-pointer text-gray-600"

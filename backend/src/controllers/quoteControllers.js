@@ -50,11 +50,11 @@ const add = async (req, res) => {
     // }
     const quote = req.body;
     try {
-        const [result] = await models.quote.insert(quote);
-        const quoteId = result.insertId;
+        const [quoteResult] = await models.quote.insert(quote);
+        const quoteId = quoteResult.insertId;
 
         if (quote.id_category) {
-            await models.quote_category.insert({ id_quote: quoteId, id_category: quote.category_id });
+            await models.quote_category.insert(quoteId, quote.id_category);
         }
 
         res.location(`quotes/${quoteId}`).sendStatus(201);
