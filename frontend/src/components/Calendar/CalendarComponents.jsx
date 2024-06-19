@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import axios from 'axios'
 import { formatDate } from '@fullcalendar/core'
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
@@ -10,10 +11,37 @@ export default function CalendarComponents() {
   const [weekendsVisible, setWeekendsVisible] = useState(true)
   const [currentEvents, setCurrentEvents] = useState([])
 
+  console.log(currentEvents);
+  useEffect(() => {
+    fetchTasks();
+  }, []);
+
+  const fetchTasks = async () => {
+    try {
+      const response = await axios.get('http://localhost:5000/tasks');
+      const tasks = response.data.map(task => ({
+        id: task.id,
+        title: task.title,
+        description: task.description,
+        status: task.status,
+        start: task.deadline, // assuming deadline is used as the event date
+        allDay: true, // you can change this based on your data
+        extendedProps: {
+          id_user: task.id_user
+        }
+      }));
+      setCurrentEvents(tasks);
+    } catch (error) {
+      console.error('Error fetching tasks', error);
+    }
+  };
+  
+
   function handleWeekendsToggle() {
     setWeekendsVisible(!weekendsVisible)
   }
 
+  //add a date
   function handleDateSelect(selectInfo) {
     let title = prompt('Please enter a new title for your event')
     let calendarApi = selectInfo.view.calendar
@@ -62,16 +90,23 @@ export default function CalendarComponents() {
           selectMirror={true}
           dayMaxEvents={true}
           weekends={weekendsVisible}
-          initialEvents={INITIAL_EVENTS} // alternatively, use the `events` setting to fetch from a feed
+          initialEvents={[
+              { title: 'event 1', date: '2024-06-01' },
+              { title: 'event 2', date: '2024-06-02' }]}
+            //   alternatively, use the `events` setting to fetch from a feed = where the task is show
           select={handleDateSelect}
           eventContent={renderEventContent} // custom render function
           eventClick={handleEventClick}
           eventsSet={handleEvents} // called after events are initialized/added/changed/removed
-          /* you can update a remote database when these fire:
+          //  you can update a remote database when these fire:
           eventAdd={function(){}}
           eventChange={function(){}}
           eventRemove={function(){}}
-          */
+          // events={[
+          //   { title: 'event 1', date: '2024-06-01' },
+          //   { title: 'event 2', date: '2024-06-02' }
+          // ]}
+
         />
       </div>
     </div>
