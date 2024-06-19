@@ -24,8 +24,8 @@ class QuoteManager extends AbstractManager {
         // REVIEW the development phase requires that testing be done only on a certain type of restrictions
         const { author, text, id_user } = quote;
         return this.database.query(
-            `INSERT INTO ${TABLE_NAME} (author, text, id_user) VALUES (?, ?, ?)`,
-            [author, text, id_user]
+            `INSERT INTO ${TABLE_NAME} (author, text, vote, id_user) VALUES (?, ?, ?, ?)`,
+            [author, text, 0, id_user]
         );
 
     }
