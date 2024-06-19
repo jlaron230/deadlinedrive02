@@ -102,11 +102,7 @@ export default function CalendarComponents() {
           eventAdd={function(){}}
           eventChange={function(){}}
           eventRemove={function(){}}
-          // events={[
-          //   { title: 'event 1', date: '2024-06-01' },
-          //   { title: 'event 2', date: '2024-06-02' }
-          // ]}
-
+         
         />
       </div>
     </div>
