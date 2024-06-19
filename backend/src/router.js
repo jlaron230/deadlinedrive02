@@ -24,7 +24,7 @@ router.post("/users", hashPassword, userControllers.add); // Route to add a new 
 router.get("/users", userControllers.browse); // Route to browse all users
   
 
-
+ 
 // Define routes for user operations
 router.get("/users/:id", userControllers.read); // Route to read a specific user by ID
 router.put("/users/:id", userControllers.edit); // Route to edit a user by ID
