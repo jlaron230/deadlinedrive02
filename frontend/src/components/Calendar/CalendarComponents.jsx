@@ -42,8 +42,10 @@ export default function CalendarComponents() {
   }
 
   //add a date
-  function handleDateSelect(selectInfo) {
-    let title = prompt('Please enter a new title for your event')
+  const handleDateSelect = async (selectInfo) => {
+    let title = prompt('Donner un titre à votre tâche !')
+    let description = prompt('Décrivez votre tâche')
+    let status = prompt("Qu'elle est son status ?")
     let calendarApi = selectInfo.view.calendar
 
     calendarApi.unselect() // clear date selection
@@ -52,12 +54,24 @@ export default function CalendarComponents() {
       calendarApi.addEvent({
         id: createEventId(),
         title,
+        description: description,
+        status: status,
         start: selectInfo.startStr,
-        end: selectInfo.endStr,
-        allDay: selectInfo.allDay
+        id_user: 10,
       })
+
+      try {
+        const response =  axios.post('http://localhost:5000/tasks', newEvent);
+        const eventWithId = { ...newEvent, id: response.data.id };
+        setCurrentEvents([...currentEvents, eventWithId]);
+      } catch (error) {
+        console.error('Error adding task', error);
+      }
     }
+    console.log(currentEvents);
   }
+
+
 
   function handleEventClick(clickInfo) {
     if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
@@ -65,49 +79,37 @@ export default function CalendarComponents() {
     }
   }
 
+  function handleEventAdd(info) {
+    const { event } = info;
+    axios.post('http://localhost:5000/tasks', event) // Adjust URL based on your API
+      .then(() => {
+        console.log('Event added to database successfully');
+      })
+      .catch(error => console.error('Error adding event to database:', error));
+  }
+  
+  function handleEventChange(info) {
+    const { event } = info;
+    axios.put(`http://localhost:5000/tasks/${event.id}`, event) // Adjust URL based on your API
+      .then(() => {
+        console.log('Event updated in database successfully');
+      })
+      .catch(error => console.error('Error updating event in database:', error));
+  }
+  
+  function handleEventRemove(info) {
+    const { event } = info;
+    axios.delete(`http://localhost:5000/tasks/${event.id}`, event) // Adjust URL based on your API
+      .then(() => {
+        console.log('Event removed from database successfully');
+      })
+      .catch(error => console.error('Error removing event from database:', error));
+  }
+  
+
   function handleEvents(events) {
     setCurrentEvents(events)
   }
-
-  return (
-    <div class="grid grid-rows-1 min-h-full text-sm ">
-      <Sidebar
-        weekendsVisible={weekendsVisible}
-        handleWeekendsToggle={handleWeekendsToggle}
-        currentEvents={currentEvents}
-      />
-      <div class="grow p-12">
-        <FullCalendar
-          plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-          headerToolbar={{
-            left: 'prev,next today',
-            center: 'title',
-            right: 'dayGridMonth,timeGridWeek,timeGridDay'
-          }}
-          initialView='dayGridMonth'
-          editable={true}
-          selectable={true}
-          selectMirror={true}
-          dayMaxEvents={true}
-          weekends={weekendsVisible}
-          initialEvents={[
-              { title: 'event 1', date: '2024-06-01' },
-              { title: 'event 2', date: '2024-06-02' }]}
-            //   alternatively, use the `events` setting to fetch from a feed = where the task is show
-          select={handleDateSelect}
-          eventContent={renderEventContent} // custom render function
-          eventClick={handleEventClick}
-          eventsSet={handleEvents} // called after events are initialized/added/changed/removed
-          //  you can update a remote database when these fire:
-          eventAdd={function(){}}
-          eventChange={function(){}}
-          eventRemove={function(){}}
-         
-        />
-      </div>
-    </div>
-  )
-}
 
 function renderEventContent(eventInfo) {
   return (
@@ -161,3 +163,45 @@ function SidebarEvent({ event }) {
     </li>
   )
 }
+
+  return (
+    <div class="grid grid-rows-1 min-h-full text-sm ">
+      <Sidebar
+        weekendsVisible={weekendsVisible}
+        handleWeekendsToggle={handleWeekendsToggle}
+        currentEvents={currentEvents}
+      />
+      <div class="grow p-12">
+        <FullCalendar
+          plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+          headerToolbar={{
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek,timeGridDay'
+          }}
+          initialView='dayGridMonth'
+          editable={true}
+          selectable={true}
+          selectMirror={true}
+          dayMaxEvents={true}
+          weekends={weekendsVisible}
+          initialEvents={ currentEvents}
+            //  base:{INITIAL_EVENTS} alternatively, use the `events` setting to fetch from a feed = where the task is show
+            // [
+              // { title: 'event 1', date: '2024-06-01' },
+              // { title: 'event 2', date: '2024-06-02' }]
+          select={handleDateSelect}
+          eventContent={renderEventContent} // custom render function
+          eventClick={handleEventClick}
+          eventsSet={handleEvents} // called after events are initialized/added/changed/removed
+          //  you can update a remote database when these fire:
+          eventAdd={handleEventAdd}
+          eventChange={handleEventChange}
+          eventRemove={handleEventRemove}
+         
+        />
+      </div>
+    </div>
+  )
+}
+
