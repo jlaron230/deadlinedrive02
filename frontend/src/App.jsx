@@ -17,6 +17,7 @@ import PrivacyPolicy from './pages/PrivacyPolicy';
 import LegalNotice from './pages/LegalNotice';
 import NotFound from './pages/NotFound';
 import Contact from './pages/Contact';
+import UserAccountProps from '@components/UserAccount/UserAccountProps';
 
 //`createContext` est utilisé pour créer un contexte pour le partage d'état dans une hiérarchie de composants
 const PostsContext = createContext();
@@ -30,9 +31,10 @@ function App() {
     <PostsContext.Provider
     //Ajouter vos composants dans le router pour la réutilisation de vos props dans chaque pages.
     value={{
-
+      UserAccountProps
          }}
    >
+    
     <Router>
       <Routes>
 
