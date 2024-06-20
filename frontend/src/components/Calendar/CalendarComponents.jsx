@@ -29,12 +29,14 @@ export default function CalendarComponents() {
         extendedProps: {
           id_user: task.id_user
         }
+        
       }));
       setCurrentEvents(tasks);
     } catch (error) {
       console.error('Error fetching tasks', error);
     }
   };
+  
   
 
   function handleWeekendsToggle() {
@@ -59,7 +61,7 @@ export default function CalendarComponents() {
         start: selectInfo.startStr,
         id_user: 10,
       })
-
+      
       try {
         const response =  axios.post('http://localhost:5000/tasks', newEvent);
         const eventWithId = { ...newEvent, id: response.data.id };
@@ -69,6 +71,7 @@ export default function CalendarComponents() {
       }
     }
     console.log(currentEvents);
+
   }
 
 
