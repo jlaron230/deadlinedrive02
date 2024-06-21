@@ -33,7 +33,7 @@ const YoursEvents = () => {
 
   return (
     <div>
-      <h2 class="p-8 font-semibold text-xl flex justify-center">Vos évènements</h2>
+      <h2 class=" py-7 font-semibold text-xl flex justify-center">Vos évènements</h2>
       {/* Map over the tasks array and render each task */}
       <div class=" grid md:grid-cols-3 ">
       {tasks.map((task, index) => (
@@ -44,6 +44,7 @@ const YoursEvents = () => {
           <p className=" text-align">{new Date(task.deadline).toLocaleDateString()}</p>
 
           <p className="text-align">{task.description}</p>
+          <p className="text-align italic">{task.status}</p>
         </div>
       ))}
       </div>

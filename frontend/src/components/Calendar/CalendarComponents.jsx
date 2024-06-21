@@ -5,11 +5,18 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import { INITIAL_EVENTS, createEventId } from "./event-utils";
+import frLocale from '@fullcalendar/core/locales/fr';
+
 
 export default function CalendarComponents() {
   const [weekendsVisible, setWeekendsVisible] = useState(true); // State to toggle weekends visibility in the calendar.
   const [currentEvents, setCurrentEvents] = useState([]); // State to store current events.
   const [loading, setLoading] = useState(true); // State to indicate loading status.
+
+  // let calendar = new Calendar(calendarEl, {
+  //   locale: frLocale,
+  //   locale: 'fr'
+  // });
 
   // useEffect hook to fetch tasks from the server when the component mounts.
   useEffect(() => {
@@ -34,11 +41,13 @@ export default function CalendarComponents() {
   // Function to format date to "YYYY-MM-DD".
   function formatDate(dateString) {
     const date = new Date(dateString);
-    const year = date.getUTCFullYear();
-    const month = (date.getUTCMonth() + 1).toString().padStart(2, "0");
-    const day = date.getUTCDate().toString().padStart(2, "0");
+    const year = date.getFullYear(); 
+    const month = (date.getMonth() + 1).toString().padStart(2, "0"); 
+    const day = date.getDate().toString().padStart(2, "0"); 
     return `${year}-${month}-${day}`;
-  }
+}
+
+  console.log(currentEvents);
 
   // Function to toggle weekends visibility.
   function handleWeekendsToggle() {
@@ -144,17 +153,18 @@ export default function CalendarComponents() {
         <div className="p-8 content-start">
           <h2 className="font-semibold">Instructions</h2>
           <ul>
-            <li>Cliqué sur une date pour ajouter un évènements</li>
-            <li>Cliqué sur une date pour supprimer un évènement</li>
+            <li>Déroulé pour voir le calendrier</li>
+            <li>Cliqué sur une date pour ajouter un évènement</li>
+            <li>Cliqué sur un évènement pour le supprimer</li>
           </ul>
-          <div className="p-8">
+          <div className="pt-2">
             <label className="font-semibold">
               <input
                 type="checkbox"
                 checked={weekendsVisible}
                 onChange={handleWeekendsToggle}
               ></input>
-              Show weekends
+              Weekends visible
             </label>
           </div>
         </div>
@@ -170,19 +180,24 @@ export default function CalendarComponents() {
         weekendsVisible={weekendsVisible}
         handleWeekendsToggle={handleWeekendsToggle}
         currentEvents={currentEvents}
+        
       />
       <div className="grow p-12">
         {loading ? (
           <p>Loading...</p> // Show loading message while data is being fetched.
         ) : (
-          <FullCalendar
+          <FullCalendar 
+            
             plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]} // Add plugins to the calendar.
-            headerToolbar={{
+            themeSystem='Slate'
+            headerToolbar ={{
               left: "prev,next today",
               center: "title",
               right: "dayGridMonth,timeGridWeek,timeGridDay",
             }}
             initialView="dayGridMonth" // Set the initial view of the calendar.
+            locale={frLocale}
+           
             editable={true} // Make events editable.
             selectable={true} // Make dates selectable.
             selectMirror={true} // Show a "mirror" of the selection.
