@@ -2,12 +2,12 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import Pagination from "@components/Pagination/Pagination";
 import {
-  ChatBubbleBottomCenterTextIcon,
   ChevronUpIcon,
   ChevronDownIcon,
 } from "@heroicons/react/24/solid";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
+import CommentSection from "@components/CommentSection/CommentSection";
 
 function QuoteCard() {
   const [quote, setQuote] = useState([]);
@@ -16,6 +16,8 @@ function QuoteCard() {
   const [currentQuotes, setCurrentQuotes] = useState([]);
   const [itemOffset, setItemOffset] = useState(0);
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedQuote, setSelectedQuote] = useState(null);
   const itemsPerPage = 9;
 
   const fetchData = async () => {
@@ -70,6 +72,11 @@ function QuoteCard() {
     setItemOffset(0);
   };
 
+  const handleQuoteClick = (quote) => {
+    setSelectedQuote(quote);
+    setIsModalOpen(true);
+  };
+
   return (
     <>
       <div className="flex flex-col max-w-7xl m-auto py-6">
@@ -109,6 +116,7 @@ function QuoteCard() {
                 className="mb-4 p-4 border-2 rounded-md border-custom-main-orange shadow w-96 min-h-80 flex flex-col hover:bg-slate-50"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.9 }}
+                onClick={() => handleQuoteClick(quote)}
               >
                 <h2 className="text-xl font-bold">Citation n°{quote.id}</h2>
                 <p className="mt-1 pb-4">
@@ -133,7 +141,6 @@ function QuoteCard() {
                       className="w-6 hover:fill-red-500 cursor-pointer"
                       // onClick={() => handleDownvote(quote.id)}
                     />
-                    <ChatBubbleBottomCenterTextIcon className="w-6 ml-5 hover:fill-blue-600 cursor-pointer" />
                   </section>
                   <button className="rounded bg-custom-main-orange w-1/3 text-white font-normal cursor-copy">
                     Partager
@@ -153,6 +160,13 @@ function QuoteCard() {
           onPageChange={handlePageClick}
         />
       </div>
+      {isModalOpen && (
+        <CommentSection
+          quote={selectedQuote}
+          category={getCategoryName(selectedQuote.id)}
+          onClose={() => setIsModalOpen(false)}
+        />
+      )}
     </>
   );
 }
