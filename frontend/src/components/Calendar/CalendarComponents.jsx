@@ -112,7 +112,7 @@ export default function CalendarComponents() {
 
   // Function to handle event changes (for updates).
   function handleEventChange(info) {
-    const { event } = info;
+    const { event } = info; // the object info is destructured
     axios
       .put(`http://localhost:5000/tasks/${event.id}`, event) // Send the updated event to the server.
       .then(() => {
