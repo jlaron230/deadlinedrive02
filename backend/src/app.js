@@ -20,7 +20,7 @@ const cors = require("cors");
 
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL ?? "http://localhost:3000",
+    origin: process.env.FRONTEND_URL ?? "http://localhost:5173",
     optionsSuccessStatus: 200,
   })
 );
@@ -46,6 +46,8 @@ const reactIndexFile = path.join(
   "index.html"
 );
 
+
+
 if (fs.existsSync(reactIndexFile)) {
   // serve REACT resources
 
@@ -57,6 +59,7 @@ if (fs.existsSync(reactIndexFile)) {
     res.sendFile(reactIndexFile);
   });
 }
+
 
 // ready to export
 

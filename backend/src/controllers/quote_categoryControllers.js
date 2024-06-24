@@ -31,44 +31,39 @@ const read = (req, res) => {
 };
 
 // Function to update an existing quote_category
-const edit = (req, res) => {
+const edit = async (req, res) => {
   const quote_category = req.body;
+  const id_quote = parseInt(req.params.id_quote, 10); // Récupérez l'id_quote depuis les paramètres
+  const id_category = parseInt(req.params.id_category, 10); // Récupérez l'id_category depuis les paramètres
 
-  // TODO validations (length, format...)
-
-  quote_category.id = parseInt(req.params.id, 10);
-
-  models.quote_category
-    .update(quote_category)
-    .then(([result]) => {
-      if (result.affectedRows === 0) {
-        res.sendStatus(404); // Sends a 404 response if the quote_category to be updated is not found
-      } else {
-        res.sendStatus(204); // Sends a 204 response to indicate the update was successful
-      }
-    })
-    .catch((err) => {
-      console.error(err); // Logs the error to the console
-      res.sendStatus(500); // Sends a server error response
-    });
+  // Validez et mettez à jour les données en utilisant id_quote et id_category
+  try {
+    await models.quote_category.update({ id_quote, id_category, ...quote_category });
+    res.sendStatus(204);
+  } catch (error) {
+    console.error(error);
+    res.sendStatus(500);
+  }
 };
+
 
 // Function to add a new quote_category
-const add = (req, res) => {
+const add = async (req, res) => {
   const quote_category = req.body;
 
-  // TODO validations (length, format...)
+  // Assurez-vous que vous avez les bonnes valeurs pour id_quote et id_category
+  const id_quote = quote_category.id_quote;
+  const id_category = quote_category.id_category;
 
-  models.quote_category
-    .insert(quote_category)
-    .then(([result]) => {
-      res.location(`/quote_categorys/${result.insertId}`).sendStatus(201); // Sends a 201 response with the location of the new quote_category
-    })
-    .catch((err) => {
-      console.error(err); // Logs the error to the console
-      res.sendStatus(500); // Sends a server error response
-    });
+  try {
+    await models.quote_category.insert(id_quote, id_category);
+    res.sendStatus(201);
+  } catch (error) {
+    console.error("Erreur lors de l'ajout : ", error);
+    res.sendStatus(500);
+  }
 };
+
 
 // Function to delete an existing quote_category by its ID
 const destroy = (req, res) => {

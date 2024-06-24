@@ -5,18 +5,18 @@ class Quote_Category extends AbstractManager {
     super({ table: "quote_category" });
   }
   // Function to insert a new record into the quote_category join table
-  insert(id_quote, id_category	) {
+  insert(id_quote, id_category) {
     return this.database.query(
-      `INSERT INTO ${this.table} (id_quote, id_category	) VALUES (?, ?)`,
-      [id_quote, id_category	]
+      `INSERT INTO ${this.table} (id_quote, id_category) VALUES (?, ?)`,
+      [id_quote, id_category]
     );
   }
 
   // Function to delete a record from the quote_category join table
-  delete(id_quote, id_category	) {
+  delete(id_quote, id_category) {
     return this.database.query(
       `DELETE FROM ${this.table} WHERE id_quote = ? AND id_category	 = ?`,
-      [id_quote, id_category	]
+      [id_quote, id_category]
     );
   }
 

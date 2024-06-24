@@ -48,7 +48,6 @@ const edit = async (req, res) => {
     res.sendStatus(500); // Internal Server Error
   }
 };
-
 // Add a new task to the database
 const add = async (req, res) => {
   const errors = validationResult(req);
@@ -57,9 +56,10 @@ const add = async (req, res) => {
   }
 
   const task = req.body;
+  console.log('Task from request body:', task);
 
-   // Convert the deadline string to a Date object if it's a string
-   if (typeof task.deadline === 'string') {
+  // Convert the deadline string to a Date object if it's a string
+  if (typeof task.deadline === 'string') {
     task.deadline = new Date(task.deadline);
   }
 
@@ -68,15 +68,20 @@ const add = async (req, res) => {
     return res.status(400).json({ message: 'Invalid data' }); // Bad Request
   }
 
-
   try {
+    console.log('Task to be inserted:', task);
     const [result] = await models.task.insert(task);
+    console.log('Insert result:', result);
     res.location(`/tasks/${result.insertId}`).sendStatus(201); // Created
   } catch (err) {
-    console.error(err);
+    console.error('Error during task insertion:', err);
     res.sendStatus(500); // Internal Server Error
   }
+  
 };
+
+
+
 
 // Delete a specific task by its ID
 const destroy = async (req, res) => {

@@ -16,6 +16,9 @@
     html{
       font-family: "Imprima", sans-serif;
     }
+    
+@layer base {
+    
     .bg-404{
         background-image: url("../src/assets/Imagehommequimarche-ezgif.com-png-to-webp-converter.webp");
         background-repeat: no-repeat;
@@ -23,3 +26,4 @@
         background-size: cover;
     }
   }
+}
