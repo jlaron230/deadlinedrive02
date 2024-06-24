@@ -6,6 +6,7 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import { INITIAL_EVENTS, createEventId } from "./event-utils";
 import frLocale from '@fullcalendar/core/locales/fr';
+import { Theme } from "@fullcalendar/core/internal";
 
 
 export default function CalendarComponents() {
@@ -70,7 +71,7 @@ export default function CalendarComponents() {
         description: description,
         status: status,
         start: selectInfo.startStr,
-        id_user: 10,
+        id_user: 11, //id_user add directly but it will be changed dynamically
       };
       calendarApi.addEvent(task); // Add the task to the calendar.
 
@@ -189,7 +190,7 @@ export default function CalendarComponents() {
           <FullCalendar 
             
             plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]} // Add plugins to the calendar.
-            themeSystem='Slate'
+            themeSystem={"Slate"}
             headerToolbar ={{
               left: "prev,next today",
               center: "title",
