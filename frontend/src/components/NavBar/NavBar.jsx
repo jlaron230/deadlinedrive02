@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
+import { Bars3Icon, XMarkIcon, BellIcon } from '@heroicons/react/24/outline';
 import logo from '../../assets/Logo-Deadlines.svg';
 
 const NavBar = () => {
@@ -15,19 +15,21 @@ const NavBar = () => {
       <div className="max-w-7xl mx-auto p-2 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
-            <img src={logo} alt="Logo" className="h-14 w-14 mr-2" />
+            <Link to="/">
+            <img src={logo} alt="Logo" className="h-16 w-16 mr-2" />
+            </Link>
             <div className="hidden md:block">
               <div className="ml-10 flex items-baseline space-x-4">
                 <Link to="/deadlines" className="text-custom-black hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">Deadlines</Link>
-                <Link to="/personnaliser-citations" className="text-custom-black hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">Personnaliser</Link>
-                <Link to="/citations" className="text-custom-black hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">Citations</Link>
+                <Link to="/customizeQuotes" className="text-custom-black hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">Personnaliser</Link>
+                <Link to="/quote" className="text-custom-black hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">Citations</Link>
                 <Link to="/favoris" className="text-custom-black hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">Favoris</Link>
-                <Link to="/a-propos" className="text-custom-black hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">À propos</Link>
+                <Link to="/about" className="text-custom-black hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">À propos</Link>
               </div>
             </div>
           </div>
           <div className="flex items-center space-x-6">
-            <button className="text-custom-black hover:text-gray-200">
+            <button onClick={() => window.location.href = '/Contact'} className="text-custom-black hover:text-gray-200">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="h-6 w-6">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
               </svg>
@@ -56,10 +58,10 @@ const NavBar = () => {
 
       <div className={`md:hidden ${isOpen ? 'block' : 'hidden'}`}>
         <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-          <Link to="/a-propos" className="text-custom-black hover:text-gray-200 block px-3 py-2 rounded-md text-base font-medium">À propos</Link>
+          <Link to="/about" className="text-custom-black hover:text-gray-200 block px-3 py-2 rounded-md text-base font-medium">À propos</Link>
           <Link to="/deadlines" className="text-custom-black hover:text-gray-200 block px-3 py-2 rounded-md text-base font-medium">Deadlines</Link>
-          <Link to="/creer-citation" className="text-custom-black hover:text-gray-200 block px-3 py-2 rounded-md text-base font-medium">Créer Citation</Link>
-          <Link to="/citations" className="text-custom-black hover:text-gray-200 block px-3 py-2 rounded-md text-base font-medium">Citations</Link>
+          <Link to="/customizeQuotes" className="text-custom-black hover:text-gray-200 block px-3 py-2 rounded-md text-base font-medium">Créer Citation</Link>
+          <Link to="/quote" className="text-custom-black hover:text-gray-200 block px-3 py-2 rounded-md text-base font-medium">Citations</Link>
         </div>
       </div>
     </nav>

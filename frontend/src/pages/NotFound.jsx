@@ -14,7 +14,7 @@ function NotFound (){
                     Oops ! Cette page est introuvable
                     </h4>
                     <p className="mb-8 text-lg text-white">
-                    La page que vous recherchez est peut-être supprimée
+                    Retrouvez votre chemin et votre motivation
                     </p>
                     <a
                       href="/"
