@@ -58,9 +58,9 @@ export default function CustomizeQuotes() {
   return (
     <>
       <div className="flex flex-col max-w-7xl m-auto">
-          <h1 className="text-4xl flex justify-center">Créer une citation</h1>
-        <div className="flex flex-row">
-        <div className="flex flex-col space-y-6 p-6 sm:p-10">
+          <h1 className="text-3xl py-6 font-semibold flex justify-center">Créer une citation</h1>
+        <div className="flex flex-row gap-20 px-2">
+        <div className="flex flex-col w-2/4">
           {successMessage && (
             <div className="p-4 mb-4 text-sm text-green-700 bg-green-100 rounded-lg">
               {successMessage}
@@ -123,7 +123,9 @@ export default function CustomizeQuotes() {
             </button>
           </form>
           </div>
-          <img src={InspirationalImage} alt="Citation inspirante" className="w-1/2 h-auto mb-4" />
+          <div className="w-2/4">
+          <img src={InspirationalImage} alt="Citation inspirante" className="mb-4 max-h-96 w-screen rounded" />
+          </div>
         </div>
         <YoursQuote />
       </div>

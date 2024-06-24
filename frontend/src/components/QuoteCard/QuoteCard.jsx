@@ -7,6 +7,7 @@ import {
   ChevronDownIcon,
 } from "@heroicons/react/24/solid";
 import { Link } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 
 function QuoteCard() {
   const [quote, setQuote] = useState([]);
@@ -71,7 +72,7 @@ function QuoteCard() {
 
   return (
     <>
-      <div className="flex flex-col max-w-7xl m-auto">
+      <div className="flex flex-col max-w-7xl m-auto py-6">
         <ul className="flex flex-wrap justify-center gap-14 mb-8">
           {category.map((c) => (
             <li
@@ -93,54 +94,65 @@ function QuoteCard() {
             Créer une citation
           </Link>
         </ul>
-        <div className="flex flex-wrap flex-row gap-9 m-auto justify-center">
-          {currentQuotes.map((quote) => (
-            <article
-              key={quote.id}
-              className="mb-4 p-4 border-2 rounded-md border-custom-main-orange shadow w-96 min-h-80 flex flex-col hover:bg-slate-50"
-            >
-              <h2 className="text-xl font-bold">Citation n°{quote.id}</h2>
-              <p className="mt-1 pb-4">
-                {quote.text.length > 89
-                  ? `${quote.text.substring(0, 88)} [...]`
-                  : quote.text}
-              </p>
-              <hr className="w-3/4 border border-black" />
-              <p className="mt-3 text-xl font-semibold">Tirée de</p>
-              <p className="mt-2 pb-4">{quote.author}</p>
-              <hr className="w-3/4 border border-black" />
-              <p className="mt-3 text-xl font-semibold">Catégorie</p>
-              <p className="mt-2 pb-4">{getCategoryName(quote.id)}</p>
-              <footer className="mt-4 text-lg font-semibold flex justify-between mt-auto">
-                <section className="flex border-2 border-dashed border-custom-main-orange rounded p-px px-4">
-                  <ChevronUpIcon
-                    className="w-6 hover:fill-green-500 cursor-pointer"
-                    // onClick={() => handleUpvote(quote.id)}
-                  />
-                  <p className="text-2xl px-1">{quote.vote}</p>
-                  <ChevronDownIcon
-                    className="w-6 hover:fill-red-500 cursor-pointer"
-                    // onClick={() => handleDownvote(quote.id)}
-                  />
-                  <ChatBubbleBottomCenterTextIcon className="w-6 ml-5 hover:fill-blue-600 cursor-pointer" />
-                </section>
-                <button className="rounded bg-custom-main-orange w-1/3 text-white font-normal cursor-copy">
-                  Partager
-                </button>
-              </footer>
-            </article>
-          ))}
-        </div>
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={selectedCategory}
+            initial={{ y: 10, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: -10, opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="flex flex-wrap flex-row gap-9 m-auto justify-center"
+          >
+            {currentQuotes.map((quote) => (
+              <motion.article
+                key={quote.id}
+                className="mb-4 p-4 border-2 rounded-md border-custom-main-orange shadow w-96 min-h-80 flex flex-col hover:bg-slate-50"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.9 }}
+              >
+                <h2 className="text-xl font-bold">Citation n°{quote.id}</h2>
+                <p className="mt-1 pb-4">
+                  {quote.text.length > 89
+                    ? `${quote.text.substring(0, 88)} [...]`
+                    : quote.text}
+                </p>
+                <hr className="w-3/4 border border-black" />
+                <p className="mt-3 text-xl font-semibold">Tirée de</p>
+                <p className="mt-2 pb-4">{quote.author}</p>
+                <hr className="w-3/4 border border-black" />
+                <p className="mt-3 text-xl font-semibold">Catégorie</p>
+                <p className="mt-2 pb-4">{getCategoryName(quote.id)}</p>
+                <footer className="mt-4 text-lg font-semibold flex justify-between mt-auto">
+                  <section className="flex border-2 border-dashed border-custom-main-orange rounded p-px px-4">
+                    <ChevronUpIcon
+                      className="w-6 hover:fill-green-500 cursor-pointer"
+                      // onClick={() => handleUpvote(quote.id)}
+                    />
+                    <p className="text-2xl px-1">{quote.vote}</p>
+                    <ChevronDownIcon
+                      className="w-6 hover:fill-red-500 cursor-pointer"
+                      // onClick={() => handleDownvote(quote.id)}
+                    />
+                    <ChatBubbleBottomCenterTextIcon className="w-6 ml-5 hover:fill-blue-600 cursor-pointer" />
+                  </section>
+                  <button className="rounded bg-custom-main-orange w-1/3 text-white font-normal cursor-copy">
+                    Partager
+                  </button>
+                </footer>
+              </motion.article>
+            ))}
+          </motion.div>
+        </AnimatePresence>{" "}
+        <Pagination
+          pageCount={Math.ceil(
+            (selectedCategory
+              ? quote.filter((q) => getCategoryName(q.id) === selectedCategory)
+              : quote
+            ).length / itemsPerPage
+          )}
+          onPageChange={handlePageClick}
+        />
       </div>
-      <Pagination
-        pageCount={Math.ceil(
-          (selectedCategory
-            ? quote.filter((q) => getCategoryName(q.id) === selectedCategory)
-            : quote
-          ).length / itemsPerPage
-        )}
-        onPageChange={handlePageClick}
-      />
     </>
   );
 }
