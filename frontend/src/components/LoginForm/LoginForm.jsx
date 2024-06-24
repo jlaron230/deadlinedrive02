@@ -2,6 +2,7 @@ import React from "react"; // Import React to create the component
 import { Formik, Form, Field, ErrorMessage } from "formik"; // Import Formik components for form handling
 import * as Yup from "yup"; // Import Yup for schema validation
 import { motion } from "framer-motion"; // Import Framer Motion for animations
+import { useNavigate } from "react-router-dom"; // Import useNavigate from react-router-dom
 import logo from "../../assets/log-in.webp"; // Import logo image
 
 const LoginForm = () => {
@@ -15,8 +16,10 @@ const LoginForm = () => {
     }, // Image moves to its normal position with a 'spring' effect
   };
 
+  const navigate = useNavigate(); // Utiliser useNavigate pour obtenir la fonction navigate
+
   return (
-    <main className="md:min-h-[87vh] flex flex-col p-2 items-center justify-center"> {/* Main container with minimum height, centered content */}
+    <main className="md:min-h-[87.5vh] flex flex-col p-2 items-center justify-center"> {/* Main container with minimum height, centered content */}
       <div className="max-w-6xl m-auto grid md:grid-cols-2 gap-8"> {/* Responsive grid for large screens */}
         <motion.div variants={imageVariants} initial="hidden" animate="visible"> {/* Animated component for the image */}
           <img
@@ -37,69 +40,113 @@ const LoginForm = () => {
                 .min(6, "Votre mot de passe doit contenir au moins 6 caractères.")
                 .required("Ce champ est obligatoire."),
             })} // Validation schema for form fields
-            onSubmit={(values, { setSubmitting }) => {
-              console.log(values); // Log form values to the console
-              setSubmitting(false); // End form submission
+            onSubmit={(values, { setSubmitting, setFieldError, resetForm }) => {
+              // Requête HTTP POST pour envoyer les données de connexion au backend
+              fetch('http://localhost:5000/users/login', {  // Assurez-vous que cette URL est correcte et correspond à votre route dans le backend.
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(values),
+              })
+              .then(response => {
+                if (!response.ok) throw new Error('Échec de la connexion');
+                return response.json();  // Traitement de la réponse JSON
+              })
+              .then(data => {
+                console.log('Connexion réussie:', data);
+                // Ici, vous pourriez rediriger l'utilisateur ou faire d'autres traitements comme stocker le token
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('id', data.user.id);
+                localStorage.setItem('firstName', data.user.firstName);
+                localStorage.setItem('lastName', data.user.lastName);
+                localStorage.setItem('email', data.user.email);
+
+                resetForm();
+                navigate('/'); // Rediriger l'utilisateur vers la page d'accueil
+              })
+              .catch(error => {
+                console.error('Erreur lors de la connexion:', error);
+                // Gérer les erreurs spécifiques
+                setFieldError('general', 'Échec de la connexion, vérifiez vos identifiants');
+              })
+              .finally(() => {
+                setSubmitting(false);  // Arrêter la soumission du formulaire
+              });
             }}
           >
-            <Form className="flex flex-col"> {/* Form start */}
-              <label htmlFor="email" className="text-left mb-1"> {/* Label for email field */}
-                Adresse Email
-              </label>
-              <Field
-                name="email"
-                type="email"
-                placeholder="Votre adresse e-mail"
-                className="p-2 mb-4 border border-gray-300 rounded" // Email field with styles
-              />
-              <ErrorMessage
-                name="email"
-                component="div"
-                className="text-red-500 text-xs mb-2" // Error message for email field
-              />
-
-              <label htmlFor="password" className="text-left mb-1"> {/* Label for password field */}
-                Mot de passe
-              </label>
-              <Field
-                name="password"
-                type="password"
-                placeholder="Votre mot de passe"
-                className="p-2 mb-4 border border-gray-300 rounded" // Password field with styles
-              />
-              <ErrorMessage
-                name="password"
-                component="div"
-                className="text-red-500 text-xs mb-2" // Error message for password field
-              />
-              <div className="text-left text-gray-500 text-xs mb-4">
-                Votre mot de passe doit être une combinaison d'au moins 6 lettres, chiffres et symboles.
-              </div>
-
-              <div className="flex justify-between items-center mb-4"> {/* Container for checkbox and forgot password link */}
-                <label className="flex items-center">
-                  <Field type="checkbox" name="rememberMe" className="mr-2" /> {/* Remember me checkbox */}
-                  Se souvenir de moi
+            {({ errors, isSubmitting }) => (
+              <Form className="flex flex-col"> {/* Form start */}
+                <label htmlFor="email" className="text-left mb-1"> {/* Label for email field */}
+                  Adresse Email
                 </label>
-                <a href="/password-recovery" className="text-caramel"> {/* Forgot password link */}
-                  Mot de passe oublié?
-                </a>
-              </div>
+                <Field
+                  name="email"
+                  type="email"
+                  placeholder="Votre adresse e-mail"
+                  className="p-2 mb-4 border border-gray-300 rounded" // Email field with styles
+                />
+                <ErrorMessage
+                  name="email"
+                  component="div"
+                  className="text-red-500 text-xs mb-2" // Error message for email field
+                />
 
-              <button
-                type="submit"
-                className="bg-butterscotch text-white py-2 rounded" // Submit button with styles
-              >
-                Connexion
-              </button>
+                <label htmlFor="password" className="text-left mb-1"> {/* Label for password field */}
+                  Mot de passe
+                </label>
+                <Field
+                  name="password"
+                  type="password"
+                  placeholder="Votre mot de passe"
+                  className="p-2 mb-4 border border-gray-300 rounded" // Password field with styles
+                />
+                <ErrorMessage
+                  name="password"
+                  component="div"
+                  className="text-red-500 text-xs mb-2" // Error message for password field
+                />
+                <div className="text-left text-gray-500 text-xs mb-4">
+                  Votre mot de passe doit être une combinaison d'au moins 6 lettres, chiffres et symboles.
+                </div>
 
-              <div className="mt-4"> {/* Link to sign-up page */}
-                Vous n'avez pas encore de compte?{" "}
-                <a href="/signup" className="text-caramel">
-                  Créez-en un dès maintenant !
-                </a>
-              </div>
-            </Form>
+                <div className="flex justify-between items-center mb-4"> {/* Container for checkbox and forgot password link */}
+                  <label className="flex items-center">
+                    <Field type="checkbox" name="rememberMe" className="mr-2" /> {/* Remember me checkbox */}
+                    Se souvenir de moi
+                  </label>
+                  <a href="/password-recovery" className="text-caramel"> {/* Forgot password link */}
+                    Mot de passe oublié?
+                  </a>
+                </div>
+
+                <button
+                  type="submit"
+                  className="bg-butterscotch text-white py-2 rounded flex items-center justify-center" // Submit button with styles
+                  disabled={isSubmitting} // Désactiver le bouton pendant la soumission
+                >
+                  {isSubmitting ? (
+                    <svg className="animate-spin h-5 w-5 text-custom-main-orange" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                    </svg>
+                  ) : (
+                    "Connexion"
+                  )}
+                </button>
+
+                {errors.general && ( // Afficher les erreurs générales
+                  <div className="text-red-500 text-xs mb-2">{errors.general}</div>
+                )}
+
+                <div className="mt-4"> {/* Link to sign-up page */}
+                  Vous n'avez pas encore de compte?{" "}
+                  <a href="/signup" className="text-caramel">
+                    Créez-en un dès maintenant !
+                  </a>
+                </div>
+              </Form>
+            )}
           </Formik>
         </div>
       </div>

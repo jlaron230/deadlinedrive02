@@ -11,8 +11,8 @@ const PasswordRecoverySchema = Yup.object().shape({
 
 const PasswordRecoveryContent = ({ onRecoverPassword }) => {
   return (
-    <main className="flex flex-col items-center justify-center p-8 md:p-24 w-full min-h-[88vh]">
-      <div className="relative flex flex-col items-center border border-black p-8 md:p-12 w-full max-w-4xl">
+    <main className="flex flex-col items-center justify-center p-8 md:p-24 w-full min-h-[85.5vh]">
+      <div className="relative flex flex-col items-center border border-butterscotch p-8 md:p-12 w-full max-w-4xl">
         <img src={logo} className="absolute bg-white -left-[30px] -top-[70px] w-24" alt="deadlinedrive logo" />
         <Formik
           initialValues={{ email: '' }}

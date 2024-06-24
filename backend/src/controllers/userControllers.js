@@ -80,6 +80,7 @@ const destroy = (req, res) => {
 
 const getUserByEmailWithPasswordAndPassToNext = (req, res, next) => {
   const { email } = req.body;
+  console.log("hello je suis là")
   models.user
     .findUserByEmail(email)
     .then(([users]) => {

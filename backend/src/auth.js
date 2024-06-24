@@ -5,7 +5,6 @@ const jwt = require("jsonwebtoken"); // Import the jsonwebtoken library for toke
 const hashPassword = async (req, res, next) => {
   argon2.hash(req.body.password) // Hash the password from the request body
     .then((hashedPassword) => {
-      console.log("asmaa plus forte que vous"); // Log a message indicating successful hashing
       req.body.password = hashedPassword; // Replace the plaintext password with the hashed password
       next(); // Call the next middleware function
     })
