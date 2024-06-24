@@ -1,6 +1,7 @@
 import ChooseTheme from "@components/ChooseTheme/ChooseTheme";
 import ChooseAuthor from "@components/ChooseAuthor/ChooseAuthor";
 import InspirationalImage from "../assets/prateek-katyal-8Aq6t-Khe5k-unsplash.jpg";
+import YoursQuote from "../components/YoursQuotes/YoursQuotes";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
@@ -122,8 +123,9 @@ export default function CustomizeQuotes() {
             </button>
           </form>
           </div>
-          <img src={InspirationalImage} alt="Citation inspirante" className="w-full h-auto mb-4" />
+          <img src={InspirationalImage} alt="Citation inspirante" className="w-1/2 h-auto mb-4" />
         </div>
+        <YoursQuote />
       </div>
     </>
   );

@@ -13,7 +13,7 @@ function Pagination({ pageCount, onPageChange }) {
       renderOnZeroPageCount={null}
       containerClassName="flex justify-center space-x-2 mt-4"
       pageClassName="bg-white border border-gray-300 rounded px-3 py-1 cursor-pointer hover:bg-gray-200"
-      activeClassName="bg-blue-500 text-white"
+      activeClassName="bg-blue-500 text-black"
       previousClassName="bg-white border border-gray-300 rounded px-3 py-1 cursor-pointer hover:bg-gray-200"
       nextClassName="bg-white border border-gray-300 rounded px-3 py-1 cursor-pointer hover:bg-gray-200"
       breakClassName="bg-white border border-gray-300 rounded px-3 py-1 cursor-pointer hover:bg-gray-200"
