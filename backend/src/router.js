@@ -22,16 +22,15 @@ const {
 router.post("/quotes", quoteControllers.add);  
 router.post("/users", hashPassword, userControllers.add); // Route to add a new user
 router.get("/users", userControllers.browse); // Route to browse all users
-  
+
 // authentication wall : verifyToken is activated for each route after this line
 router.use(verifyToken);  
-
 
 // Define routes for user operations
 router.get("/users/:id", userControllers.read); // Route to read a specific user by ID
 router.put("/users/:id", userControllers.edit); // Route to edit a user by ID
 router.delete("/users/:id", userControllers.destroy); // Route to delete a user by ID
-
+  
 // Similar setup for categories, quotes, tasks, deadlines, and quote categories
 router.get("/categories", categoryControllers.browse);
 router.get("/categories/:id", categoryControllers.read);

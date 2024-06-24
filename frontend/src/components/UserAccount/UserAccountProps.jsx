@@ -1,9 +1,8 @@
 import { useState } from "react";
 import Password from "./Password";
 import Quote from "./Quote";
-import Setting from "./Setting";
-import SettingsModification from "./SettingsModification";
 import Close from "./Close";
+import FetchUser from "./FetchUser";
 
 function UserAccountProps() {
   // State to manage the active tab and default to "general"
@@ -25,7 +24,6 @@ function UserAccountProps() {
           <span className="font-medium">Paramètres</span>
           <Close /> {/* Close button component */}
         </div>
-
         {/* Main content section */}
         <div className="h-2/3 max-h-full max-lg:block lg:flex min-h-screen">
           {/* Sidebar section */}
@@ -72,7 +70,7 @@ function UserAccountProps() {
                     </h1>
                   </div>
                   {/* Conditional rendering based on editing state */}
-                  {isEditing ? <Setting /> : <SettingsModification />}
+                  <FetchUser />
                 </section>
               </>
             )}
