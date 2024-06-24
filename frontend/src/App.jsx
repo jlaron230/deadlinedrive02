@@ -17,6 +17,7 @@ import PrivacyPolicy from './pages/PrivacyPolicy';
 import LegalNotice from './pages/LegalNotice';
 import NotFound from './pages/NotFound';
 import Contact from './pages/Contact';
+import UserAccountProps from '@components/UserAccount/UserAccountProps';
 
 // Import Navbar and Footer
 import NavBar from '@components/NavBar/NavBar';
@@ -34,9 +35,10 @@ function App() {
     <PostsContext.Provider
     //Ajouter vos composants dans le router pour la réutilisation de vos props dans chaque pages.
     value={{
-
+      UserAccountProps
          }}
    >
+    
     <Router>
       <NavBar />
       <Routes>

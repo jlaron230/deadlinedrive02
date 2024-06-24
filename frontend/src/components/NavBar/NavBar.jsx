@@ -30,7 +30,7 @@ const NavBar = () => {
             </div>
           </div>
           <div className="flex items-center space-x-6"> {/* Flex container for icons on the right */}
-            <button onClick={() => window.location.href = '/Contact'} className="text-custom-black hover:text-gray-200"> {/* Button to redirect to contact page */}
+            <button onClick={() => window.location.href = '/contact'} className="text-custom-black hover:text-gray-200"> {/* Button to redirect to contact page */}
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="h-6 w-6"> {/* SVG icon */}
                 <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
               </svg>
@@ -43,7 +43,7 @@ const NavBar = () => {
               </button>
               <span className="absolute top-0 right-0 text-xs bg-red-500 text-custom-black rounded-full h-5 w-5 flex items-center justify-center">3</span> {/* Badge for notification count */}
             </div>
-            <button onClick={() => window.location.href = '/UserAccount'} className="text-custom-black hover:text-gray-200"> {/* Button to redirect to user account page */}
+            <button onClick={() => window.location.href = '/user-account'} className="text-custom-black hover:text-gray-200"> {/* Button to redirect to user account page */}
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="h-6 w-6"> {/* SVG icon */}
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 14c-4.28 0-7.5 3.22-7.5 7.5a1 1 0 1 0 2 0C6.5 17.57 8.57 15.5 12 15.5s5.5 2.07 5.5 6a1 1 0 1 0 2 0C19.5 17.57 16.28 14 12 14zM12 2C7.82 2 4.5 5.32 4.5 9.5S7.82 17 12 17s7.5-3.32 7.5-7.5S16.18 2 12 2zM12 5c2.48 0 4.5 2.02 4.5 4.5S14.48 14 12 14 7.5 11.98 7.5 9.5 9.52 5 12 5z" />
               </svg>

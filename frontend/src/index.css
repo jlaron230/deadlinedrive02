@@ -1,17 +1,20 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 
 :root{
 --theme1: #C97D50;
 }
 
-h1, h2, h3, h4, h5, h6{
-      font-family: "Laila", sans-serif;
+@layer base {
+    h1, h2, h3, h4, h5, h6{
+      font-family: "Laila", serif;
       color: theme1;
     }
     html{
-        font-family: "Imprima", sans-serif;
+      font-family: "Imprima", sans-serif;
     }
     
 @layer base {
@@ -23,3 +26,4 @@ h1, h2, h3, h4, h5, h6{
         background-size: cover;
     }
   }
+}
