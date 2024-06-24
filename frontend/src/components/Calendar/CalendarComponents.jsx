@@ -7,7 +7,7 @@ import interactionPlugin from "@fullcalendar/interaction";
 import { INITIAL_EVENTS, createEventId } from "./event-utils";
 import frLocale from '@fullcalendar/core/locales/fr';
 import { Theme } from "@fullcalendar/core/internal";
-
+import './CalendarStyle.css';
 
 export default function CalendarComponents() {
   const [weekendsVisible, setWeekendsVisible] = useState(true); // State to toggle weekends visibility in the calendar.
@@ -151,7 +151,7 @@ export default function CalendarComponents() {
   function Sidebar({ weekendsVisible, handleWeekendsToggle, currentEvents }) {
     return (
       <div className="flex flex-row justify-center">
-        <div className="p-8 content-start">
+        <div className="py-7 content-start text-center">
           <h2 className="font-semibold">Instructions</h2>
           <ul>
             <li>Déroulé pour voir le calendrier</li>
