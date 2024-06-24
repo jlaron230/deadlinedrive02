@@ -62,14 +62,14 @@ function ChooseTheme({ selectedTheme, onSelectTheme }) {
         onChange={handleSearchChange}
         onFocus={handleInputFocus}
         placeholder="Choisir un thème"
-        className="px-4 py-2 bg-orange-400 rounded-lg w-96 placeholder:text-gray-800"
+        className="px-4 py-2 bg-custom-main-orange rounded-lg w-96 placeholder:text-gray-800 font-semibold"
       />
       <ChevronDownIcon
           className="h-5 w-5 absolute right-3 top-1/2 transform -translate-y-2/4 cursor-pointer text-gray-600"
           onClick={handleIconClick}
         />
       {isDropdownOpen && (
-        <ul className="absolute z-10 w-full bg-orange-400 border border-gray-300 rounded-lg max-h-60 overflow-y-auto">
+        <ul className="absolute z-10 w-full bg-custom-main-orange border border-gray-300 rounded-lg max-h-60 overflow-y-auto">
           {filteredCategories.map((category) => (
             <li
               key={category.id}

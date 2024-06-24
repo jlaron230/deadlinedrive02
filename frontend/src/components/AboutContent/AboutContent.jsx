@@ -1,11 +1,11 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import amirProfil from "../../assets/amirProfil.svg";
+import React from "react"; // Import React to create the component
+import { Link } from "react-router-dom"; // Import Link from react-router-dom for navigation
+import amirProfil from "../../assets/amirProfil.svg"; // Import profile images
 import calliProfil from "../../assets/calliProfil.svg";
 import jeromeProfil from "../../assets/jeromeProfil.svg";
 import faysoilProfil from "../../assets/faysoilProfil.svg";
 import history from "../../assets/OurHistory.webp";
-import Faq from "@components/Faq/Faq";
+import Faq from "@components/Faq/Faq"; // Import the FAQ component
 
 const AboutContent = () => {
   // Define team members data
@@ -41,7 +41,7 @@ const AboutContent = () => {
   ];
 
   return (
-    <main className="md:min-h-[87vh] mx-auto px-4 sm:px-6 lg:px-8">
+    <main className="md:min-h-[87vh] mx-auto px-4 sm:px-6 lg:px-8"> {/* Main container with minimum height, centered content */}
       <div className="max-w-6xl mx-auto">
         <section className="my-8 px-2 py-8">
           <h1 className="text-4xl text-caramel font-bold text-center mb-4">
@@ -144,10 +144,10 @@ const AboutContent = () => {
             ))}
           </div>
         </section>
-        <Faq />
+        <Faq /> {/* Include the FAQ component */}
       </div>
     </main>
   );
 };
 
-export default AboutContent;
+export default AboutContent; // Export AboutContent component for use in other parts of the application

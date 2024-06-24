@@ -49,7 +49,7 @@ function App() {
         <Route path="/signup" element={<Signup />} />  {/* Route for login page */}
         <Route path="/login" element={<Login />} />  {/* Route for signup page */}
         <Route path="/about" element={<About />} />  {/* Route for about page */}
-        <Route path="/calendar" element={<Calendar />} />  {/* Route for calendar page */}
+        <Route path="/deadlines" element={<Calendar />} />  {/* Route for calendar page */}
         <Route path="/user-account" element={<UserAccount />} />  {/* Route for user account page */}
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />  {/* Route for privacy policy page */}
         <Route path="/legal-notice" element={<LegalNotice />} />  {/* Route for legal notice page */}

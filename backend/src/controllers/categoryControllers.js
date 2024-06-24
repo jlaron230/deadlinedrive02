@@ -1,3 +1,4 @@
+
 const models = require("../models"); // Import the models from the specified path
 
 // Function to handle browsing (getting all categories)
