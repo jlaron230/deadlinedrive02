@@ -87,7 +87,7 @@ function QuoteCard() {
             </li>
           ))}
           <Link
-            to="/CustomizeQuotes"
+            to="/customize-quotes"
             className="rounded bg-custom-main-orange text-black font-normal px-3"
           >
             Créer une citation

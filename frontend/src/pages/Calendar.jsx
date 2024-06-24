@@ -9,10 +9,8 @@ import YoursEvents from '@components/YoursEvents/YoursEvents';
 export default function Calendar (){
     return (
        <>
-       <NavBar />
        <YoursEvents />
        <CalendarComponents />
-       <Footer/>
        </> 
     )
 }

@@ -18,6 +18,10 @@ import LegalNotice from './pages/LegalNotice';
 import NotFound from './pages/NotFound';
 import Contact from './pages/Contact';
 
+// Import Navbar and Footer
+import NavBar from '@components/NavBar/NavBar';
+import Footer from '@components/Footer/Footer';
+
 //`createContext` est utilisé pour créer un contexte pour le partage d'état dans une hiérarchie de composants
 const PostsContext = createContext();
 // Création et exportation d'un hook personnalisé `PostsQuotes` pour utiliser le contexte
@@ -34,23 +38,25 @@ function App() {
          }}
    >
     <Router>
+      <NavBar />
       <Routes>
 
         {/* Define routes for each page */}
         <Route path="/" element={<Home />} />  {/* Route for the home page */}
-        <Route path="/CustomizeQuotes" element={<CustomizeQuotes />} />  {/* Route for customizing quotes page */}
-        <Route path="/Quotes" element={<Quotes />} />  {/* Route for quotes page */}
-        <Route path="/PasswordRecovery" element={<PasswordRecovery />} />  {/* Route for password recovery page */}
-        <Route path="/Signup" element={<Signup />} />  {/* Route for login page */}
-        <Route path="/Login" element={<Login />} />  {/* Route for signup page */}
-        <Route path="/About" element={<About />} />  {/* Route for about page */}
-        <Route path="/Calendar" element={<Calendar />} />  {/* Route for calendar page */}
-        <Route path="/UserAccount" element={<UserAccount />} />  {/* Route for user account page */}
-        <Route path="/PrivacyPolicy" element={<PrivacyPolicy />} />  {/* Route for privacy policy page */}
-        <Route path="/LegalNotice" element={<LegalNotice />} />  {/* Route for legal notice page */}
-        <Route path="/Contact" element={<Contact />} />  // Route for legal notice page
+        <Route path="/customize-quotes" element={<CustomizeQuotes />} />  {/* Route for customizing quotes page */}
+        <Route path="/quotes" element={<Quotes />} />  {/* Route for quotes page */}
+        <Route path="/password-recovery" element={<PasswordRecovery />} />  {/* Route for password recovery page */}
+        <Route path="/signup" element={<Signup />} />  {/* Route for login page */}
+        <Route path="/login" element={<Login />} />  {/* Route for signup page */}
+        <Route path="/about" element={<About />} />  {/* Route for about page */}
+        <Route path="/deadlines" element={<Calendar />} />  {/* Route for calendar page */}
+        <Route path="/user-account" element={<UserAccount />} />  {/* Route for user account page */}
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />  {/* Route for privacy policy page */}
+        <Route path="/legal-notice" element={<LegalNotice />} />  {/* Route for legal notice page */}
+        <Route path="/contact" element={<Contact />} />  {/* Route for legal notice page*/}
         <Route path="*" element={<NotFound />} />  {/* Route for handling 404 Not Found */}
       </Routes>
+      <Footer />
     </Router>
     
     </PostsContext.Provider>
