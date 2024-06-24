@@ -1,5 +1,7 @@
 import ChooseTheme from "@components/ChooseTheme/ChooseTheme";
 import ChooseAuthor from "@components/ChooseAuthor/ChooseAuthor";
+import InspirationalImage from "../assets/prateek-katyal-8Aq6t-Khe5k-unsplash.jpg";
+import YoursQuote from "../components/YoursQuotes/YoursQuotes";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
@@ -55,9 +57,10 @@ export default function CustomizeQuotes() {
 
   return (
     <>
-      <div className="flex">
+      <div className="flex flex-col max-w-7xl m-auto">
+          <h1 className="text-4xl flex justify-center">Créer une citation</h1>
+        <div className="flex flex-row">
         <div className="flex flex-col space-y-6 p-6 sm:p-10">
-          <h1>Créer une citation</h1>
           {successMessage && (
             <div className="p-4 mb-4 text-sm text-green-700 bg-green-100 rounded-lg">
               {successMessage}
@@ -85,7 +88,7 @@ export default function CustomizeQuotes() {
                 })
               }
               placeholder="Personnaliser une nouvelle citation"
-              className="px-4 py-1 border border-gray-400 rounded-md focus:outline-none focus:border-gray-800 min-h-32 w-full bg-orange-400 placeholder:text-slate-100"
+              className="px-4 py-1 border border-gray-400 rounded-md focus:outline-none focus:border-gray-800 min-h-32 w-full bg-custom-main-orange placeholder:text-slate-100"
             />
             <ChooseAuthor
             selectedAuthor={newQuote.author}
@@ -101,7 +104,7 @@ export default function CustomizeQuotes() {
               value={customAuthor}
               onChange={(e) => setCustomAuthor(e.target.value)}
               placeholder="Si auteur non répertorié"
-              className="px-4 py-1 border border-gray-400 rounded-md focus:outline-none focus:border-gray-800 w-full bg-orange-400 placeholder:text-slate-100"
+              className="px-4 py-1 border border-gray-400 rounded-md focus:outline-none focus:border-gray-800 w-full bg-custom-main-orange placeholder:text-slate-100"
             />
             <ChooseTheme
             selectedTheme={newQuote.id_category}
@@ -114,12 +117,15 @@ export default function CustomizeQuotes() {
             />
             <button
               type="submit"
-              className="px-4 py-1 bg-amber-300 text-white font-semibold rounded hover:bg-amber-200"
+              className="px-4 py-1 bg-african-violet text-white font-semibold rounded hover:bg-butterscotch"
             >
               Créer
             </button>
           </form>
+          </div>
+          <img src={InspirationalImage} alt="Citation inspirante" className="w-1/2 h-auto mb-4" />
         </div>
+        <YoursQuote />
       </div>
     </>
   );
