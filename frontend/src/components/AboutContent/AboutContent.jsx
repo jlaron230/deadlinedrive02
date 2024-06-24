@@ -93,7 +93,7 @@ const AboutContent = () => {
             sport, vous trouverez une source d'inspiration adaptée à vos goûts
             et à vos intérêts pour nourrir votre esprit et stimuler votre
             motivation chaque jour. Si vous ne trouvez pas votre inspiration, 
-            <Link to="/customizeQuotes" className="text-blue-500">
+            <Link to="/customize-quotes" className="text-blue-500">
              &nbsp;créez votre citation ici
             </Link>
             .

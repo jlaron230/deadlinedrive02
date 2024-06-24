@@ -21,7 +21,7 @@ const NavBar = () => {
             <div className="hidden md:block">
               <div className="ml-10 flex items-baseline space-x-4">
                 <Link to="/deadlines" className="text-custom-black hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">Deadlines</Link>
-                <Link to="/customizeQuotes" className="text-custom-black hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">Personnaliser</Link>
+                <Link to="/customize-quotes" className="text-custom-black hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">Personnaliser</Link>
                 <Link to="/quote" className="text-custom-black hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">Citations</Link>
                 <Link to="/favoris" className="text-custom-black hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">Favoris</Link>
                 <Link to="/about" className="text-custom-black hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">À propos</Link>
@@ -60,7 +60,7 @@ const NavBar = () => {
         <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
           <Link to="/about" className="text-custom-black hover:text-gray-200 block px-3 py-2 rounded-md text-base font-medium">À propos</Link>
           <Link to="/deadlines" className="text-custom-black hover:text-gray-200 block px-3 py-2 rounded-md text-base font-medium">Deadlines</Link>
-          <Link to="/customizeQuotes" className="text-custom-black hover:text-gray-200 block px-3 py-2 rounded-md text-base font-medium">Créer Citation</Link>
+          <Link to="/customize-quotes" className="text-custom-black hover:text-gray-200 block px-3 py-2 rounded-md text-base font-medium">Créer Citation</Link>
           <Link to="/quote" className="text-custom-black hover:text-gray-200 block px-3 py-2 rounded-md text-base font-medium">Citations</Link>
         </div>
       </div>

@@ -43,16 +43,16 @@ function App() {
 
         {/* Define routes for each page */}
         <Route path="/" element={<Home />} />  {/* Route for the home page */}
-        <Route path="/customizeQuotes" element={<CustomizeQuotes />} />  {/* Route for customizing quotes page */}
+        <Route path="/customize-quotes" element={<CustomizeQuotes />} />  {/* Route for customizing quotes page */}
         <Route path="/quotes" element={<Quotes />} />  {/* Route for quotes page */}
-        <Route path="/passwordRecovery" element={<PasswordRecovery />} />  {/* Route for password recovery page */}
+        <Route path="/password-recovery" element={<PasswordRecovery />} />  {/* Route for password recovery page */}
         <Route path="/signup" element={<Signup />} />  {/* Route for login page */}
         <Route path="/login" element={<Login />} />  {/* Route for signup page */}
         <Route path="/about" element={<About />} />  {/* Route for about page */}
         <Route path="/calendar" element={<Calendar />} />  {/* Route for calendar page */}
-        <Route path="/userAccount" element={<UserAccount />} />  {/* Route for user account page */}
-        <Route path="/privacyPolicy" element={<PrivacyPolicy />} />  {/* Route for privacy policy page */}
-        <Route path="/legalNotice" element={<LegalNotice />} />  {/* Route for legal notice page */}
+        <Route path="/user-account" element={<UserAccount />} />  {/* Route for user account page */}
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />  {/* Route for privacy policy page */}
+        <Route path="/legal-notice" element={<LegalNotice />} />  {/* Route for legal notice page */}
         <Route path="/contact" element={<Contact />} />  {/* Route for legal notice page*/}
         <Route path="*" element={<NotFound />} />  {/* Route for handling 404 Not Found */}
       </Routes>
