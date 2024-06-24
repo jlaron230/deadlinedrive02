@@ -81,7 +81,7 @@ const LoginForm = () => {
                   <Field type="checkbox" name="rememberMe" className="mr-2" /> {/* Remember me checkbox */}
                   Se souvenir de moi
                 </label>
-                <a href="/passwordRecovery" className="text-caramel"> {/* Forgot password link */}
+                <a href="/password-recovery" className="text-caramel"> {/* Forgot password link */}
                   Mot de passe oublié?
                 </a>
               </div>
