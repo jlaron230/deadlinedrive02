@@ -51,7 +51,6 @@ function FetchData({ userId, email, name, birthday }) {
         },
       });
       setIsEditing(false);
-      fetchUserData(); // Refresh the user data
     } catch (error) {
       console.error('Error updating user data:', error);
     }
@@ -130,24 +129,6 @@ function FetchData({ userId, email, name, birthday }) {
                     />
                   ) : (
                     user.email
-                  )}
-                </dt>
-              </div>
-              <div>
-                <dd className="text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                  Date de naissance
-                </dd>
-                <dt className="text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                  {isEditing ? (
-                    <input
-                      type="date"
-                      name="birthday"
-                      value={user.birthday}
-                      onChange={handleInputChange}
-                       className="w-full rounded-md border border-stroke dark:border-dark-3 py-[10px] px-5 text-dark-6 outline-none transition focus:border-primary active:border-primary"
-                    />
-                  ) : (
-                    user.birthday
                   )}
                 </dt>
               </div>
