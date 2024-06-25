@@ -9,14 +9,13 @@ class UserManager extends AbstractManager {
   insert(user) {
     return this.database.query(
       `insert into ${this.table} 
-      (firstName, lastName, email, password, birthday) 
-      values (?, ?, ?, ?, ?)`, // SQL query to insert a new user
+      (firstName, lastName, email, password) 
+      values (?, ?, ?, ?)`, // SQL query to insert a new user
       [
         user.firstName,
         user.lastName,
         user.email,
         user.password,
-        user.birthday
       ] // Array of values to be inserted
     );
   }
@@ -29,14 +28,12 @@ class UserManager extends AbstractManager {
       lastName = ?, 
       email = ?, 
       password = ?, 
-      birthday = ?
       where id = ?`, // SQL query to update a user
       [
         user.firstName, 
         user.lastName, 
         user.email, 
         user.password, 
-        user.birthday, 
         user.id
       ] // Array of values to be updated and the user ID
     );
