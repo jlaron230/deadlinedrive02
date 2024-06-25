@@ -160,6 +160,7 @@ function QuoteCard() {
           onPageChange={handlePageClick}
         />
       </div>
+      <AnimatePresence>
       {isModalOpen && (
         <CommentSection
           quote={selectedQuote}
@@ -167,6 +168,7 @@ function QuoteCard() {
           onClose={() => setIsModalOpen(false)}
         />
       )}
+      </AnimatePresence>
     </>
   );
 }
