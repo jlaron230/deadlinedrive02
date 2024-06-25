@@ -2,6 +2,8 @@ import React from 'react';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import logo from "C:/Users/Amir NINACH/Desktop/deadlinedrive/frontend/src/assets/Logo-Deadlines.svg"
+import { motion } from 'framer-motion';
+
 
 const PasswordRecoverySchema = Yup.object().shape({
   email: Yup.string()
@@ -12,8 +14,14 @@ const PasswordRecoverySchema = Yup.object().shape({
 const PasswordRecoveryContent = ({ onRecoverPassword }) => {
   return (
     <main className="flex flex-col items-center justify-center p-8 md:p-24 w-full min-h-[85.5vh]">
-      <div className="relative flex flex-col items-center border border-butterscotch p-8 md:p-12 w-full max-w-4xl">
-        <img src={logo} className="absolute bg-white -left-[30px] -top-[70px] w-24" alt="deadlinedrive logo" />
+      <div className="relative flex flex-col items-center border rounded-md border-butterscotch p-8 md:p-12 w-full max-w-4xl">
+      <motion.img
+  src={logo}
+  className="absolute bg-white -left-[30px] -top-[70px] w-24"
+  alt="deadlinedrive logo"
+  animate={{ rotate: 360 }}
+  transition={{ duration: 3, loop: Infinity, ease: "linear" }}
+/>
         <Formik
           initialValues={{ email: '' }}
           validationSchema={PasswordRecoverySchema}
@@ -38,7 +46,7 @@ const PasswordRecoveryContent = ({ onRecoverPassword }) => {
               ) : null}
               <button
                 type="submit"
-                className="mt-4 w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-butterscotch hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                className="mt-4 w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-butterscotch hover:bg-caramel focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               >
                 Envoyer
               </button>
