@@ -9,11 +9,12 @@ import frLocale from '@fullcalendar/core/locales/fr';
 import './CalendarStyle.css';
 
 export default function CalendarComponents() {
-  const [weekendsVisible, setWeekendsVisible] = useState(true);
-  const [currentEvents, setCurrentEvents] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [selectedEvent, setSelectedEvent] = useState(null);
+  // State variables
+  const [weekendsVisible, setWeekendsVisible] = useState(true); // Toggle for weekends visibility
+  const [currentEvents, setCurrentEvents] = useState([]); // List of current events
+  const [loading, setLoading] = useState(true); // Loading state
+  const [modalIsOpen, setModalIsOpen] = useState(false); // Modal visibility state
+  const [selectedEvent, setSelectedEvent] = useState(null); // Currently selected event
 
   // Function to fetch tasks from the server
   const fetchTasks = async () => {
@@ -40,6 +41,7 @@ export default function CalendarComponents() {
     fetchTasks();
   }, []);
 
+  // Function to format a date string to "YYYY-MM-DD"
   function formatDate(dateString) {
     const date = new Date(dateString);
     const year = date.getFullYear();
@@ -48,6 +50,7 @@ export default function CalendarComponents() {
     return `${year}-${month}-${day}`;
   }
 
+  // Function to format a date string to "YYYY-MM-DD HH:MM:SS"
   function formatDateTime(dateString) {
     const date = new Date(dateString);
     const year = date.getFullYear();
@@ -59,17 +62,19 @@ export default function CalendarComponents() {
     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
   }
 
+  // Function to toggle the visibility of weekends
   function handleWeekendsToggle() {
     setWeekendsVisible(!weekendsVisible);
   }
 
+  // Function to handle date selection for creating a new task
   const handleDateSelect = async (selectInfo) => {
-    let title = prompt("Donnez un titre à votre tâche!");
-    let description = prompt("Décrivez votre tâche !");
-    let status = prompt("Quel est son status ?");
+    let title = prompt("Donnez un titre à votre tâche!"); // Prompt for task title
+    let description = prompt("Décrivez votre tâche !"); // Prompt for task description
+    let status = prompt("Quel est son status ?"); // Prompt for task status
     let calendarApi = selectInfo.view.calendar;
 
-    calendarApi.unselect();
+    calendarApi.unselect(); // Unselect the date
 
     if (title) {
       let task = {
@@ -77,10 +82,10 @@ export default function CalendarComponents() {
         title,
         description: description,
         status: status,
-        deadline: formatDateTime(selectInfo.startStr),
-        id_user: 22,
+        deadline: formatDateTime(selectInfo.startStr), // Format the deadline correctly
+        id_user: 22, // Assuming a fixed user ID for demonstration
       };
-      calendarApi.addEvent(task);
+      calendarApi.addEvent(task); // Add the event to the calendar
 
       try {
         const response = await axios.post("http://localhost:5000/tasks", task);
@@ -91,6 +96,7 @@ export default function CalendarComponents() {
     }
   };
 
+  // Function to handle clicking on an event
   const handleEventClick = (clickInfo) => {
     setSelectedEvent({
       id: clickInfo.event.id,
@@ -99,37 +105,40 @@ export default function CalendarComponents() {
       status: clickInfo.event.extendedProps.status,
       start: clickInfo.event.start,
     });
-    setModalIsOpen(true);
+    setModalIsOpen(true); // Open the modal for event update/delete
   };
 
+  // Function to handle updating an event
   const handleEventUpdate = async () => {
     try {
       const updatedEvent = {
         ...selectedEvent,
-        id_user: 22,
-        deadline: formatDateTime(selectedEvent.start)
+        id_user: 22, // Assuming a fixed user ID for demonstration
+        deadline: formatDateTime(selectedEvent.start) // Format the deadline correctly
       };
 
       await axios.put(`http://localhost:5000/tasks/${selectedEvent.id}`, updatedEvent);
       fetchTasks(); // Fetch tasks after updating an event
-      setModalIsOpen(false);
+      setModalIsOpen(false); // Close the modal
     } catch (error) {
       console.error("Error updating task", error);
     }
   };
 
+  // Function to handle deleting an event
   const handleEventDelete = async () => {
     if (window.confirm(`Are you sure you want to delete the event '${selectedEvent.title}'`)) {
       try {
         await axios.delete(`http://localhost:5000/tasks/${selectedEvent.id}`);
         fetchTasks(); // Fetch tasks after deleting an event
-        setModalIsOpen(false);
+        setModalIsOpen(false); // Close the modal
       } catch (error) {
         console.error("Error deleting task", error);
       }
     }
   };
 
+  // Function to render the event content in the calendar
   function renderEventContent(eventInfo) {
     return (
       <>
@@ -139,15 +148,16 @@ export default function CalendarComponents() {
     );
   }
 
+  // Sidebar component for instructions and weekend toggle
   function Sidebar({ weekendsVisible, handleWeekendsToggle }) {
     return (
       <div className="flex flex-row justify-center">
         <div className="py-7 content-start text-center">
           <h2 className="font-semibold">Instructions</h2>
           <ul>
-            <li>Déroulé pour voir le calendrier</li>
-            <li>Cliqué sur une date pour ajouter un évènement</li>
-            <li>Cliqué sur un évènement pour le supprimer</li>
+            <li>Scroll pour voir le calendrier</li>
+            <li>Cliquer sur une date pour créer un event</li>
+            <li>Cliquer sur un évènement pour le modifier ou le supprimer</li>
           </ul>
           <div className="pt-2">
             <label className="font-semibold">
