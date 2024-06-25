@@ -48,6 +48,17 @@ export default function CalendarComponents() {
     return `${year}-${month}-${day}`;
   }
 
+  function formatDateTime(dateString) {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const day = date.getDate().toString().padStart(2, "0");
+    const hours = date.getHours().toString().padStart(2, "0");
+    const minutes = date.getMinutes().toString().padStart(2, "0");
+    const seconds = date.getSeconds().toString().padStart(2, "0");
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+  }
+
   function handleWeekendsToggle() {
     setWeekendsVisible(!weekendsVisible);
   }
@@ -66,7 +77,7 @@ export default function CalendarComponents() {
         title,
         description: description,
         status: status,
-        start: selectInfo.startStr,
+        deadline: formatDateTime(selectInfo.startStr),
         id_user: 22,
       };
       calendarApi.addEvent(task);
@@ -96,7 +107,7 @@ export default function CalendarComponents() {
       const updatedEvent = {
         ...selectedEvent,
         id_user: 22,
-        deadline: formatDate(selectedEvent.start)
+        deadline: formatDateTime(selectedEvent.start)
       };
 
       await axios.put(`http://localhost:5000/tasks/${selectedEvent.id}`, updatedEvent);
@@ -218,8 +229,8 @@ export default function CalendarComponents() {
               <label className="my-1">
                 Date:
                 <input
-                  type="date"
-                  value={selectedEvent?.start ? formatDate(selectedEvent.start) : ''}
+                  type="datetime-local"
+                  value={selectedEvent?.start ? formatDateTime(selectedEvent.start).substring(0, 16) : ''}
                   onChange={(e) => setSelectedEvent({ ...selectedEvent, start: e.target.value })}
                   className="my-1 p-2 rounded"
                 />
