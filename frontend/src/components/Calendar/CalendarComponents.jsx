@@ -6,18 +6,14 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import { INITIAL_EVENTS, createEventId } from "./event-utils";
 import frLocale from '@fullcalendar/core/locales/fr';
-import { Theme } from "@fullcalendar/core/internal";
 import './CalendarStyle.css';
 
 export default function CalendarComponents() {
   const [weekendsVisible, setWeekendsVisible] = useState(true); // State to toggle weekends visibility in the calendar.
   const [currentEvents, setCurrentEvents] = useState([]); // State to store current events.
   const [loading, setLoading] = useState(true); // State to indicate loading status.
-
-  // let calendar = new Calendar(calendarEl, {
-  //   locale: frLocale,
-  //   locale: 'fr'
-  // });
+  const [modalIsOpen, setModalIsOpen] = useState(false); // State to control the visibility of the modal.
+  const [selectedEvent, setSelectedEvent] = useState(null); // State to store the selected event details.
 
   // useEffect hook to fetch tasks from the server when the component mounts.
   useEffect(() => {
@@ -28,6 +24,9 @@ export default function CalendarComponents() {
           title: task.title,
           date: formatDate(task.deadline), // Format the date for the calendar.
           id: task.id,
+          status: task.status,
+          description: task.description,
+          id_user: task.id_user
         }));
         setCurrentEvents(tasks); // Update the state with fetched tasks.
         setLoading(false); // Indicate that loading is complete.
@@ -39,6 +38,8 @@ export default function CalendarComponents() {
     fetchTasks(); // Invoke the fetchTasks function.
   }, []); // Empty dependency array means this effect runs once on mount.
 
+
+  console.log(currentEvents);
   // Function to format date to "YYYY-MM-DD".
   function formatDate(dateString) {
     const date = new Date(dateString);
@@ -46,9 +47,7 @@ export default function CalendarComponents() {
     const month = (date.getMonth() + 1).toString().padStart(2, "0"); 
     const day = date.getDate().toString().padStart(2, "0"); 
     return `${year}-${month}-${day}`;
-}
-
-  console.log(currentEvents);
+  }
 
   // Function to toggle weekends visibility.
   function handleWeekendsToggle() {
@@ -71,7 +70,7 @@ export default function CalendarComponents() {
         description: description,
         status: status,
         start: selectInfo.startStr,
-        id_user: 11, //id_user add directly but it will be changed dynamically
+        id_user: 22, // id_user add directly but it will be changed dynamically
       };
       calendarApi.addEvent(task); // Add the task to the calendar.
 
@@ -85,15 +84,21 @@ export default function CalendarComponents() {
     }
   };
 
-  // Function to handle event click (for deletion).
-  function handleEventClick(clickInfo) {
-    if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
-      clickInfo.event.remove(); // Remove the event from the calendar.
-    }
-  }
+  // Function to handle event click.
+  const handleEventClick = (clickInfo) => {
+    // Set the selected event details and open the modal.
+    setSelectedEvent({
+      id: clickInfo.event.id,
+      title: clickInfo.event.title,
+      description: clickInfo.event.extendedProps.description,
+      status: clickInfo.event.extendedProps.status,
+      start: clickInfo.event.start,
+    });
+    setModalIsOpen(true);
+  };
 
-  // Function to handle adding event to the database.
-  function handleEventAdd(info) {
+   // Function to handle adding event to the database.
+   function handleEventAdd(info) {
     const event = {
       title: info.event.title,
       description: info.event.extendedProps.description,
@@ -110,27 +115,44 @@ export default function CalendarComponents() {
       .catch((error) => console.error("Error adding event to database:", error));
   }
 
-  // Function to handle event changes (for updates).
-  function handleEventChange(info) {
-    const { event } = info; // the object info is destructured
-    axios
-      .put(`http://localhost:5000/tasks/${event.id}`, event) // Send the updated event to the server.
-      .then(() => {
-        console.log("Event updated in database successfully");
-      })
-      .catch((error) => console.error("Error updating event in database:", error));
-  }
+  // Function to handle event update.
+  const handleEventUpdate = async () => {
+    try {
+      // Format start date if necessary
+      const updatedEvent = {
+        ...selectedEvent,
+        id_user: 22, // Ensure id_user is included
+        deadline: formatDate(selectedEvent.start) // Format date if start is a date string
+      };
+  
+      // Send the updated event to the server.
+      const response = await axios.put(`http://localhost:5000/tasks/${selectedEvent.id}`, updatedEvent);
+  
+      // Update the event in the state with the response data.
+      const updatedEvents = currentEvents.map(event =>
+        event.id === selectedEvent.id ? { ...event, ...response.data } : event
+      );
+  
+      setCurrentEvents(updatedEvents); // Update the state with the updated events.
+      setModalIsOpen(false); // Close the modal.
+    } catch (error) {
+      console.error("Error updating task", error); // Handle error.
+    }
+  };
 
-  // Function to handle event removal.
-  function handleEventRemove(info) {
-    const { event } = info;
-    axios
-      .delete(`http://localhost:5000/tasks/${event.id}`, event) // Remove the event from the server.
-      .then(() => {
-        console.log("Event removed from database successfully");
-      })
-      .catch((error) => console.error("Error removing event from database:", error));
-  }
+  // Function to handle event deletion.
+  const handleEventDelete = async () => {
+    if (window.confirm(`Are you sure you want to delete the event '${selectedEvent.title}'`)) {
+      try {
+        await axios.delete(`http://localhost:5000/tasks/${selectedEvent.id}`); // Remove the event from the server.
+        const remainingEvents = currentEvents.filter(event => event.id !== selectedEvent.id); // Remove the event from the state.
+        setCurrentEvents(remainingEvents);
+        setModalIsOpen(false); // Close the modal.
+      } catch (error) {
+        console.error("Error deleting task", error); // Handle error.
+      }
+    }
+  };
 
   // Function to handle events set.
   function handleEvents(events) {
@@ -154,7 +176,7 @@ export default function CalendarComponents() {
         <div className="py-7 content-start text-center">
           <h2 className="font-semibold">Instructions</h2>
           <ul>
-            <li>Déroulé pour voir le calendrier</li>
+          <li>Déroulé pour voir le calendrier</li>
             <li>Cliqué sur une date pour ajouter un évènement</li>
             <li>Cliqué sur un évènement pour le supprimer</li>
           </ul>
@@ -173,7 +195,6 @@ export default function CalendarComponents() {
     );
   }
 
-
   // Conditional rendering based on loading state.
   return (
     <div className="grid grid-rows-1 min-h-full text-sm">
@@ -181,14 +202,13 @@ export default function CalendarComponents() {
         weekendsVisible={weekendsVisible}
         handleWeekendsToggle={handleWeekendsToggle}
         currentEvents={currentEvents}
-        
+
       />
       <div className="grow p-12">
         {loading ? (
           <p>Loading...</p> // Show loading message while data is being fetched.
         ) : (
           <FullCalendar 
-            
             plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]} // Add plugins to the calendar.
             themeSystem={"Slate"}
             headerToolbar ={{
@@ -198,7 +218,6 @@ export default function CalendarComponents() {
             }}
             initialView="dayGridMonth" // Set the initial view of the calendar.
             locale={frLocale}
-           
             editable={true} // Make events editable.
             selectable={true} // Make dates selectable.
             selectMirror={true} // Show a "mirror" of the selection.
@@ -210,10 +229,62 @@ export default function CalendarComponents() {
             eventClick={handleEventClick} // Handle event click.
             eventsSet={handleEvents} // Set the events.
             eventAdd={handleEventAdd} // Handle event addition.
-            eventChange={handleEventChange} // Handle event change.
-            eventRemove={handleEventRemove} // Handle event removal.
           />
         )}
+
+{modalIsOpen && (
+  <div className="modal">
+    <div className="modal-content p-4 flex flex-col bg-custom-main-orange m-3 rounded-lg">
+      <h2 className="font-semibold text-xl pb-4">Update Task</h2>
+      <label className="my-1">
+        Title:
+        <input
+          type="text"
+          value={selectedEvent?.title}
+          onChange={(e) => setSelectedEvent({ ...selectedEvent, title: e.target.value })}
+          className="my-1 p-2 rounded"
+        />
+      </label>
+      <label className="my-1">
+        Description:
+        <textarea
+          value={selectedEvent?.description}
+          onChange={(e) => setSelectedEvent({ ...selectedEvent, description: e.target.value })}
+          className="my-1 p-2 rounded"
+        />
+      </label>
+      <label className="my-1">
+        Status:
+        <input
+          type="text"
+          value={selectedEvent?.status}
+          onChange={(e) => setSelectedEvent({ ...selectedEvent, status: e.target.value })}
+          className="my-1 p-2 rounded"
+        />
+      </label>
+      <label className="my-1">
+        Date:
+        <input
+          type="date"
+          value={selectedEvent?.start ? formatDate(selectedEvent.start) : ''}
+          onChange={(e) => setSelectedEvent({ ...selectedEvent, start: e.target.value })}
+          className="my-1 p-2 rounded"
+        />
+      </label>
+      <button onClick={handleEventUpdate} className="my-2 bg-caramel w-1/3 text-white font-normal">
+        Update
+      </button>
+      <button onClick={handleEventDelete} className="my-2 bg-caramel w-1/3 text-white font-normal">
+        Delete
+      </button>
+      <button onClick={() => setModalIsOpen(false)} className="my-2 bg-caramel w-1/3 text-white font-normal">
+        Close
+      </button>
+    </div>
+  </div>
+)}
+
+
       </div>
     </div>
   );

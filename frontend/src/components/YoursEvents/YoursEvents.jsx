@@ -40,9 +40,9 @@ const YoursEvents = () => {
 
   return (
     <div>
-      <h2 class=" py-7 font-semibold text-xl flex justify-center">Vos évènements</h2>
+      <h2 className=" py-7 font-semibold text-xl flex justify-center">Vos évènements</h2>
       {/* Map over the tasks array and render each task */}
-      <div class=" grid md:grid-cols-3 ">
+      <div className=" grid md:grid-cols-3 ">
       {tasks.map((task, index) => (
           <motion.div 
           key={index}
