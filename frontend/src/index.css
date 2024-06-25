@@ -7,12 +7,17 @@
 :root{
 --theme1: #C97D50;
 }
-
 @layer base {
-    h1, h2, h3, h4, h5, h6{
-      font-family: "Laila", serif;
-      color: theme1;
-    }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Laila', sans-serif;
+    font-weight: 700; /* Correspond à la définition de @font-face */
+    font-style: normal;
+    color: var(--theme1);
+  }
+  .btn{
+    background-color: var(--theme1)!important;
+    color: white!important;
+  }
     html{
       font-family: "Imprima", sans-serif;
     }

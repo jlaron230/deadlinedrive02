@@ -68,6 +68,7 @@ const verifyToken = (req, res, next) => {
 
 const verifyId = (req, res, next) => {
   try {
+    console.log(req.payload);
     if (req.payload.sub === parseInt(req.params.user.id, 10)) {
       next();
     } else {
