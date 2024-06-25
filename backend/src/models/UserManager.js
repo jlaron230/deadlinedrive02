@@ -26,14 +26,12 @@ class UserManager extends AbstractManager {
       `update ${this.table} SET 
       firstName = ?, 
       lastName = ?, 
-      email = ?, 
-      password = ?, 
+      email = ? 
       where id = ?`, // SQL query to update a user
       [
         user.firstName, 
         user.lastName, 
         user.email, 
-        user.password, 
         user.id
       ] // Array of values to be updated and the user ID
     );
@@ -47,6 +45,14 @@ class UserManager extends AbstractManager {
       [email] // Array of values to be used in the query
     );
   }
+
+  modifyPassword(id, hashPassword){
+    return this.database.query(
+      `UPDATE ${this.table} SET password = ? WHERE id = ?`,
+      [hashPassword, id]
+    );
+  }
+
 }
 
 module.exports = UserManager; // Export the UserManager class

@@ -3,28 +3,32 @@ import axios from "axios";
 import Button from "./Button";
 
 function FetchData({ userId }) {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: ''
+  });
   const [isEditing, setIsEditing] = useState(false);
 
   // Function to fetch user data from the API
-  const fetchUserData = () => {
+  const fetchUserData = async () => {
     const token = localStorage.getItem('token');
     if (!token) {
       console.error('No token found');
       return;
     }
 
-    axios.get(`http://localhost:5000/users/${userId}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      }
-    })
-    .then(response => {
+    try {
+      const response = await axios.get(`http://localhost:5000/users/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        }
+      });
       setUser(response.data);
-    })
-    .catch(error => {
+    } catch (error) {
       console.error('Error fetching user data:', error);
-    });
+    }
   };
 
   // Fetch user data when component mounts or userId changes
@@ -35,10 +39,10 @@ function FetchData({ userId }) {
   // Function to handle input changes in the form
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setUser({
-      ...user,
+    setUser((prevUser) => ({
+      ...prevUser,
       [name]: value,
-    });
+    }));
   };
 
   // Function to toggle editing mode
@@ -46,21 +50,22 @@ function FetchData({ userId }) {
     setIsEditing(!isEditing);
   };
 
-
   // Function to save edited user data
   const handleSaveClick = async () => {
-    try {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        throw new Error('No token found');
-      }
+    const token = localStorage.getItem('token');
+    if (!token) {
+      console.error('No token found');
+      return;
+    }
 
+    try {
       await axios.put(`http://localhost:5000/users/${userId}`, user, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
       setIsEditing(false); // Exit edit mode after successful save
+      fetchUserData(); // Refetch user data to update the state
     } catch (error) {
       console.error('Error updating user data:', error);
     }

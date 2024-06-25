@@ -15,7 +15,7 @@ function Password({ userId }) {
     }
 
     try {
-      const response = await axios.get(`http://localhost:5000/users/11`, {
+      const response = await axios.get(`http://localhost:5000/users/62`,user, {
         headers: {
           Authorization: `Bearer ${token}`,
         }
@@ -42,7 +42,7 @@ function Password({ userId }) {
 
     try {
       const token = localStorage.getItem('token');
-      await axios.put(`http://localhost:5000/users/11`, { 
+      await axios.put(`http://localhost:5000/users/62`, { 
         oldPassword: passwords.oldPassword,
         newPassword: passwords.newPassword 
       }, {

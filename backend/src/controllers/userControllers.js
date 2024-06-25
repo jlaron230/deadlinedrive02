@@ -1,4 +1,5 @@
 const models = require("../models");
+const argon2 = require("argon2");
 
 // Function to get all users
 const browse = (req, res) => {
@@ -16,6 +17,7 @@ const browse = (req, res) => {
 // Function to get a user by ID
 const read = (req, res) => {
   models.user
+  
     .find(req.params.id)
     .then(([rows]) => {
       if (rows[0] == null) {
@@ -30,25 +32,48 @@ const read = (req, res) => {
     });
 };
 
-// Function to update a user by ID
-const edit = (req, res) => {
-  const user = req.body;
-  user.id = parseInt(req.params.id, 10);
 
-  models.user
-    .update(user)
-    .then(([result]) => {
+const edit = async (req, res) => {
+  try {
+    const userId = parseInt(req.params.id, 10);
+    const user = req.body;
+    user.id = userId;
+
+    console.log(user, "User data received for editing");
+
+    // Check if user exists
+    const [existingUser] = await models.user.find(userId);
+    if (!existingUser) {
+      return res.sendStatus(404); // Send a 404 status if no user is found
+    }
+
+    // If the request contains a password, hash it and update the password
+    if (user.password) {
+      const hashPassword = await argon2.hash(user.password);
+      user.password = hashPassword;
+
+      const result = await models.user.modifyPassword(userId, hashPassword);
       if (result.affectedRows === 0) {
-        res.sendStatus(404); // Send a 404 status if no user was updated
-      } else {
-        res.sendStatus(204); // Send a 204 status to indicate success
+        return res.sendStatus(404); // Send a 404 status if no user was updated
       }
-    })
-    .catch((err) => {
-      console.error(err);
-      res.sendStatus(500); // Send a 500 status on error
-    });
+      console.log("Password updated successfully for user:", userId);
+    }
+
+    // Update other user details
+    const result = await models.user.update(user);
+    if (result.affectedRows === 0) {
+      return res.sendStatus(404); // Send a 404 status if no user was updated
+    }
+
+    console.log("User details updated successfully for user:", userId);
+
+    res.sendStatus(204); // Send a 204 status to indicate success
+  } catch (err) {
+    console.error('Error updating user:', err);
+    res.sendStatus(500); // Send a 500 status on error
+  }
 };
+
 
 // Function to add a new user
 const add = async (req, res) => {
