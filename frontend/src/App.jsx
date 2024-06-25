@@ -18,6 +18,7 @@ import LegalNotice from './pages/LegalNotice';
 import NotFound from './pages/NotFound';
 import Contact from './pages/Contact';
 import UserAccountProps from '@components/UserAccount/UserAccountProps';
+import Test from '@pages/Test';
 
 // Import Navbar and Footer
 import NavBar from '@components/NavBar/NavBar';
@@ -56,6 +57,7 @@ function App() {
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />  {/* Route for privacy policy page */}
         <Route path="/legal-notice" element={<LegalNotice />} />  {/* Route for legal notice page */}
         <Route path="/contact" element={<Contact />} />  {/* Route for legal notice page*/}
+        <Route path="/test" element={<Test />} />  {/* Route for legal notice page*/}
         <Route path="*" element={<NotFound />} />  {/* Route for handling 404 Not Found */}
       </Routes>
       <Footer />
