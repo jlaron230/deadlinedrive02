@@ -236,9 +236,9 @@ export default function CalendarComponents() {
         {modalIsOpen && (
           <div className="modal" ref={updateModalRef}> {/* Add ref to update modal */}
             <div className="modal-content p-4 flex flex-col bg-custom-main-orange m-3 rounded-lg">
-              <h2 className="font-semibold text-xl pb-4">Update Task</h2>
+              <h2 className="font-semibold text-xl pb-4">Modifier une tâche</h2>
               <label className="my-1">
-                Title:
+                Titre:
                 <input
                   type="text"
                   value={selectedEvent?.title}
@@ -272,14 +272,14 @@ export default function CalendarComponents() {
                   className="my-1 p-2 rounded"
                 />
               </label>
-              <button onClick={handleEventUpdate} className="my-2 bg-caramel w-1/3 text-white font-normal">
-                Update
+              <button onClick={handleEventUpdate} className="hover:text-black mt-12 inline-block rounded-lg border border-white px-4 py-3 text-center font-semibold text-white transition hover:bg-white hover:text-primary">
+                Modifier
               </button>
-              <button onClick={handleEventDelete} className="my-2 bg-caramel w-1/3 text-white font-normal">
-                Delete
+              <button onClick={handleEventDelete} className="hover:text-black mt-12 inline-block rounded-lg border border-white px-4 py-3 text-center font-semibold text-white transition hover:bg-white hover:text-primary">
+                Supprimer
               </button>
-              <button onClick={() => setModalIsOpen(false)} className="my-2 bg-caramel w-1/3 text-white font-normal">
-                Close
+              <button onClick={() => setModalIsOpen(false)} className="hover:text-black mt-12 inline-block rounded-lg border border-white px-4 py-3 text-center font-semibold text-white transition hover:bg-white hover:text-primary">
+                Fermer
               </button>
             </div>
           </div>
@@ -288,9 +288,9 @@ export default function CalendarComponents() {
         {createModalIsOpen && (
           <div className="modal" ref={createModalRef}> {/* Add ref to create modal */}
             <div className="modal-content p-4 flex flex-col bg-custom-main-orange m-3 rounded-lg">
-              <h2 className="font-semibold text-xl pb-4">Create Task</h2>
+              <h2 className="font-semibold text-xl pb-4">Créer une date</h2>
               <label className="my-1">
-                Title:
+                Titre:
                 <input
                   type="text"
                   value={newTask.title}
@@ -324,11 +324,11 @@ export default function CalendarComponents() {
                   className="my-1 p-2 rounded"
                 />
               </label>
-              <button onClick={handleCreateTask} className="my-2 bg-caramel w-1/3 text-white font-normal">
-                Create
+              <button onClick={handleCreateTask} className="hover:text-black mt-12 inline-block rounded-lg border border-white px-4 py-3 text-center font-semibold text-white transition hover:bg-white hover:text-primary">
+                Créer
               </button>
-              <button onClick={() => setCreateModalIsOpen(false)} className="my-2 bg-caramel w-1/3 text-white font-normal">
-                Close
+              <button onClick={() => setCreateModalIsOpen(false)} className="hover:text-black mt-12 inline-block rounded-lg border border-white px-4 py-3 text-center font-semibold text-white transition hover:bg-white hover:text-primary">
+                Fermer
               </button>
             </div>
           </div>
