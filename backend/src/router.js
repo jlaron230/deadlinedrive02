@@ -70,6 +70,6 @@ router.post("/comment", commentControllers.add);
 router.delete("/comment/:id", commentControllers.destroy);
 
 // authentication wall : verifyToken is activated for each route after this line
-router.use(verifyToken);  
+// router.use(verifyToken);  
 
 module.exports = router;

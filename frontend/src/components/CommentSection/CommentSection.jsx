@@ -1,20 +1,63 @@
 import { ChevronUpIcon, ChevronDownIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import { motion } from "framer-motion";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 
 function CommentSection({ quote, category, onClose }) {
-  const [comments, setComments] = useState([]); // Simule les données chargées de la base de données
+  const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    // Charger les commentaires au chargement du composant
+    axios.get(`http://localhost:5000/comments?quoteId=${quote.id}`)
+      .then(response => {
+        // Isoler le tableau à l'index 0
+        const commentsArray = response.data[0];
+        // Garder seulement les 3 derniers éléments
+        const lastThreeComments = commentsArray.slice(-3);
+        setComments(lastThreeComments);
+      })
+      .catch(error => console.error('Error loading comments:', error));
+  }, [quote.id]);
+
+  useEffect(() => {
+    // Charger les utilisateurs au chargement du composant
+    axios.get('http://localhost:5000/users')
+      .then(response => setUsers(response.data))
+      .catch(error => console.error('Error loading users:', error));
+  }, []);
 
   const handleAddComment = () => {
-    // Ici, vous devez intégrer une API pour envoyer le commentaire à votre base de données
-    const newCommentData = {
-      username: "NomUtilisateur", // Remplacez par le nom d'utilisateur actuel, si disponible
-      date: new Date().toLocaleDateString(),
-      content: newComment
+    const commentData = {
+      content: newComment,
+      id_user: localStorage.getItem('id'), // Assurez-vous de remplacer ceci par l'ID de l'utilisateur actuel
+      id_quote: quote.id
     };
-    setComments([...comments, newCommentData]);
-    setNewComment(""); // Réinitialiser le champ après soumission
+
+    axios.post('http://localhost:5000/comment', commentData)
+      .then(response => {
+        setComments([...comments, { ...commentData, username: getUserFirstNameFromLocalStorage(), created_at: new Date().toISOString() }]);
+        setNewComment(""); // Réinitialiser le champ après soumission
+      })
+      .catch(error => console.error('Failed to add comment:', error));
+  };
+
+  // Fonction pour récupérer le prénom de l'utilisateur à partir de l'ID de l'utilisateur
+  const getUserFirstName = (userId) => {
+    const user = users.find((user) => user.id === parseInt(userId, 10));
+    return user ? user.firstName : "Unknown User";
+  };
+
+  // Fonction pour formater la date
+  const formatDate = (dateString) => {
+    const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+    return new Date(dateString).toLocaleDateString('fr-FR', options);
+  };
+
+  // Fonction pour récupérer le prénom de l'utilisateur depuis le localStorage
+  const getUserFirstNameFromLocalStorage = () => {
+    return localStorage.getItem('firstName') || 'NomUtilisateur';
   };
 
   return (
@@ -50,8 +93,8 @@ function CommentSection({ quote, category, onClose }) {
           <div className="w-full mt-4">
             {comments.map((comment, index) => (
               <div key={index} className="bg-gray-100 p-3 rounded-lg mb-2">
-                <p className="text-sm font-bold">{comment.username}</p>
-                <p className="text-xs">{comment.date}</p>
+                <p className="text-sm font-bold">{getUserFirstName(comment.id_user)}</p>
+                <p className="text-xs">{formatDate(comment.created_at)}</p>
                 <p className="text-sm">{comment.content}</p>
               </div>
             ))}
@@ -63,7 +106,7 @@ function CommentSection({ quote, category, onClose }) {
                 onChange={(e) => setNewComment(e.target.value)}
               />
               <button
-                className="mt-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                className="mt-2 bg-butterscotch hover:bg-caramel text-white font-bold py-2 px-4 rounded"
                 onClick={handleAddComment}
               >
                 Envoyer
