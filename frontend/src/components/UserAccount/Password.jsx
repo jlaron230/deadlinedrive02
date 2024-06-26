@@ -1,21 +1,27 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 
-function Password({ userId }) {
+function Password() {
   const [isEditing, setIsEditing] = useState(false);  // Initial state should be false for viewing mode
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState({
+    firstName: '',
+    lastName: '',
+    email: ''
+  });
   const [passwords, setPasswords] = useState({ oldPassword: "", newPassword: "", confirmPassword: "" });
   const [errorMessage, setErrorMessage] = useState("");
+const userId= "76";
 
   const fetchUserData = async () => {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      console.error('No token found');
-      return;
-    }
+    // if (!token) {
+    //   console.error('No token found');
+    //   return;
+    // }
 
     try {
-      const response = await axios.get(`http://localhost:5000/users/62`,user, {
+      const token = localStorage.getItem('token');
+      console.log(token, 'token')
+      const response = await axios.get(`http://localhost:5000/users/${userId}`,user , {
         headers: {
           Authorization: `Bearer ${token}`,
         }
@@ -42,19 +48,22 @@ function Password({ userId }) {
 
     try {
       const token = localStorage.getItem('token');
-      await axios.put(`http://localhost:5000/users/62`, { 
-        oldPassword: passwords.oldPassword,
-        newPassword: passwords.newPassword 
-      }, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
+      await axios.put(`http://localhost:5000/users/${userId}/password`, user , 
+        { 
+          oldPassword: passwords.oldPassword,
+          newPassword: passwords.newPassword 
+        }, 
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        }
+      );
       setIsEditing(false);
       fetchUserData();
       setErrorMessage("");
     } catch (error) {
-      console.error('Error updating user data:', error);
+      console.error('Error updating password:', error);
       setErrorMessage("Erreur lors de la mise à jour du mot de passe");
     }
   };
@@ -66,7 +75,7 @@ function Password({ userId }) {
   useEffect(() => {
     fetchUserData();
   }, [userId]);
-
+console.log(user, "user")
   return (
     <>
       {user ? (
@@ -134,4 +143,4 @@ function Password({ userId }) {
   );
 }
 
-export default Password; // Export the Password component as default
+export default Password;

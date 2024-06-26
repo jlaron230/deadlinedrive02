@@ -1,84 +1,99 @@
 const argon2 = require("argon2"); // Import the argon2 library for password hashing
 const jwt = require("jsonwebtoken"); // Import the jsonwebtoken library for token generation and verification
+const models = require('./models'); // Assuming you have a models file to interact with your database
 
 // Middleware function to hash the user's password before storing it
-const hashPassword = async (req, res, next) => {
-  argon2.hash(req.body.password) // Hash the password from the request body
-    .then((hashedPassword) => {
-      req.body.password = hashedPassword; // Replace the plaintext password with the hashed password
-      next(); // Call the next middleware function
-    })
-    .catch((err) => {
-      console.error(err); // Log any errors that occur during hashing
-      res.sendStatus(500); // Send a 500 Internal Server Error status if hashing fails
-    });
+const hashPassword = async (req, res,next) => {
+  try {
+    const hashedPassword = await argon2.hash(req.body.password);
+    req.body.password = hashedPassword;
+  next();
+} catch (err) {
+    console.error('Error hashing password:', err);
+    res.sendStatus(500);
+  }
 };
 
 // Function to verify the user's password during login
-const verifyPassword = (req, res) => {
-  console.log("testr2:", req.user.password, req.body.password); // Log the hashed and plaintext passwords for debugging
+const verifyPassword = async (req, res, next) => {
+  try {
+    console.log("Request body:", req.body);    
+    console.log("Request user:", req.user);
 
-  argon2.verify(req.user.password, req.body.password) // Verify the hashed password against the plaintext password
-    .then((isVerified) => {
-      if (isVerified) {
-        console.log("acceptée"); // Log a message indicating successful verification
 
-        const payload = { sub: req.user.id }; // Create a JWT payload with the user's ID
+    const isVerified = await argon2.verify(req.user.password, req.body.password);
+    if (isVerified) {
+      console.log("Password verification succeeded");
 
-        const token = jwt.sign(payload, process.env.JWT_SECRET, {
-          expiresIn: "99h", // Set the token to expire in 99 hours
-        });
-
-        delete req.user.hashedPassword; // Remove the hashed password from the user object for security
-        res.send({ user: req.user, token: token }); // Send the user object and JWT token as the response
-      } else {
-        res.sendStatus(401); // Send a 401 Unauthorized status if password verification fails
-      }
-    })
-    .catch((err) => {
-      console.error(err); // Log any errors that occur during verification
-      res.sendStatus(500); // Send a 500 Internal Server Error status if verification fails
-    });
+      const payload = { sub: req.user.id };
+      console.log(payload);
+      console.log(payload.sub);
+      const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "99h" });
+      
+      delete req.user.password; // Ensure the password is not sent back to the client
+      res.send({ user: req.user, token: token });
+    } else {
+      res.sendStatus(401);
+    }
+  next();
+} catch (err) {
+    console.error('Error verifying password:', err);
+    res.sendStatus(500);
+  }
 };
 
-// Middleware function to verify the JWT token for protected routes
-const verifyToken = (req, res, next) => {
+// Middleware to verify the JWT token and attach user to the request
+const verifyToken = async (req, res, next) => {
   try {
-    const authorizationHeader = req.get("Authorization"); // Get the Authorization header from the request
+    const authorizationHeader = req.get("Authorization");
 
-    if (authorizationHeader == null) {
-      throw new Error("Authorization header is missing"); // Throw an error if the header is missing
+    if (!authorizationHeader) {
+      throw new Error("Authorization header is missing");
     }
-
-    const [type, token] = authorizationHeader.split(" "); // Split the header into type and token
+    
+    const [type, token] = authorizationHeader.split(" ");
 
     if (type !== "Bearer") {
-      throw new Error("Authorization header has not the 'Bearer' type"); // Throw an error if the header type is not 'Bearer'
+      throw new Error("Authorization header has not the 'Bearer' type");
+    };
+  
+    const payload = jwt.verify(token, process.env.JWT_SECRET);
+    req.payload = payload;
+    console.log('Payload:', payload); // Debugging log to check the payload
+    
+    
+    const user = await models.user.findById(payload.sub); // Use payload to get the user ID
+    if (!user) {
+      return res.status(404).send('User not found');
     }
 
-    req.payload = jwt.verify(token, process.env.JWT_SECRET); // Verify the token and store the payload in the request object
 
     next(); // Call the next middleware function
   } catch (err) {
-    console.error(err); // Log any errors that occur during verification
+    console.error('Error verifying token:', err);
     res.sendStatus(401); // Send a 401 Unauthorized status if token verification fails
   }
 };
 
+// Function to verify if the authenticated user matches the requested user ID
 const verifyId = (req, res, next) => {
   try {
-    console.log(req.payload,"payload: ");
+    console.log(req.payload, "payload: ");
     console.log(req.params.id, "params");
-    if (req.payload.sub === parseInt(req.params.id, 10)) {
-      next();
+    console.log("Request user:", req.user);
+    if (req.payload && req.payload.sub === parseInt(req.params.id, 10)) {
+     next()
     } else {
-      res.sendStatus(403);
+      res.sendStatus(403); // Forbidden
     }
+    next()
   } catch (err) {
-    console.error(err);
+    console.error('Error verifying ID:', err);
     res.sendStatus(401);
   }
 };
+
+
 
 // Export the functions for use in other parts of the application
 module.exports = {

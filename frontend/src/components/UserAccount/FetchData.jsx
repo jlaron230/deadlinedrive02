@@ -6,28 +6,25 @@ function FetchData({ userId }) {
   const [user, setUser] = useState({
     firstName: '',
     lastName: '',
-    email: '',
-    password: ''
+    email: ''
   });
   const [isEditing, setIsEditing] = useState(false);
+  const [error, setError] = useState(null);
 
   // Function to fetch user data from the API
   const fetchUserData = async () => {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      console.error('No token found');
-      return;
-    }
-
     try {
+      const token = localStorage.getItem('token');
       const response = await axios.get(`http://localhost:5000/users/${userId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         }
       });
       setUser(response.data);
+      setError(null); // Clear any previous errors
     } catch (error) {
       console.error('Error fetching user data:', error);
+      setError('Failed to fetch user data'); // Set error state for display
     }
   };
 
@@ -52,13 +49,8 @@ function FetchData({ userId }) {
 
   // Function to save edited user data
   const handleSaveClick = async () => {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      console.error('No token found');
-      return;
-    }
-
     try {
+      const token = localStorage.getItem('token');
       await axios.put(`http://localhost:5000/users/${userId}`, user, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -68,6 +60,7 @@ function FetchData({ userId }) {
       fetchUserData(); // Refetch user data to update the state
     } catch (error) {
       console.error('Error updating user data:', error);
+      setError('Failed to update user data'); // Set error state for display
     }
   };
 
