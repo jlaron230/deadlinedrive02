@@ -50,11 +50,9 @@ const edit = async (req, res) => {
       ...newUserDetails, // Écraser uniquement les champs fournis dans la requête
     };
 
+    console.log(newUserDetails, 'detailllllllllllllllll')
     // Si la requête contient un mot de passe, le hasher et mettre à jour le mot de passe
-    if (newUserDetails.password) {
-      const hashPassword = await argon2.hash(newUserDetails.password);
-      updatedUser.password = hashPassword;
-    }
+
 
     // Mise à jour dans la base de données
     const result = await models.user.update(updatedUser);
@@ -63,7 +61,7 @@ const edit = async (req, res) => {
     }
 
     console.log("User details updated successfully for user:", userId);
-    res.sendStatus(204); // Envoyer un statut 204 pour indiquer le succès
+    return res.sendStatus(204); // Envoyer un statut 204 pour indiquer le succès
   } catch (err) {
     console.error('Error updating user:', err);
     res.sendStatus(500); // Envoyer un statut 500 en cas d'erreur
@@ -73,8 +71,8 @@ const edit = async (req, res) => {
 const changePassword = async (req, res) => {
   try {
     const userId = parseInt(req.params.id, 10);
-    const { oldPassword, newPassword } = req.body;
-    console.log(oldPassword, newPassword, "useridddddddddddddd")
+    const {newPassword } = req.body;
+    console.log(newPassword, "useridddddddddddddd")
 
 
     // Fetch user to validate old password
@@ -92,21 +90,22 @@ console.log(req.body, "user password");
     // }
     // console.log(storedPassword, "stored password");
 
-    // const validPassword = await argon2.verify(newPassword, oldPassword);
-    console.log(newPassword, 'loggggggggggggggggggggggggggg')
+    // const validPassword = await argon2.verify(newPassword);
+    // console.log(newPassword, 'loggggggggggggggggggggggggggg')
 
     // if (!validPassword) {
     //   return res.status(400).send('Old password is incorrect');
     // }
 
-    const hashPassword = await argon2.hash(newPassword);
+    console.log(newPassword, 'newwwwwwwwwwwww"')
+    const hashPassword = await argon2.hash(newPassword.newPassword);
     const result = await models.user.modifyPassword(userId, hashPassword);
     if (result.affectedRows === 0) {
-      return res.sendStatus(404);
+      // return res.sendStatus(404);
     }
 
     console.log("Password updated successfully for user:", userId);
-    res.sendStatus(204);
+    return res.sendStatus(204);
   } catch (err) {
     console.error('Error updating password:', err);
     res.sendStatus(500);

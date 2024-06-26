@@ -8,7 +8,7 @@ function Password() {
     lastName: '',
     email: ''
   });
-  const [passwords, setPasswords] = useState({ oldPassword: "", newPassword: "", confirmPassword: "" });
+  const [passwords, setPasswords] = useState({newPassword: "", confirmPassword: "" });
   const [errorMessage, setErrorMessage] = useState("");
 const userId= "80";
 
@@ -49,8 +49,8 @@ const userId= "80";
     try {
       const token = localStorage.getItem('token');
       await axios.put(`http://localhost:5000/users/${userId}/password`, {...user, 
-        oldPassword: "$argon2id$v=19$m=65536,t=3,p=4$XOOfEXy3DAlehPSHNBpBxA$nmjhI8TXJcLOzYlkfnZ8OAAf5IpUjHcam1bLpVLWBuE",
-        newPassword: "marseille" } , 
+       
+        newPassword: passwords} , 
         {
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -90,17 +90,6 @@ console.log(user, "user")
             </div>
           ) : (
             <div>
-              <label className="mb-[10px] block text-base font-medium text-dark dark:text-white">
-                Ancien Mot de passe
-              </label>
-              <input
-                type="password"
-                name="oldPassword"
-                placeholder="Ancien mot de passe"
-                value={passwords.oldPassword}
-                onChange={handleInputChange}
-                className="w-full rounded-md border border-stroke dark:border-dark-3 py-[10px] px-5 text-dark-6 outline-none transition focus:border-primary active:border-primary"
-              />
               <label className="mb-[10px] block text-base font-medium text-dark dark:text-white">
                 Nouveau Mot de passe
               </label>
