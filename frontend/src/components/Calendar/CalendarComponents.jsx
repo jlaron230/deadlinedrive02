@@ -24,6 +24,8 @@ export default function CalendarComponents() {
   });
 
   const calendarRef = useRef(null); // Ref for FullCalendar
+  const updateModalRef = useRef(null); // Ref for update modal
+  const createModalRef = useRef(null); // Ref for create modal
 
   // Function to fetch tasks from the server
   const fetchTasks = async () => {
@@ -49,6 +51,20 @@ export default function CalendarComponents() {
   useEffect(() => {
     fetchTasks();
   }, []);
+
+  // Scroll to the update modal when it opens
+  useEffect(() => {
+    if (modalIsOpen && updateModalRef.current) {
+      updateModalRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [modalIsOpen]);
+
+  // Scroll to the create modal when it opens
+  useEffect(() => {
+    if (createModalIsOpen && createModalRef.current) {
+      createModalRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [createModalIsOpen]);
 
   // Function to format a date string to "YYYY-MM-DD"
   function formatDate(dateString) {
@@ -218,7 +234,7 @@ export default function CalendarComponents() {
         )}
 
         {modalIsOpen && (
-          <div className="modal">
+          <div className="modal" ref={updateModalRef}> {/* Add ref to update modal */}
             <div className="modal-content p-4 flex flex-col bg-custom-main-orange m-3 rounded-lg">
               <h2 className="font-semibold text-xl pb-4">Update Task</h2>
               <label className="my-1">
@@ -270,7 +286,7 @@ export default function CalendarComponents() {
         )}
 
         {createModalIsOpen && (
-          <div className="modal">
+          <div className="modal" ref={createModalRef}> {/* Add ref to create modal */}
             <div className="modal-content p-4 flex flex-col bg-custom-main-orange m-3 rounded-lg">
               <h2 className="font-semibold text-xl pb-4">Create Task</h2>
               <label className="my-1">
