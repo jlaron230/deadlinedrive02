@@ -36,18 +36,21 @@ const App = () => {
     // The root div element with padding.
     <div className="p-8">
       {/* Heading with center-aligned text and bold font */}
-      <h3 className="flex flex-col items-center font-semibold">Citations tendances</h3>
+      
       {/* A grid container with padding, gap between items, and custom styling */}
-      <div className="grid md:grid-cols-3 gap-5 p-4 justify-center bg-custom-main-orange m-3 rounded-lg">
+      <div className=" bg-custom-main-orange m-3 rounded-lg">
+        <h3 className="flex flex-col items-center font-semibold px-2 py-3">Citations tendances</h3>
         {/* Map over the quotes array and render each quote in a div */}
+        <div className="grid md:grid-cols-3 gap-5 p-4 justify-center">
         {quotes.map((quote, index) => (
-          <div key={index}>
+          <section key={index}>
             {/* Paragraph for the quote text, centered */}
             <p className="text-center">{quote.text}</p>
             {/* Paragraph for the quote author, bold and centered */}
             <p className="font-semibold text-center">{quote.author}</p>
-          </div>
-        ))}  
+          </section>
+        ))}
+        </div>  
       </div>
     </div>
   );

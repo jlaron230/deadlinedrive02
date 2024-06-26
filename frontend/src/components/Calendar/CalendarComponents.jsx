@@ -324,12 +324,14 @@ export default function CalendarComponents() {
                   className="my-1 p-2 rounded"
                 />
               </label>
+              
               <button onClick={handleCreateTask} className="hover:text-black mt-12 inline-block rounded-lg border border-white px-4 py-3 text-center font-semibold text-white transition hover:bg-white hover:text-primary">
                 Créer
               </button>
               <button onClick={() => setCreateModalIsOpen(false)} className="hover:text-black mt-12 inline-block rounded-lg border border-white px-4 py-3 text-center font-semibold text-white transition hover:bg-white hover:text-primary">
                 Fermer
               </button>
+              
             </div>
           </div>
         )}
