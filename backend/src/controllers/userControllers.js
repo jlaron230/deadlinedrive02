@@ -80,7 +80,7 @@ const changePassword = async (req, res) => {
     if (!user) {
       return res.status(404).send('User not found');
     }
-console.log(user.password, "user password");
+console.log(req.body, "user password");
     // Ensure user.password is a non-empty string
     const storedPassword = String(user.password);
     if (!storedPassword || typeof storedPassword !== 'string' || storedPassword.trim() === '') {
@@ -88,10 +88,12 @@ console.log(user.password, "user password");
     }
     console.log(storedPassword, "stored password");
 
-    const validPassword = await argon2.verify(user.password, oldPassword);
-    if (!validPassword) {
-      return res.status(400).send('Old password is incorrect');
-    }
+    const validPassword = await argon2.verify(req.body.password, oldPassword);
+    console.log('loggggggggggggggggggggggggggg')
+
+    // if (!validPassword) {
+    //   return res.status(400).send('Old password is incorrect');
+    // }
 
     const hashPassword = await argon2.hash(newPassword);
     const result = await models.user.modifyPassword(userId, hashPassword);
@@ -145,6 +147,7 @@ const getUserByEmailWithPasswordAndPassToNext = (req, res, next) => {
       if (users[0] != null) {
         const [firstUser] = users;
         req.user = firstUser; // Attach the user to the request object
+        console.log(req.user, 'userControllerrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr')
         next(); // Call the next middleware
       } else {
         res.sendStatus(401); // Send a 401 status if no user is found

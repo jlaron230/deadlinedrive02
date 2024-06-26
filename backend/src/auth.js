@@ -4,6 +4,7 @@ const models = require('./models'); // Assuming you have a models file to intera
 
 // Middleware function to hash the user's password before storing it
 const hashPassword = async (req, res,next) => {
+  console.log("Request body:", req.body);    
   try {
     const hashedPassword = await argon2.hash(req.body.password);
     req.body.password = hashedPassword;
@@ -13,11 +14,10 @@ const hashPassword = async (req, res,next) => {
     res.sendStatus(500);
   }
 };
-
 // Function to verify the user's password during login
 const verifyPassword = async (req, res, next) => {
+  console.log(req.user, "req user avant verif pass");
   try {
-    console.log("Request body:", req.body);    
     console.log("Request user:", req.user);
 
 

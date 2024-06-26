@@ -10,7 +10,7 @@ function Password() {
   });
   const [passwords, setPasswords] = useState({ oldPassword: "", newPassword: "", confirmPassword: "" });
   const [errorMessage, setErrorMessage] = useState("");
-const userId= "76";
+const userId= "80";
 
   const fetchUserData = async () => {
     // if (!token) {
@@ -21,7 +21,7 @@ const userId= "76";
     try {
       const token = localStorage.getItem('token');
       console.log(token, 'token')
-      const response = await axios.get(`http://localhost:5000/users/${userId}`,user , {
+      const response = await axios.get(`http://localhost:5000/users/${userId}` , {
         headers: {
           Authorization: `Bearer ${token}`,
         }
@@ -48,11 +48,9 @@ const userId= "76";
 
     try {
       const token = localStorage.getItem('token');
-      await axios.put(`http://localhost:5000/users/${userId}/password`, user , 
-        { 
-          oldPassword: passwords.oldPassword,
-          newPassword: passwords.newPassword 
-        }, 
+      await axios.put(`http://localhost:5000/users/${userId}/password`, {...user, 
+        oldPassword: "$argon2id$v=19$m=65536,t=3,p=4$XOOfEXy3DAlehPSHNBpBxA$nmjhI8TXJcLOzYlkfnZ8OAAf5IpUjHcam1bLpVLWBuE",
+        newPassword: "marseille" } , 
         {
           headers: {
             'Authorization': `Bearer ${token}`,
