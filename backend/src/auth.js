@@ -20,13 +20,15 @@ const verifyPassword = async (req, res, next) => {
   try {
     console.log("Request user:", req.user);
 
+    console.log("Request body:", req.body.password);
 
     const isVerified = await argon2.verify(req.user.password, req.body.password);
+    console.log(isVerified, 'loooooooooooooooooooooooooooooooooooooooo')
     if (isVerified) {
       console.log("Password verification succeeded");
 
       const payload = { sub: req.user.id };
-      console.log(payload);
+      console.log(payload, 'payloooooooooooooooood');
       console.log(payload.sub);
       const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "99h" });
       
@@ -78,7 +80,6 @@ const verifyToken = async (req, res, next) => {
 // Function to verify if the authenticated user matches the requested user ID
 const verifyId = (req, res, next) => {
   try {
-    console.log(req.payload, "payload: ");
     console.log(req.params.id, "params");
     console.log("Request user:", req.user);
     if (req.payload && req.payload.sub === parseInt(req.params.id, 10)) {
@@ -89,7 +90,7 @@ const verifyId = (req, res, next) => {
     next()
   } catch (err) {
     console.error('Error verifying ID:', err);
-    res.sendStatus(401);
+    res.sendStatus(402);
   }
 };
 

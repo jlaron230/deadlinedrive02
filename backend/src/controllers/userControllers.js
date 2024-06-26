@@ -74,22 +74,26 @@ const changePassword = async (req, res) => {
   try {
     const userId = parseInt(req.params.id, 10);
     const { oldPassword, newPassword } = req.body;
+    console.log(oldPassword, newPassword, "useridddddddddddddd")
+
 
     // Fetch user to validate old password
-    const user = await models.user.findById(userId);
-    if (!user) {
-      return res.status(404).send('User not found');
-    }
+    // const user = await models.user.findById(userId);
+    console.log(req.body, "okkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk")
+
+    // if (!user) {
+    //   return res.status(404).send('User not found');
+    // }
 console.log(req.body, "user password");
     // Ensure user.password is a non-empty string
-    const storedPassword = String(user.password);
-    if (!storedPassword || typeof storedPassword !== 'string' || storedPassword.trim() === '') {
-      return res.status(400).send('Invalid user password data');
-    }
-    console.log(storedPassword, "stored password");
+    // const storedPassword = String(user.password);
+    // if (!storedPassword || typeof storedPassword !== 'string' || storedPassword.trim() === '') {
+    //   return res.status(400).send('Invalid user password data');
+    // }
+    // console.log(storedPassword, "stored password");
 
-    const validPassword = await argon2.verify(req.body.password, oldPassword);
-    console.log('loggggggggggggggggggggggggggg')
+    // const validPassword = await argon2.verify(newPassword, oldPassword);
+    console.log(newPassword, 'loggggggggggggggggggggggggggg')
 
     // if (!validPassword) {
     //   return res.status(400).send('Old password is incorrect');
