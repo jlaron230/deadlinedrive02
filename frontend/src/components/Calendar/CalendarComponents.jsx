@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
@@ -13,8 +13,17 @@ export default function CalendarComponents() {
   const [weekendsVisible, setWeekendsVisible] = useState(true); // Toggle for weekends visibility
   const [currentEvents, setCurrentEvents] = useState([]); // List of current events
   const [loading, setLoading] = useState(true); // Loading state
-  const [modalIsOpen, setModalIsOpen] = useState(false); // Modal visibility state
+  const [modalIsOpen, setModalIsOpen] = useState(false); // Modal visibility state for event update
+  const [createModalIsOpen, setCreateModalIsOpen] = useState(false); // Modal visibility state for task creation
   const [selectedEvent, setSelectedEvent] = useState(null); // Currently selected event
+  const [newTask, setNewTask] = useState({ // State to store new task information
+    title: "",
+    description: "",
+    status: "",
+    deadline: "",
+  });
+
+  const calendarRef = useRef(null); // Ref for FullCalendar
 
   // Function to fetch tasks from the server
   const fetchTasks = async () => {
@@ -68,31 +77,32 @@ export default function CalendarComponents() {
   }
 
   // Function to handle date selection for creating a new task
-  const handleDateSelect = async (selectInfo) => {
-    let title = prompt("Donnez un titre à votre tâche!"); // Prompt for task title
-    let description = prompt("Décrivez votre tâche !"); // Prompt for task description
-    let status = prompt("Quel est son status ?"); // Prompt for task status
-    let calendarApi = selectInfo.view.calendar;
+  const handleDateSelect = (selectInfo) => {
+    setNewTask({
+      ...newTask,
+      deadline: formatDateTime(selectInfo.startStr), // Set the selected date as the deadline
+    });
+    setCreateModalIsOpen(true); // Open the modal for task creation
+  };
 
-    calendarApi.unselect(); // Unselect the date
+  // Function to handle submitting the new task
+  const handleCreateTask = async () => {
+    const calendarApi = calendarRef.current.getApi();
 
-    if (title) {
-      let task = {
-        id: createEventId(),
-        title,
-        description: description,
-        status: status,
-        deadline: formatDateTime(selectInfo.startStr), // Format the deadline correctly
-        id_user: 22, // Assuming a fixed user ID for demonstration
-      };
-      calendarApi.addEvent(task); // Add the event to the calendar
+    const task = {
+      id: createEventId(),
+      ...newTask,
+      id_user: 22, // Assuming a fixed user ID for demonstration
+    };
 
-      try {
-        const response = await axios.post("http://localhost:5000/tasks", task);
-        fetchTasks(); // Fetch tasks after adding a new one
-      } catch (error) {
-        console.error("Error adding task", error);
-      }
+    calendarApi.addEvent(task); // Add the event to the calendar
+
+    try {
+      await axios.post("http://localhost:5000/tasks", task);
+      fetchTasks(); // Fetch tasks after adding a new one
+      setCreateModalIsOpen(false); // Close the modal
+    } catch (error) {
+      console.error("Error adding task", error);
     }
   };
 
@@ -185,6 +195,7 @@ export default function CalendarComponents() {
           <p>Loading...</p>
         ) : (
           <FullCalendar 
+            ref={calendarRef} // Add ref to FullCalendar component
             plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
             themeSystem={"Slate"}
             headerToolbar={{
@@ -252,6 +263,55 @@ export default function CalendarComponents() {
                 Delete
               </button>
               <button onClick={() => setModalIsOpen(false)} className="my-2 bg-caramel w-1/3 text-white font-normal">
+                Close
+              </button>
+            </div>
+          </div>
+        )}
+
+        {createModalIsOpen && (
+          <div className="modal">
+            <div className="modal-content p-4 flex flex-col bg-custom-main-orange m-3 rounded-lg">
+              <h2 className="font-semibold text-xl pb-4">Create Task</h2>
+              <label className="my-1">
+                Title:
+                <input
+                  type="text"
+                  value={newTask.title}
+                  onChange={(e) => setNewTask({ ...newTask, title: e.target.value })}
+                  className="my-1 p-2 rounded"
+                />
+              </label>
+              <label className="my-1">
+                Description:
+                <textarea
+                  value={newTask.description}
+                  onChange={(e) => setNewTask({ ...newTask, description: e.target.value })}
+                  className="my-1 p-2 rounded"
+                />
+              </label>
+              <label className="my-1">
+                Status:
+                <input
+                  type="text"
+                  value={newTask.status}
+                  onChange={(e) => setNewTask({ ...newTask, status: e.target.value })}
+                  className="my-1 p-2 rounded"
+                />
+              </label>
+              <label className="my-1">
+                Date:
+                <input
+                  type="datetime-local"
+                  value={newTask.deadline ? newTask.deadline.substring(0, 16) : ''}
+                  onChange={(e) => setNewTask({ ...newTask, deadline: e.target.value })}
+                  className="my-1 p-2 rounded"
+                />
+              </label>
+              <button onClick={handleCreateTask} className="my-2 bg-caramel w-1/3 text-white font-normal">
+                Create
+              </button>
+              <button onClick={() => setCreateModalIsOpen(false)} className="my-2 bg-caramel w-1/3 text-white font-normal">
                 Close
               </button>
             </div>
