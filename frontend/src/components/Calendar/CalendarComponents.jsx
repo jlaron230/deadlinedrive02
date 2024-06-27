@@ -4,34 +4,42 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
-import { createEventId } from "./event-utils";
-import frLocale from '@fullcalendar/core/locales/fr';
-import './CalendarStyle.css';
+import { createEventId } from "./event-utils"; // Importing utility function for event IDs
+import frLocale from '@fullcalendar/core/locales/fr'; // French locale for FullCalendar
+import './CalendarStyle.css'; // CSS file for calendar styling
+
+// Function to simulate user authentication
+const simulateAuth = () => {
+  const user = JSON.parse(localStorage.getItem('user'));
+  return user || { id: 22 }; // Default user for testing
+};
 
 export default function CalendarComponents() {
-  // State variables
-  const [weekendsVisible, setWeekendsVisible] = useState(true); // Toggle for weekends visibility
-  const [currentEvents, setCurrentEvents] = useState([]); // List of current events
-  const [loading, setLoading] = useState(true); // Loading state
-  const [modalIsOpen, setModalIsOpen] = useState(false); // Modal visibility state for event update
-  const [createModalIsOpen, setCreateModalIsOpen] = useState(false); // Modal visibility state for task creation
-  const [selectedEvent, setSelectedEvent] = useState(null); // Currently selected event
-  const [newTask, setNewTask] = useState({ // State to store new task information
+  // State hooks for managing component state
+  const [weekendsVisible, setWeekendsVisible] = useState(true); // Toggle weekends visibility
+  const [currentEvents, setCurrentEvents] = useState([]); // Array of current events/tasks
+  const [loading, setLoading] = useState(true); // Loading state indicator
+  const [modalIsOpen, setModalIsOpen] = useState(false); // State for update modal visibility
+  const [createModalIsOpen, setCreateModalIsOpen] = useState(false); // State for create modal visibility
+  const [selectedEvent, setSelectedEvent] = useState(null); // State for currently selected event/task
+  const [newTask, setNewTask] = useState({ // State for new task creation
     title: "",
     description: "",
     status: "",
     deadline: "",
   });
 
-  const calendarRef = useRef(null); // Ref for FullCalendar
+  // Refs for DOM elements (used for scrolling to modals)
+  const calendarRef = useRef(null); // Ref for FullCalendar component
   const updateModalRef = useRef(null); // Ref for update modal
   const createModalRef = useRef(null); // Ref for create modal
 
-  // Function to fetch tasks from the server
+  // Function to fetch tasks from backend
   const fetchTasks = async () => {
     try {
       const response = await axios.get("http://localhost:5000/tasks");
-      const tasks = response.data.map((task) => ({
+      const userTasks = response.data.filter(task => task.id_user === user.id); // Filter tasks by authenticated user ID
+      const tasks = userTasks.map((task) => ({
         title: task.title,
         date: formatDate(task.deadline),
         id: task.id,
@@ -39,34 +47,37 @@ export default function CalendarComponents() {
         description: task.description,
         id_user: task.id_user
       }));
-      setCurrentEvents(tasks);
-      setLoading(false);
+      setCurrentEvents(tasks); // Update current events state with fetched tasks
+      setLoading(false); // Update loading state
     } catch (error) {
       console.error("Error fetching tasks", error);
-      setLoading(false);
+      setLoading(false); // Update loading state in case of error
     }
   };
 
-  // Call fetchTasks initially when the component mounts
+  // Simulate user authentication
+  const user = simulateAuth();
+
+  // Effect hook to fetch tasks on component mount
   useEffect(() => {
     fetchTasks();
-  }, []);
+  }, []); // Empty dependency array ensures it runs only once on mount
 
-  // Scroll to the update modal when it opens
+  // Effect hook to scroll to update modal when it opens
   useEffect(() => {
     if (modalIsOpen && updateModalRef.current) {
       updateModalRef.current.scrollIntoView({ behavior: "smooth" });
     }
-  }, [modalIsOpen]);
+  }, [modalIsOpen]); // Dependency on modalIsOpen state
 
-  // Scroll to the create modal when it opens
+  // Effect hook to scroll to create modal when it opens
   useEffect(() => {
     if (createModalIsOpen && createModalRef.current) {
       createModalRef.current.scrollIntoView({ behavior: "smooth" });
     }
-  }, [createModalIsOpen]);
+  }, [createModalIsOpen]); // Dependency on createModalIsOpen state
 
-  // Function to format a date string to "YYYY-MM-DD"
+  // Function to format date string to "YYYY-MM-DD" format
   function formatDate(dateString) {
     const date = new Date(dateString);
     const year = date.getFullYear();
@@ -75,7 +86,7 @@ export default function CalendarComponents() {
     return `${year}-${month}-${day}`;
   }
 
-  // Function to format a date string to "YYYY-MM-DD HH:MM:SS"
+  // Function to format date and time string to "YYYY-MM-DD HH:mm:ss" format
   function formatDateTime(dateString) {
     const date = new Date(dateString);
     const year = date.getFullYear();
@@ -87,42 +98,42 @@ export default function CalendarComponents() {
     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
   }
 
-  // Function to toggle the visibility of weekends
+  // Handler function to toggle weekends visibility
   function handleWeekendsToggle() {
     setWeekendsVisible(!weekendsVisible);
   }
 
-  // Function to handle date selection for creating a new task
+  // Handler function for date select in calendar
   const handleDateSelect = (selectInfo) => {
     setNewTask({
       ...newTask,
-      deadline: formatDateTime(selectInfo.startStr), // Set the selected date as the deadline
+      deadline: formatDateTime(selectInfo.startStr),
     });
-    setCreateModalIsOpen(true); // Open the modal for task creation
+    setCreateModalIsOpen(true); // Open create modal
   };
 
-  // Function to handle submitting the new task
+  // Handler function for creating a new task
   const handleCreateTask = async () => {
-    const calendarApi = calendarRef.current.getApi();
+    const calendarApi = calendarRef.current.getApi(); // Access FullCalendar API
 
     const task = {
-      id: createEventId(),
+      id: createEventId(), // Generate unique event ID
       ...newTask,
-      id_user: 27, // Assuming a fixed user ID for demonstration
+      id_user: user.id, // Use authenticated user's ID
     };
 
-    calendarApi.addEvent(task); // Add the event to the calendar
+    calendarApi.addEvent(task); // Add event to FullCalendar
 
     try {
-      await axios.post("http://localhost:5000/tasks", task);
-      fetchTasks(); // Fetch tasks after adding a new one
-      setCreateModalIsOpen(false); // Close the modal
+      await axios.post("http://localhost:5000/tasks", task); // POST request to save task
+      fetchTasks(); // Refresh tasks after creation
+      setCreateModalIsOpen(false); // Close create modal
     } catch (error) {
       console.error("Error adding task", error);
     }
   };
 
-  // Function to handle clicking on an event
+  // Handler function for clicking on an event/task in calendar
   const handleEventClick = (clickInfo) => {
     setSelectedEvent({
       id: clickInfo.event.id,
@@ -130,34 +141,45 @@ export default function CalendarComponents() {
       description: clickInfo.event.extendedProps.description,
       status: clickInfo.event.extendedProps.status,
       start: clickInfo.event.start,
+      id_user: clickInfo.event.extendedProps.id_user,
     });
-    setModalIsOpen(true); // Open the modal for event update/delete
+    setModalIsOpen(true); // Open update/delete modal for the clicked event
   };
 
-  // Function to handle updating an event
+  // Handler function for updating an event/task
   const handleEventUpdate = async () => {
+    if (selectedEvent.id_user !== user.id) {
+      alert('You can only update your own tasks');
+      return;
+    }
+
     try {
       const updatedEvent = {
         ...selectedEvent,
-        id_user: 27, // Assuming a fixed user ID for demonstration
-        deadline: formatDateTime(selectedEvent.start) // Format the deadline correctly
+        id_user: user.id,
+        deadline: formatDateTime(selectedEvent.start),
       };
 
-      await axios.put(`http://localhost:5000/tasks/${selectedEvent.id}`, updatedEvent);
-      fetchTasks(); // Fetch tasks after updating an event
-      setModalIsOpen(false); // Close the modal
+      await axios.put(`http://localhost:5000/tasks/${selectedEvent.id}`, updatedEvent); // PUT request to update task
+      fetchTasks(); // Refresh tasks after update
+      setModalIsOpen(false); // Close update modal
     } catch (error) {
       console.error("Error updating task", error);
     }
   };
 
-  // Function to handle deleting an event
+  // Handler function for deleting an event/task
   const handleEventDelete = async () => {
+    if (selectedEvent.id_user !== user.id) {
+      alert('You can only delete your own tasks');
+      return;
+    }
+
     if (window.confirm(`Are you sure you want to delete the event '${selectedEvent.title}'`)) {
       try {
-        await axios.delete(`http://localhost:5000/tasks/${selectedEvent.id}`);
-        fetchTasks(); // Fetch tasks after deleting an event
-        setModalIsOpen(false); // Close the modal
+        await axios.delete(`http://localhost:5000/tasks/${selectedEvent.id}`); // DELETE request to delete task
+        fetchTasks(); // Refresh tasks after deletion
+        setModalIsOpen(false); // Close delete modal
       } catch (error) {
         console.error("Error deleting task", error);
       }

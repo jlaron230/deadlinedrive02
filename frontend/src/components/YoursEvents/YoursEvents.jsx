@@ -2,6 +2,12 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { motion } from 'framer-motion';
 
+const simulateAuth = () => {
+  const user = JSON.parse(localStorage.getItem('user'));
+  return user || { id: 22 }; // Default user for testing
+};
+
+
 const YoursEvents = () => {
   // Initialize state to store tasks
   const [tasks, setTasks] = useState([]);
@@ -11,14 +17,21 @@ const YoursEvents = () => {
     // Define an asynchronous function to fetch tasks from the server
     const fetchTasks = async () => {
       try {
+
+        const user = simulateAuth();
+
         // Make a GET request to the server to retrieve tasks
         const response = await axios.get('http://localhost:5000/tasks');
         
+
+         // Filter tasks by the authenticated user's ID
+         const userTasks = response.data.filter(task => task.id_user === user.id);
+
        // Get the current date
        const now = new Date();
 
         // Filter out tasks with deadlines in the past
-        const futureTasks = response.data.filter(task => new Date(task.deadline) >= now);
+        const futureTasks = userTasks.filter(task => new Date(task.deadline) >= now);
         
         // Sort tasks by deadline in ascending order
         const sortedTasks = futureTasks.sort((a, b) => new Date(a.deadline) - new Date(b.deadline));
