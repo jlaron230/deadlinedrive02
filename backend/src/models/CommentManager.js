@@ -49,6 +49,13 @@ class CommentManager extends AbstractManager {
             [id]
         );
     }
+
+    findByQuoteId(quoteId) {
+        return this.database.query(
+            `SELECT * FROM ${TABLE_NAME} WHERE id_quote = ?`,
+            [quoteId]
+        );
+    }
 }
 
 module.exports = CommentManager;

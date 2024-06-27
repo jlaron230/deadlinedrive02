@@ -1,12 +1,14 @@
-import { ChevronUpIcon, ChevronDownIcon, XMarkIcon } from "@heroicons/react/24/solid";
+import { ChevronUpIcon, ChevronDownIcon, XMarkIcon, PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
 import { motion } from "framer-motion";
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
 function CommentSection({ quote, category, onClose }) {
   const [comments, setComments] = useState([]);
+  const [users, setUsers] = useState([]); // Ajout de l'état users
   const [newComment, setNewComment] = useState("");
-  const [users, setUsers] = useState([]);
+  const [editingComment, setEditingComment] = useState(null);
+  const [editedContent, setEditedContent] = useState("");
 
   useEffect(() => {
     // Charger les commentaires au chargement du composant
@@ -43,10 +45,33 @@ function CommentSection({ quote, category, onClose }) {
       .catch(error => console.error('Failed to add comment:', error));
   };
 
-  // Fonction pour récupérer le prénom de l'utilisateur à partir de l'ID de l'utilisateur
-  const getUserFirstName = (userId) => {
-    const user = users.find((user) => user.id === parseInt(userId, 10));
-    return user ? user.firstName : "Unknown User";
+  const handleDeleteComment = (commentId) => {
+    axios.delete(`http://localhost:5000/comment/${commentId}`)
+      .then(() => {
+        setComments(comments.filter(comment => comment.id !== commentId));
+      })
+      .catch(error => console.error('Failed to delete comment:', error));
+  };
+
+  const handleEditComment = (commentId) => {
+    setEditingComment(commentId);
+    const comment = comments.find(comment => comment.id === commentId);
+    setEditedContent(comment.content);
+  };
+
+  const handleUpdateComment = (commentId) => {
+    axios.put(`http://localhost:5000/comment/${commentId}`, { content: editedContent })
+      .then(() => {
+        setComments(comments.map(comment => {
+          if (comment.id === commentId) {
+            return { ...comment, content: editedContent };
+          }
+          return comment;
+        }));
+        setEditingComment(null);
+        setEditedContent("");
+      })
+      .catch(error => console.error('Failed to update comment:', error));
   };
 
   // Fonction pour formater la date
@@ -58,6 +83,12 @@ function CommentSection({ quote, category, onClose }) {
   // Fonction pour récupérer le prénom de l'utilisateur depuis le localStorage
   const getUserFirstNameFromLocalStorage = () => {
     return localStorage.getItem('firstName') || 'NomUtilisateur';
+  };
+
+  // Fonction pour récupérer le prénom de l'utilisateur à partir de l'ID de l'utilisateur
+  const getUserFirstName = (userId) => {
+    const user = users.find((user) => user.id === parseInt(userId, 10));
+    return user ? user.firstName : "Unknown User";
   };
 
   return (
@@ -93,14 +124,44 @@ function CommentSection({ quote, category, onClose }) {
           <div className="w-full mt-4">
             {comments.map((comment, index) => (
               <div key={index} className="bg-gray-100 p-3 rounded-lg mb-2">
-                <p className="text-sm font-bold">{getUserFirstName(comment.id_user)}</p>
-                <p className="text-xs">{formatDate(comment.created_at)}</p>
-                <p className="text-sm">{comment.content}</p>
+                <p className="text-lg font-bold">{getUserFirstName(comment.id_user)}</p>
+                <p className="text-sm">{formatDate(comment.created_at)}</p>
+                {editingComment === comment.id ? (
+                  <div className="flex flex-col">
+                    <textarea
+                      className="w-full p-2 text-base border border-gray-300 rounded-md"
+                      value={editedContent}
+                      onChange={(e) => setEditedContent(e.target.value)}
+                    />
+                    <button
+                      className="mt-2 bg-butterscotch hover:bg-caramel text-white font-bold py-2 px-4 rounded w-/4"
+                      onClick={() => handleUpdateComment(comment.id)}
+                    >
+                      Modifier votre commentaire
+                    </button>
+                  </div>
+                ) : (
+                  <p className="text-sm">{comment.content}</p>
+                )}
+                <div className="flex space-x-2 mt-2 justify-end">
+                  <button
+                    className="text-blue-500 hover:text-blue-700"
+                    onClick={() => handleEditComment(comment.id)}
+                  >
+                    <PencilIcon className="w-6 h-6" />
+                  </button>
+                  <button
+                    className="text-red-500 hover:text-red-700"
+                    onClick={() => handleDeleteComment(comment.id)}
+                  >
+                    <TrashIcon className="w-6 h-6" />
+                  </button>
+                </div>
               </div>
             ))}
             <div className="mt-4">
               <textarea
-                className="w-full p-2 text-sm border border-gray-300 rounded-md"
+                className="w-full p-2 text-base border border-gray-300 rounded-md"
                 placeholder="Ajoutez un commentaire..."
                 value={newComment}
                 onChange={(e) => setNewComment(e.target.value)}

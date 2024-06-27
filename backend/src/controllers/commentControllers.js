@@ -2,7 +2,14 @@ const models = require("../models");
 
 const browse = async (req, res) => {
     try {
-        const rows = await models.comment.findAll();
+        let rows;
+        if (req.query.quoteId) {
+            // Fetch comments specific to a quote if quoteId is provided
+            rows = await models.comment.findByQuoteId(req.query.quoteId);
+        } else {
+            // Fetch all comments if no quoteId is provided
+            rows = await models.comment.findAll();
+        }
         res.send(rows);
     } catch (error) {
         console.error(error);
