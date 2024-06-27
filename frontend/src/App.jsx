@@ -5,7 +5,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';  // I
 
 // Import the components for the different pages
 import Home from './pages/Home';
-import CustomizeQuotes from './pages/CustomizeQuotes';
+import CitationHome from './pages/CitationHome';
 import Quotes from './pages/Quotes';
 import PasswordRecovery from './pages/PasswordRecovery';
 import Login from './pages/Login';
@@ -46,7 +46,7 @@ function App() {
 
         {/* Define routes for each page */}
         <Route path="/" element={<Home />} />  {/* Route for the home page */}
-        <Route path="/customize-quotes" element={<CustomizeQuotes />} />  {/* Route for customizing quotes page */}
+        <Route path="/customize-quotes" element={<CitationHome />} />  {/* Route for customizing quotes page */}
         <Route path="/quotes" element={<Quotes />} />  {/* Route for quotes page */}
         <Route path="/password-recovery" element={<PasswordRecovery />} />  {/* Route for password recovery page */}
         <Route path="/signup" element={<Signup />} />  {/* Route for login page */}
