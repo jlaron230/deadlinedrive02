@@ -9,11 +9,13 @@ const QuotePerDays = () => {
   const [quoteCategories, setQuoteCategories] = useState([]);
   const [randomQuote, setRandomQuote] = useState(null);
 
+
   // useEffect to check if user is logged in by checking for a JWT token in localStorage.
-  // useEffect(() => {
-  //   const token = localStorage.getItem("jwtToken");
-  //   setIsLoggedIn(!!token); // Simplify token check
-  // }, []);
+  useEffect(() => {
+    const token = localStorage.getItem("jwtToken");
+    setIsLoggedIn(!!token); // Simplify token check
+  }, []);
+
 
   // Function to fetch data from the API
   const fetchData = async () => {
@@ -69,12 +71,12 @@ const QuotePerDays = () => {
   // Render component UI
   return (
     <div className="p-8">
-      {isLoggedIn ? (
+      {!isLoggedIn ? (
         // If user is not logged in, show a button to log in or register.
         <div className="flex flex-col items-center">
           <a href={'/signup'}>
             <button className="font-semibold p-4 bg-custom-main-orange rounded-lg">
-              Click here to log in or register!
+              Cliquez ici pour vous inscrire ou vous connecter !
             </button>
           </a>
         </div>

@@ -108,7 +108,7 @@ export default function CalendarComponents() {
     const task = {
       id: createEventId(),
       ...newTask,
-      id_user: 22, // Assuming a fixed user ID for demonstration
+      id_user: 27, // Assuming a fixed user ID for demonstration
     };
 
     calendarApi.addEvent(task); // Add the event to the calendar
@@ -139,7 +139,7 @@ export default function CalendarComponents() {
     try {
       const updatedEvent = {
         ...selectedEvent,
-        id_user: 22, // Assuming a fixed user ID for demonstration
+        id_user: 27, // Assuming a fixed user ID for demonstration
         deadline: formatDateTime(selectedEvent.start) // Format the deadline correctly
       };
 
