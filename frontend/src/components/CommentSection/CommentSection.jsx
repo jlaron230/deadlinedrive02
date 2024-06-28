@@ -82,10 +82,7 @@ function CommentSection({ quote, category, onClose }) {
 
   // Update a comment
   const handleUpdateComment = (commentId) => {
-    axios
-      .put(`http://localhost:5000/comment/${commentId}`, {
-        content: editedContent,
-      })
+    axios.put(`http://localhost:5000/comment/${commentId}`, { content: editedContent, id_user : localStorage.getItem('id'), id_quote: quote.id })
       .then(() => {
         // Update the comment content in the state
         setComments(
@@ -117,6 +114,7 @@ function CommentSection({ quote, category, onClose }) {
     const user = users.find((user) => user.id === parseInt(userId, 10));
     return user ? user.firstName : "Unknown User";
   };
+
 
   // Render the comment section with UI for viewing and managing comments
   return (
@@ -178,13 +176,13 @@ function CommentSection({ quote, category, onClose }) {
                     className="text-blue-500 hover:text-blue-700"
                     onClick={() => handleEditComment(comment.id)}
                   >
-                    <PencilIcon className="w-6 h-6" />
+                    <PencilIcon className="w-5 h-5" />
                   </button>
                   <button
                     className="text-red-500 hover:text-red-700"
                     onClick={() => handleDeleteComment(comment.id)}
                   >
-                    <TrashIcon className="w-6 h-6" />
+                    <TrashIcon className="w-5 h-5" />
                   </button>
                 </div>
               </div>
