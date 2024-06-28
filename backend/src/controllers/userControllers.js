@@ -32,39 +32,42 @@ const read = (req, res) => {
     });
 };
 
-
 const edit = async (req, res) => {
   try {
     const userId = parseInt(req.params.id, 10);
     const newUserDetails = req.body;
 
+    console.log('UserId:', userId); // Debugging log
+    console.log('New User Details:', newUserDetails); // Debugging log
+
     // Vérifiez si l'utilisateur existe
-    const [existingUser] = await models.user.find(userId);
+    const existingUser = await models.user.findById(userId);
+    console.log('Existing User:', existingUser); // Debugging log
     if (!existingUser) {
-      return res.sendStatus(404); // Envoyer un statut 404 si aucun utilisateur n'est trouvé
+      return res.status(404).send('User not found'); // Envoyer un statut 404 si aucun utilisateur n'est trouvé
     }
 
     // Mise à jour des informations utilisateur
     const updatedUser = {
-      ...existingUser, // Inclure les informations utilisateur existantes
-      ...newUserDetails, // Écraser uniquement les champs fournis dans la requête
+      ...existingUser,
+      ...newUserDetails,
     };
 
-    console.log(newUserDetails, 'detailllllllllllllllll')
-    // Si la requête contient un mot de passe, le hasher et mettre à jour le mot de passe
+    console.log('Updated User:', updatedUser); // Debugging log
 
-
-    // Mise à jour dans la base de données
     const result = await models.user.update(updatedUser);
+    console.log('Update Result:', result); // Debugging log
     if (result.affectedRows === 0) {
-      return res.sendStatus(404); // Envoyer un statut 404 si aucun utilisateur n'a été mis à jour
+      return res.status(404).send('No user updated'); // Envoyer un statut 404 si aucun utilisateur n'a été mis à jour
     }
 
     console.log("User details updated successfully for user:", userId);
-    return res.sendStatus(204); // Envoyer un statut 204 pour indiquer le succès
+    return res.status(204).send(); // Envoyer un statut 204 pour indiquer le succès
   } catch (err) {
     console.error('Error updating user:', err);
-    res.sendStatus(500); // Envoyer un statut 500 en cas d'erreur
+    if (!res.headersSent) {
+      return res.status(500).send('Internal Server Error'); // Envoyer un statut 500 en cas d'erreur
+    }
   }
 };
 

@@ -20,10 +20,9 @@ const verifyPassword = async (req, res, next) => {
   try {
     console.log("Request user:", req.user);
 
-    console.log("Request body:", req.body.password);
 
     const isVerified = await argon2.verify(req.user.password, req.body.password);
-    console.log(isVerified, 'loooooooooooooooooooooooooooooooooooooooo')
+
     if (isVerified) {
       console.log("Password verification succeeded");
 
@@ -80,6 +79,7 @@ const verifyToken = async (req, res, next) => {
 // Function to verify if the authenticated user matches the requested user ID
 const verifyId = (req, res, next) => {
   try {
+    console.log(req.payload, "payload: ");
     console.log(req.params.id, "params");
     console.log("Request user:", req.user);
     if (req.payload && req.payload.sub === parseInt(req.params.id, 10)) {
@@ -87,7 +87,6 @@ const verifyId = (req, res, next) => {
     } else {
       res.sendStatus(403); // Forbidden
     }
-    next()
   } catch (err) {
     console.error('Error verifying ID:', err);
     res.sendStatus(402);

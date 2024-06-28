@@ -1,13 +1,16 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Password from "./Password";
 import Quote from "./Quote";
 import FetchUser from "./FetchUser";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
-function UserAccountProps(userId) {
+function UserAccountProps() {
   // State to manage the active tab and default to "general"
   const [activeTab, setActiveTab] = useState("general");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const userId = localStorage.getItem('id');
+  const navigate = useNavigate();  // Use useNavigate to obtain the navigate function
 
   // Function to handle tab clicks and update activeTab state
   const handleTabClick = (tab) => {
@@ -24,25 +27,32 @@ function UserAccountProps(userId) {
 
   // Fonction de déconnexion
   const handleLogout = () => {
-    localStorage.removeItem("token"); // Supprimer le token JWT du localStorage
-    setUser(null); // Réinitialiser l'état de l'utilisateur à null
+    localStorage.clear(); // Supprimer le token JWT du localStorage
+    navigate("/login");
+
     // Optionnel : Rediriger l'utilisateur vers la page de connexion ou une autre page après la déconnexion
     // history.push('/login');
   };
 
+    // Redirect to login page if user is not logged in
+    useEffect(() => {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        navigate("/login");
+      }
+    }, []);
+
   // Fonction de déconnexion
   const deleting = async () => {
     try {
-      await axios.delete(`http://localhost:5000/users/18`, {
+      localStorage.clear(); // Supprimer le token JWT du localStorage
+
+      navigate("/signup");
+      await axios.delete(`http://localhost:5000/users/${userId}`, {
         // headers: {
         //   Authorization: `Bearer ${token}`,
         // },
       });
-
-      // localStorage.removeItem("token"); // Supprimer le token JWT du localStorage
-      // Réinitialiser d'autres états ou effectuer d'autres actions nécessaires après la déconnexion
-      // Par exemple, rediriger vers la page de connexion
-      href="/"
       // history.push('/login');
       console.log("User logged out successfully");
     } catch (error) {
@@ -66,7 +76,7 @@ function UserAccountProps(userId) {
               handleTabClick("deconnexion");
               handleLogout();
             }}
-            href="/"
+            href="#"
           >
             Déconnexion
           </a>
@@ -242,7 +252,7 @@ const Modal = ({ isOpen, onClose, deletes }) => {
             >
               Fermer
             </button>
-            <a href="/">
+            <a href="#">
             <button
               type="button"
               onClick={deletes}

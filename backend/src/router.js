@@ -25,9 +25,9 @@ router.get("/users", userControllers.browse); // Route to browse all users
 
 // Protected routes
 router.get('/users/:id', userControllers.read);
-router.put('/users/:id', verifyId, userControllers.edit);
+router.put('/users/:id', verifyToken,verifyId, userControllers.edit);
 router.delete('/users/:id',  userControllers.destroy);
-router.put('/users/:id/password',userControllers.getUserByEmailWithPasswordAndPassToNext, userControllers.changePassword);
+router.put('/users/:id/password',userControllers.getUserByEmailWithPasswordAndPassToNext, verifyToken, userControllers.changePassword);
 
   
 // Similar setup for categories, quotes, tasks, deadlines, and quote categories

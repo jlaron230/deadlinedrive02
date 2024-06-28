@@ -24,7 +24,7 @@ class UserManager extends AbstractManager {
     return this.database.query(
       `UPDATE ${this.table} SET firstName = ?, lastName = ?, email = ? WHERE id = ?`,
       [user.firstName, user.lastName, user.email, user.id]
-    );
+    ).then(([result]) => result); // Renvoi du bon résultat
   }
 
   
@@ -43,13 +43,13 @@ class UserManager extends AbstractManager {
      );
    }
 
-     // Method to find user by ID
-  findById(id) {
+   findById(id) {
     return this.database.query(
-      `SELECT * FROM user WHERE id = ?`,
+      `SELECT * FROM ${this.table} WHERE id = ?`,
       [id]
     ).then(results => results[0]);
   }
+
 
 }
 
