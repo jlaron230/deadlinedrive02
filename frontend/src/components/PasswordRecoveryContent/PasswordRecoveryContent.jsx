@@ -1,7 +1,7 @@
 import React from 'react';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
-import logo from '../../assets/deadlinedrive_logo.svg'
+import logo from "../../assets/Logo-Deadlines.svg";
 import { motion } from 'framer-motion';
 
 

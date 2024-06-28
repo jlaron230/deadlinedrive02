@@ -5,7 +5,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';  // I
 
 // Import the components for the different pages
 import Home from './pages/Home';
-import CustomizeQuotes from './pages/CustomizeQuotes';
+import CitationHome from './pages/CitationHome';
 import Quotes from './pages/Quotes';
 import PasswordRecovery from './pages/PasswordRecovery';
 import Login from './pages/Login';
@@ -18,6 +18,7 @@ import LegalNotice from './pages/LegalNotice';
 import NotFound from './pages/NotFound';
 import Contact from './pages/Contact';
 import UserAccountProps from '@components/UserAccount/UserAccountProps';
+import Test from '@pages/Test';
 
 // Import Navbar and Footer
 import NavBar from '@components/NavBar/NavBar';
@@ -45,7 +46,7 @@ function App() {
 
         {/* Define routes for each page */}
         <Route path="/" element={<Home />} />  {/* Route for the home page */}
-        <Route path="/customize-quotes" element={<CustomizeQuotes />} />  {/* Route for customizing quotes page */}
+        <Route path="/customize-quotes" element={<CitationHome />} />  {/* Route for customizing quotes page */}
         <Route path="/quotes" element={<Quotes />} />  {/* Route for quotes page */}
         <Route path="/password-recovery" element={<PasswordRecovery />} />  {/* Route for password recovery page */}
         <Route path="/signup" element={<Signup />} />  {/* Route for login page */}
@@ -56,6 +57,7 @@ function App() {
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />  {/* Route for privacy policy page */}
         <Route path="/legal-notice" element={<LegalNotice />} />  {/* Route for legal notice page */}
         <Route path="/contact" element={<Contact />} />  {/* Route for legal notice page*/}
+        <Route path="/test" element={<Test />} />  {/* Route for legal notice page*/}
         <Route path="*" element={<NotFound />} />  {/* Route for handling 404 Not Found */}
       </Routes>
       <Footer />

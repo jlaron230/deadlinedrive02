@@ -1,143 +1,192 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
-import { INITIAL_EVENTS, createEventId } from "./event-utils";
-import frLocale from '@fullcalendar/core/locales/fr';
-import { Theme } from "@fullcalendar/core/internal";
+import { createEventId } from "./event-utils"; // Importing utility function for event IDs
+import frLocale from '@fullcalendar/core/locales/fr'; // French locale for FullCalendar
+import './CalendarStyle.css'; // CSS file for calendar styling
 
+// Function to simulate user authentication
+const simulateAuth = () => {
+  const user = JSON.parse(localStorage.getItem('user'));
+  return user || { id: 22 }; // Default user for testing
+};
 
 export default function CalendarComponents() {
-  const [weekendsVisible, setWeekendsVisible] = useState(true); // State to toggle weekends visibility in the calendar.
-  const [currentEvents, setCurrentEvents] = useState([]); // State to store current events.
-  const [loading, setLoading] = useState(true); // State to indicate loading status.
+  // State hooks for managing component state
+  const [weekendsVisible, setWeekendsVisible] = useState(true); // Toggle weekends visibility
+  const [currentEvents, setCurrentEvents] = useState([]); // Array of current events/tasks
+  const [loading, setLoading] = useState(true); // Loading state indicator
+  const [modalIsOpen, setModalIsOpen] = useState(false); // State for update modal visibility
+  const [createModalIsOpen, setCreateModalIsOpen] = useState(false); // State for create modal visibility
+  const [selectedEvent, setSelectedEvent] = useState(null); // State for currently selected event/task
+  const [newTask, setNewTask] = useState({ // State for new task creation
+    title: "",
+    description: "",
+    status: "",
+    deadline: "",
+  });
 
-  // let calendar = new Calendar(calendarEl, {
-  //   locale: frLocale,
-  //   locale: 'fr'
-  // });
+  // Refs for DOM elements (used for scrolling to modals)
+  const calendarRef = useRef(null); // Ref for FullCalendar component
+  const updateModalRef = useRef(null); // Ref for update modal
+  const createModalRef = useRef(null); // Ref for create modal
 
-  // useEffect hook to fetch tasks from the server when the component mounts.
+  // Function to fetch tasks from backend
+  const fetchTasks = async () => {
+    try {
+      const response = await axios.get("http://localhost:5000/tasks");
+      const userTasks = response.data.filter(task => task.id_user === user.id); // Filter tasks by authenticated user ID
+      const tasks = userTasks.map((task) => ({
+        title: task.title,
+        date: formatDate(task.deadline),
+        id: task.id,
+        status: task.status,
+        description: task.description,
+        id_user: task.id_user
+      }));
+      setCurrentEvents(tasks); // Update current events state with fetched tasks
+      setLoading(false); // Update loading state
+    } catch (error) {
+      console.error("Error fetching tasks", error);
+      setLoading(false); // Update loading state in case of error
+    }
+  };
+
+  // Simulate user authentication
+  const user = simulateAuth();
+
+  // Effect hook to fetch tasks on component mount
   useEffect(() => {
-    const fetchTasks = async () => {
-      try {
-        const response = await axios.get("http://localhost:5000/tasks"); // Fetch tasks from the server.
-        const tasks = response.data.map((task) => ({
-          title: task.title,
-          date: formatDate(task.deadline), // Format the date for the calendar.
-          id: task.id,
-        }));
-        setCurrentEvents(tasks); // Update the state with fetched tasks.
-        setLoading(false); // Indicate that loading is complete.
-      } catch (error) {
-        console.error("Error fetching tasks", error); // Handle error.
-        setLoading(false); // Indicate that loading is complete even if there's an error.
-      }
-    };
-    fetchTasks(); // Invoke the fetchTasks function.
-  }, []); // Empty dependency array means this effect runs once on mount.
+    fetchTasks();
+  }, []); // Empty dependency array ensures it runs only once on mount
 
-  // Function to format date to "YYYY-MM-DD".
+  // Effect hook to scroll to update modal when it opens
+  useEffect(() => {
+    if (modalIsOpen && updateModalRef.current) {
+      updateModalRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [modalIsOpen]); // Dependency on modalIsOpen state
+
+  // Effect hook to scroll to create modal when it opens
+  useEffect(() => {
+    if (createModalIsOpen && createModalRef.current) {
+      createModalRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [createModalIsOpen]); // Dependency on createModalIsOpen state
+
+  // Function to format date string to "YYYY-MM-DD" format
   function formatDate(dateString) {
     const date = new Date(dateString);
-    const year = date.getFullYear(); 
-    const month = (date.getMonth() + 1).toString().padStart(2, "0"); 
-    const day = date.getDate().toString().padStart(2, "0"); 
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const day = date.getDate().toString().padStart(2, "0");
     return `${year}-${month}-${day}`;
-}
+  }
 
-  console.log(currentEvents);
+  // Function to format date and time string to "YYYY-MM-DD HH:mm:ss" format
+  function formatDateTime(dateString) {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const day = date.getDate().toString().padStart(2, "0");
+    const hours = date.getHours().toString().padStart(2, "0");
+    const minutes = date.getMinutes().toString().padStart(2, "0");
+    const seconds = date.getSeconds().toString().padStart(2, "0");
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+  }
 
-  // Function to toggle weekends visibility.
+  // Handler function to toggle weekends visibility
   function handleWeekendsToggle() {
     setWeekendsVisible(!weekendsVisible);
   }
 
-  // Function to handle date selection in the calendar.
-  const handleDateSelect = async (selectInfo) => {
-    let title = prompt("Donnez un titre à votre tâche!");
-    let description = prompt("Décrivez votre tâche !");
-    let status = prompt("Quel est son status ?");
-    let calendarApi = selectInfo.view.calendar;
+  // Handler function for date select in calendar
+  const handleDateSelect = (selectInfo) => {
+    setNewTask({
+      ...newTask,
+      deadline: formatDateTime(selectInfo.startStr),
+    });
+    setCreateModalIsOpen(true); // Open create modal
+  };
 
-    calendarApi.unselect(); // Unselect the date range.
+  // Handler function for creating a new task
+  const handleCreateTask = async () => {
+    const calendarApi = calendarRef.current.getApi(); // Access FullCalendar API
 
-    if (title) {
-      let task = {
-        id: createEventId(), // Create a unique ID for the task.
-        title,
-        description: description,
-        status: status,
-        start: selectInfo.startStr,
-        id_user: 11, //id_user add directly but it will be changed dynamically
+    const task = {
+      id: createEventId(), // Generate unique event ID
+      ...newTask,
+      id_user: user.id, // Use authenticated user's ID
+    };
+
+    calendarApi.addEvent(task); // Add event to FullCalendar
+
+    try {
+      await axios.post("http://localhost:5000/tasks", task); // POST request to save task
+      fetchTasks(); // Refresh tasks after creation
+      setCreateModalIsOpen(false); // Close create modal
+    } catch (error) {
+      console.error("Error adding task", error);
+    }
+  };
+
+  // Handler function for clicking on an event/task in calendar
+  const handleEventClick = (clickInfo) => {
+    setSelectedEvent({
+      id: clickInfo.event.id,
+      title: clickInfo.event.title,
+      description: clickInfo.event.extendedProps.description,
+      status: clickInfo.event.extendedProps.status,
+      start: clickInfo.event.start,
+      id_user: clickInfo.event.extendedProps.id_user,
+    });
+    setModalIsOpen(true); // Open update/delete modal for the clicked event
+  };
+
+  // Handler function for updating an event/task
+  const handleEventUpdate = async () => {
+    if (selectedEvent.id_user !== user.id) {
+      alert('You can only update your own tasks');
+      return;
+    }
+
+    try {
+      const updatedEvent = {
+        ...selectedEvent,
+        id_user: user.id,
+        deadline: formatDateTime(selectedEvent.start),
       };
-      calendarApi.addEvent(task); // Add the task to the calendar.
 
+      await axios.put(`http://localhost:5000/tasks/${selectedEvent.id}`, updatedEvent); // PUT request to update task
+      fetchTasks(); // Refresh tasks after update
+      setModalIsOpen(false); // Close update modal
+    } catch (error) {
+      console.error("Error updating task", error);
+    }
+  };
+
+  // Handler function for deleting an event/task
+  const handleEventDelete = async () => {
+    if (selectedEvent.id_user !== user.id) {
+      alert('You can only delete your own tasks');
+      return;
+    }
+
+    if (window.confirm(`Are you sure you want to delete the event '${selectedEvent.title}'`)) {
       try {
-        const response = await axios.post("http://localhost:5000/tasks", task); // Send the new task to the server.
-        const eventWithId = { ...task, id: response.data.id }; // Update task with the ID from the server.
-        setCurrentEvents([...currentEvents, eventWithId]); // Add the new task to the state.
+        await axios.delete(`http://localhost:5000/tasks/${selectedEvent.id}`); // DELETE request to delete task
+        fetchTasks(); // Refresh tasks after deletion
+        setModalIsOpen(false); // Close delete modal
       } catch (error) {
-        console.error("Error adding task", error); // Handle error.
+        console.error("Error deleting task", error);
       }
     }
   };
 
-  // Function to handle event click (for deletion).
-  function handleEventClick(clickInfo) {
-    if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
-      clickInfo.event.remove(); // Remove the event from the calendar.
-    }
-  }
-
-  // Function to handle adding event to the database.
-  function handleEventAdd(info) {
-    const event = {
-      title: info.event.title,
-      description: info.event.extendedProps.description,
-      status: info.event.extendedProps.status,
-      deadline: info.event.start,
-      id_user: info.event.extendedProps.id_user,
-    };
-
-    axios
-      .post("http://localhost:5000/tasks", event) // Send the new event to the server.
-      .then(() => {
-        console.log("Event added to database successfully");
-      })
-      .catch((error) => console.error("Error adding event to database:", error));
-  }
-
-  // Function to handle event changes (for updates).
-  function handleEventChange(info) {
-    const { event } = info;
-    axios
-      .put(`http://localhost:5000/tasks/${event.id}`, event) // Send the updated event to the server.
-      .then(() => {
-        console.log("Event updated in database successfully");
-      })
-      .catch((error) => console.error("Error updating event in database:", error));
-  }
-
-  // Function to handle event removal.
-  function handleEventRemove(info) {
-    const { event } = info;
-    axios
-      .delete(`http://localhost:5000/tasks/${event.id}`, event) // Remove the event from the server.
-      .then(() => {
-        console.log("Event removed from database successfully");
-      })
-      .catch((error) => console.error("Error removing event from database:", error));
-  }
-
-  // Function to handle events set.
-  function handleEvents(events) {
-    setCurrentEvents(events);
-  }
-
-  // Function to render event content in the calendar.
+  // Function to render the event content in the calendar
   function renderEventContent(eventInfo) {
     return (
       <>
@@ -147,16 +196,16 @@ export default function CalendarComponents() {
     );
   }
 
-  // Sidebar component to display instructions and toggle for weekends visibility.
-  function Sidebar({ weekendsVisible, handleWeekendsToggle, currentEvents }) {
+  // Sidebar component for instructions and weekend toggle
+  function Sidebar({ weekendsVisible, handleWeekendsToggle }) {
     return (
       <div className="flex flex-row justify-center">
-        <div className="p-8 content-start">
+        <div className="py-7 content-start text-center">
           <h2 className="font-semibold">Instructions</h2>
           <ul>
-            <li>Déroulé pour voir le calendrier</li>
-            <li>Cliqué sur une date pour ajouter un évènement</li>
-            <li>Cliqué sur un évènement pour le supprimer</li>
+            <li>Scroll pour voir le calendrier</li>
+            <li>Cliquer sur une date pour créer un event</li>
+            <li>Cliquer sur un évènement pour le modifier ou le supprimer</li>
           </ul>
           <div className="pt-2">
             <label className="font-semibold">
@@ -173,46 +222,150 @@ export default function CalendarComponents() {
     );
   }
 
-
-  // Conditional rendering based on loading state.
   return (
     <div className="grid grid-rows-1 min-h-full text-sm">
       <Sidebar
         weekendsVisible={weekendsVisible}
         handleWeekendsToggle={handleWeekendsToggle}
-        currentEvents={currentEvents}
-        
       />
       <div className="grow p-12">
         {loading ? (
-          <p>Loading...</p> // Show loading message while data is being fetched.
+          <p>Loading...</p>
         ) : (
           <FullCalendar 
-            
-            plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]} // Add plugins to the calendar.
+            ref={calendarRef} // Add ref to FullCalendar component
+            plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
             themeSystem={"Slate"}
-            headerToolbar ={{
-              left: "prev,next today",
+            headerToolbar={{
+              left: "prev,next",
               center: "title",
-              right: "dayGridMonth,timeGridWeek,timeGridDay",
+              right: "today",
             }}
-            initialView="dayGridMonth" // Set the initial view of the calendar.
+            initialView="dayGridMonth"
             locale={frLocale}
-           
-            editable={true} // Make events editable.
-            selectable={true} // Make dates selectable.
-            selectMirror={true} // Show a "mirror" of the selection.
-            dayMaxEvents={true} // Limit the number of events per day.
-            weekends={weekendsVisible} // Show/hide weekends.
-            initialEvents={currentEvents} // Set initial events.
-            select={handleDateSelect} // Handle date selection.
-            eventContent={renderEventContent} // Render custom event content.
-            eventClick={handleEventClick} // Handle event click.
-            eventsSet={handleEvents} // Set the events.
-            eventAdd={handleEventAdd} // Handle event addition.
-            eventChange={handleEventChange} // Handle event change.
-            eventRemove={handleEventRemove} // Handle event removal.
+            editable={true}
+            selectable={true}
+            selectMirror={true}
+            dayMaxEvents={true}
+            weekends={weekendsVisible}
+            events={currentEvents}
+            select={handleDateSelect}
+            eventContent={renderEventContent}
+            eventClick={handleEventClick}
           />
+        )}
+
+        {modalIsOpen && (
+          <div className="modal" ref={updateModalRef}> {/* Add ref to update modal */}
+            <div className="modal-content p-4 flex flex-col bg-custom-main-orange m-3 rounded-lg">
+              <h2 className="font-semibold text-xl pb-4">Modifier une tâche</h2>
+              <label className="my-1">
+                Titre:
+                <input
+                  type="text"
+                  value={selectedEvent?.title}
+                  onChange={(e) => setSelectedEvent({ ...selectedEvent, title: e.target.value })}
+                  className="my-1 p-2 rounded"
+                />
+              </label>
+              <label className="my-1">
+                Description:
+                <textarea
+                  value={selectedEvent?.description}
+                  onChange={(e) => setSelectedEvent({ ...selectedEvent, description: e.target.value })}
+                  className="my-1 p-2 rounded"
+                />
+              </label>
+              <label className="my-1">
+                Status:
+                <select value={selectedEvent?.status} onChange={(e) => setSelectedEvent({ ...selectedEvent, status: e.target.value })} className="my-1 p-2 rounded">
+
+                <option value="A faire">A faire</option>
+
+                <option value="En cours">En cours</option>
+
+                <option value="Urgent">Urgent</option>
+
+                <option value="Fini">Fini</option>
+
+                </select>
+              </label>
+              <label className="my-1">
+                Date:
+                <input
+                  type="datetime-local"
+                  value={selectedEvent?.start ? formatDateTime(selectedEvent.start).substring(0, 16) : ''}
+                  onChange={(e) => setSelectedEvent({ ...selectedEvent, start: e.target.value })}
+                  className="my-1 p-2 rounded"
+                />
+              </label>
+              <button onClick={handleEventUpdate} className="hover:text-black mt-12 inline-block rounded-lg border border-white px-4 py-3 text-center font-semibold text-white transition hover:bg-white hover:text-primary">
+                Modifier
+              </button>
+              <button onClick={handleEventDelete} className="hover:text-black mt-12 inline-block rounded-lg border border-white px-4 py-3 text-center font-semibold text-white transition hover:bg-white hover:text-primary">
+                Supprimer
+              </button>
+              <button onClick={() => setModalIsOpen(false)} className="hover:text-black mt-12 inline-block rounded-lg border border-white px-4 py-3 text-center font-semibold text-white transition hover:bg-white hover:text-primary">
+                Fermer
+              </button>
+            </div>
+          </div>
+        )}
+
+        {createModalIsOpen && (
+          <div className="modal" ref={createModalRef}> {/* Add ref to create modal */}
+            <div className="modal-content p-4 flex flex-col bg-custom-main-orange m-3 rounded-lg">
+              <h2 className="font-semibold text-xl pb-4">Créer une date</h2>
+              <label className="my-1">
+                Titre:
+                <input
+                  type="text"
+                  value={newTask.title}
+                  onChange={(e) => setNewTask({ ...newTask, title: e.target.value })}
+                  className="my-1 p-2 rounded"
+                />
+              </label>
+              <label className="my-1">
+                Description:
+                <textarea
+                  value={newTask.description}
+                  onChange={(e) => setNewTask({ ...newTask, description: e.target.value })}
+                  className="my-1 p-2 rounded"
+                />
+              </label>
+              <label className="my-1">
+              Status:
+                <select value={newTask.status}  onChange={(e) => setNewTask({ ...newTask, status: e.target.value })} className="my-1 p-2 rounded">
+
+                <option value="A faire">A faire</option>
+
+                <option value="En cours">En cours</option>
+
+                <option value="Urgent">Urgent</option>
+
+                <option value="Fini">Fini</option>
+
+                </select>
+              </label>
+              <label className="my-1">
+                Date:
+                <input
+                  type="datetime-local"
+                  value={newTask.deadline ? newTask.deadline.substring(0, 16) : ''}
+                  onChange={(e) => setNewTask({ ...newTask, deadline: e.target.value })}
+                  className="my-1 p-2 rounded"
+                />
+              </label>
+              
+              <button onClick={handleCreateTask} className="hover:text-black mt-12 inline-block rounded-lg border border-white px-4 py-3 text-center font-semibold text-white transition hover:bg-white hover:text-primary">
+                Créer
+              </button>
+              <button onClick={() => setCreateModalIsOpen(false)} className="hover:text-black mt-12 inline-block rounded-lg border border-white px-4 py-3 text-center font-semibold text-white transition hover:bg-white hover:text-primary">
+                Fermer
+              </button>
+              
+            </div>
+          </div>
         )}
       </div>
     </div>

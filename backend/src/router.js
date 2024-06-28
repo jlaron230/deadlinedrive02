@@ -61,9 +61,9 @@ router.put("/quote_category/:id", quote_categoryControllers.edit);
 router.post("/quote_category", quote_categoryControllers.add);
 router.delete("/quote_category/:id", quote_categoryControllers.destroy);
 
-
 router.get("/comments", commentControllers.browse);
 router.get("/comment/:id", commentControllers.read);
+router.get("/comments/by-quote/:quoteId", commentControllers.findByQuote);
 router.put("/comment/:id", commentControllers.edit);
 router.post("/comment", commentControllers.add);
 router.delete("/comment/:id", commentControllers.destroy);

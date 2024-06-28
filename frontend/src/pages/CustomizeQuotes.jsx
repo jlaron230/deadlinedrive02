@@ -3,6 +3,7 @@ import ChooseAuthor from "@components/ChooseAuthor/ChooseAuthor";
 import InspirationalImage from "../assets/prateek-katyal-8Aq6t-Khe5k-unsplash.jpg";
 import YoursQuote from "../components/YoursQuotes/YoursQuotes";
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import axios from "axios";
 
 export default function CustomizeQuotes() {
@@ -25,13 +26,14 @@ export default function CustomizeQuotes() {
       console.error("Error fetching data : ", error);
     }
   };
-
+  
+  console.log(categories);
+  
   useEffect(() => {
     fetchData();
   }, []);
 
-  const addQuote = async (newQuote) => {
-    const id_user = 10;
+  const addQuote = async (newQuote, token) => {
     try {
       const author = customAuthor || newQuote.author;
 
@@ -41,7 +43,13 @@ export default function CustomizeQuotes() {
         text: newQuote.text,
         id_user: newQuote.id_user,
         id_category: newQuote.id_category
-        });
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
 
       setQuotes([...quotes, res.data]);
       setSuccessMessage(
@@ -57,19 +65,34 @@ export default function CustomizeQuotes() {
 
   return (
     <>
-      <div className="flex flex-col max-w-7xl m-auto">
-          <h1 className="text-4xl flex justify-center">Créer une citation</h1>
-        <div className="flex flex-row">
-        <div className="flex flex-col space-y-6 p-6 sm:p-10">
+    <motion.div
+      initial={{ opacity: 0, x: -50, y: -50 }}
+      animate={{ opacity: 1, x: 0, y: 0 }}
+      transition={{ duration: 1, ease: "easeOut" }}
+      className="flex flex-col max-w-7xl m-auto"
+    >
+      <h1 className="text-3xl py-6 font-semibold flex justify-center">Créer une citation</h1>
+      <div className="flex flex-row gap-20 px-2">
+        <div className="flex flex-col w-2/4">
           {successMessage && (
-            <div className="p-4 mb-4 text-sm text-green-700 bg-green-100 rounded-lg">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5 }}
+              className="p-4 mb-4 text-sm text-green-700 bg-green-100 rounded-lg"
+            >
               {successMessage}
-            </div>
+            </motion.div>
           )}
           {errorMessage && (
-            <div className="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5 }}
+              className="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg"
+            >
               {errorMessage}
-            </div>
+            </motion.div>
           )}
           <form
             onSubmit={(e) => {
@@ -78,7 +101,10 @@ export default function CustomizeQuotes() {
             }}
             className="flex flex-col gap-6"
           >
-            <textarea
+            <motion.textarea
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
               type="text"
               value={newQuote.text}
               onChange={(e) =>
@@ -90,43 +116,70 @@ export default function CustomizeQuotes() {
               placeholder="Personnaliser une nouvelle citation"
               className="px-4 py-1 border border-gray-400 rounded-md focus:outline-none focus:border-gray-800 min-h-32 w-full bg-custom-main-orange placeholder:text-slate-100"
             />
-            <ChooseAuthor
-            selectedAuthor={newQuote.author}
-            onSelectAuthor={(author) =>
-                setNewQuote({
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+            >
+              <ChooseAuthor
+                selectedAuthor={newQuote.author}
+                onSelectAuthor={(author) =>
+                  setNewQuote({
                     ...newQuote,
                     author: author,
-                })
-            }
-            />
-            <input
+                  })
+                }
+              />
+            </motion.div>
+            <motion.input
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
               type="text"
               value={customAuthor}
               onChange={(e) => setCustomAuthor(e.target.value)}
               placeholder="Si auteur non répertorié"
               className="px-4 py-1 border border-gray-400 rounded-md focus:outline-none focus:border-gray-800 w-full bg-custom-main-orange placeholder:text-slate-100"
             />
-            <ChooseTheme
-            selectedTheme={newQuote.id_category}
-            onSelectTheme={(id_category) =>
-                setNewQuote({
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+            >
+              <ChooseTheme
+                selectedTheme={newQuote.id_category}
+                onSelectTheme={(id_category) =>
+                  setNewQuote({
                     ...newQuote,
                     id_category: id_category,
-            })
-        }
-            />
-            <button
+                  })
+                }
+              />
+            </motion.div>
+            <motion.button
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.5 }}
               type="submit"
               className="px-4 py-1 bg-african-violet text-white font-semibold rounded hover:bg-butterscotch"
             >
               Créer
-            </button>
+            </motion.button>
           </form>
-          </div>
-          <img src={InspirationalImage} alt="Citation inspirante" className="w-1/2 h-auto mb-4" />
         </div>
-        <YoursQuote />
+        <div className="w-2/4">
+          <motion.img
+            src={InspirationalImage}
+            alt="Citation inspirante"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.6 }}
+            className="mb-4 max-h-96 w-screen rounded"
+          />
+        </div>
       </div>
+      <YoursQuote />
+    </motion.div>
     </>
   );
 }
