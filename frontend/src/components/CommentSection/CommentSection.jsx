@@ -16,6 +16,7 @@ function CommentSection({ quote, category, onClose }) {
   const [newComment, setNewComment] = useState("");
   const [editingComment, setEditingComment] = useState(null);
   const [editedContent, setEditedContent] = useState("");
+  const [userId, setUserID] = useState(localStorage.getItem("id"))
 
   // Fetch comments related to the specified quote on component mount or when quote.id changes
   useEffect(() => {
@@ -41,7 +42,7 @@ function CommentSection({ quote, category, onClose }) {
   const handleAddComment = () => {
     const commentData = {
       content: newComment,
-      id_user: localStorage.getItem("id"), // Retrieve user ID from local storage
+      id_user: userId, // Retrieve user ID from local storage
       id_quote: quote.id,
     };
 
@@ -115,7 +116,7 @@ function CommentSection({ quote, category, onClose }) {
     return user ? user.firstName : "Unknown User";
   };
 
-
+console.log()
   // Render the comment section with UI for viewing and managing comments
   return (
     <motion.div
@@ -154,7 +155,7 @@ function CommentSection({ quote, category, onClose }) {
                   {getUserFirstName(comment.id_user)}
                 </p>
                 <p className="text-sm">{formatDate(comment.created_at)}</p>
-                {editingComment === comment.id ? (
+                {editingComment === comment.id && parseInt(userId) === comment.id_user? (
                   <div className="flex flex-col">
                     <textarea
                       className="w-full p-2 text-base border border-gray-300 rounded-md"
@@ -176,7 +177,7 @@ function CommentSection({ quote, category, onClose }) {
                     className="text-blue-500 hover:text-blue-700"
                     onClick={() => handleEditComment(comment.id)}
                   >
-                    <PencilIcon className="w-5 h-5" />
+                    {parseInt(userId) === comment.id_user && <PencilIcon className="w-5 h-5" />}
                   </button>
                   <button
                     className="text-red-500 hover:text-red-700"
