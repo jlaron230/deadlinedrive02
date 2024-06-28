@@ -278,12 +278,17 @@ export default function CalendarComponents() {
               </label>
               <label className="my-1">
                 Status:
-                <input
-                  type="text"
-                  value={selectedEvent?.status}
-                  onChange={(e) => setSelectedEvent({ ...selectedEvent, status: e.target.value })}
-                  className="my-1 p-2 rounded"
-                />
+                <select value={selectedEvent?.status} onChange={(e) => setSelectedEvent({ ...selectedEvent, status: e.target.value })} className="my-1 p-2 rounded">
+
+                <option value="A faire">A faire</option>
+
+                <option value="En cours">En cours</option>
+
+                <option value="Urgent">Urgent</option>
+
+                <option value="Fini">Fini</option>
+
+                </select>
               </label>
               <label className="my-1">
                 Date:
@@ -329,13 +334,18 @@ export default function CalendarComponents() {
                 />
               </label>
               <label className="my-1">
-                Status:
-                <input
-                  type="text"
-                  value={newTask.status}
-                  onChange={(e) => setNewTask({ ...newTask, status: e.target.value })}
-                  className="my-1 p-2 rounded"
-                />
+              Status:
+                <select value={newTask.status}  onChange={(e) => setNewTask({ ...newTask, status: e.target.value })} className="my-1 p-2 rounded">
+
+                <option value="A faire">A faire</option>
+
+                <option value="En cours">En cours</option>
+
+                <option value="Urgent">Urgent</option>
+
+                <option value="Fini">Fini</option>
+
+                </select>
               </label>
               <label className="my-1">
                 Date:
