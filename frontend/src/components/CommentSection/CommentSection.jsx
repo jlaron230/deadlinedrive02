@@ -6,126 +6,133 @@ import {
   TrashIcon,
 } from "@heroicons/react/24/solid";
 import { motion } from "framer-motion";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 
 function CommentSection({ quote, category, onClose }) {
-  // State variables for managing comments, user data, and new comment inputs
+  // State for storing the comments
   const [comments, setComments] = useState([]);
+  // State for storing user data
   const [users, setUsers] = useState([]);
+  // State for storing new comment input
   const [newComment, setNewComment] = useState("");
+  // State for tracking which comment is being edited
   const [editingComment, setEditingComment] = useState(null);
+  // State for storing the edited comment content
   const [editedContent, setEditedContent] = useState("");
-  const [userId, setUserID] = useState(localStorage.getItem("id"))
+  // State for tracking the user ID from local storage
+  const [userId, setUserID] = useState(localStorage.getItem("id"));
+  // Ref for the modal content to track clicks outside
+  const modalRef = useRef(null);
 
-  // Fetch comments related to the specified quote on component mount or when quote.id changes
+  // Effect for fetching comments based on the quote ID
   useEffect(() => {
-    axios
-      .get(`http://localhost:5000/comments/by-quote/${quote.id}`)
-      .then((response) => {
-        // Take the last three comments from the fetched data
+    axios.get(`http://localhost:5000/comments/by-quote/${quote.id}`)
+      .then(response => {
         const lastThreeComments = response.data[0].slice(-3);
         setComments(lastThreeComments);
       })
-      .catch((error) => console.error("Error loading comments:", error));
+      .catch(error => console.error("Error loading comments:", error));
   }, [quote.id]);
 
-  // Fetch user data on component mount
+  // Effect for fetching user data
   useEffect(() => {
-    axios
-      .get("http://localhost:5000/users")
-      .then((response) => setUsers(response.data))
-      .catch((error) => console.error("Error loading users:", error));
+    axios.get("http://localhost:5000/users")
+      .then(response => setUsers(response.data))
+      .catch(error => console.error("Error loading users:", error));
   }, []);
 
-  // Add a new comment
+  // Function to add a new comment
   const handleAddComment = () => {
     const commentData = {
       content: newComment,
-      id_user: userId, // Retrieve user ID from local storage
+      id_user: userId,
       id_quote: quote.id,
     };
-
-    axios
-      .post("http://localhost:5000/comment", commentData)
-      .then((response) => {
-        // Append the new comment to the current list and reset input field
-        setComments([
-          ...comments,
-          {
-            ...commentData,
-            username: getUserFirstNameFromLocalStorage(),
-            created_at: new Date().toISOString(),
-          },
-        ]);
+    axios.post("http://localhost:5000/comment", commentData)
+      .then(response => {
+        setComments([...comments, {
+          ...commentData,
+          username: getUserFirstNameFromLocalStorage(),
+          created_at: new Date().toISOString(),
+        }]);
         setNewComment("");
       })
-      .catch((error) => console.error("Failed to add comment:", error));
+      .catch(error => console.error("Failed to add comment:", error));
   };
 
-  // Delete a comment
+  // Function to delete a comment
   const handleDeleteComment = (commentId) => {
-    axios
-      .delete(`http://localhost:5000/comment/${commentId}`)
+    axios.delete(`http://localhost:5000/comment/${commentId}`)
       .then(() => {
-        // Remove the deleted comment from the state
-        setComments(comments.filter((comment) => comment.id !== commentId));
+        setComments(comments.filter(comment => comment.id !== commentId));
       })
-      .catch((error) => console.error("Failed to delete comment:", error));
+      .catch(error => console.error("Failed to delete comment:", error));
   };
 
-  // Start editing a comment
+  // Function to start editing a comment
   const handleEditComment = (commentId) => {
     setEditingComment(commentId);
-    const comment = comments.find((comment) => comment.id === commentId);
+    const comment = comments.find(comment => comment.id === commentId);
     setEditedContent(comment.content);
   };
 
-  // Update a comment
+  // Function to update a comment
   const handleUpdateComment = (commentId) => {
-    axios.put(`http://localhost:5000/comment/${commentId}`, { content: editedContent, id_user : localStorage.getItem('id'), id_quote: quote.id })
+    axios.put(`http://localhost:5000/comment/${commentId}`, {
+      content: editedContent,
+      id_user: userId,
+      id_quote: quote.id
+    })
       .then(() => {
-        // Update the comment content in the state
-        setComments(
-          comments.map((comment) =>
-            comment.id === commentId
-              ? { ...comment, content: editedContent }
-              : comment
-          )
-        );
+        setComments(comments.map(comment =>
+          comment.id === commentId ? { ...comment, content: editedContent } : comment
+        ));
         setEditingComment(null);
         setEditedContent("");
       })
-      .catch((error) => console.error("Failed to update comment:", error));
+      .catch(error => console.error("Failed to update comment:", error));
   };
 
-  // Format dates for display
+  // Function to format dates for display
   const formatDate = (dateString) => {
     const options = { year: "numeric", month: "2-digit", day: "2-digit" };
     return new Date(dateString).toLocaleDateString("fr-FR", options);
   };
 
-  // Retrieve user's first name from local storage or return a placeholder
+  // Function to retrieve the user's first name from local storage
   const getUserFirstNameFromLocalStorage = () => {
     return localStorage.getItem("firstName") || "NomUtilisateur";
   };
 
-  // Retrieve user's first name from state by user ID
+  // Function to retrieve a user's first name from the users state by user ID
   const getUserFirstName = (userId) => {
-    const user = users.find((user) => user.id === parseInt(userId, 10));
+    const user = users.find(user => user.id === parseInt(userId, 10));
     return user ? user.firstName : "Unknown User";
   };
 
-console.log()
-  // Render the comment section with UI for viewing and managing comments
+  // Function to handle clicking outside of the modal content to close the modal
+  const handleClickOutside = (event) => {
+    if (modalRef.current && !modalRef.current.contains(event.target)) {
+      onClose(); // Close modal if click is outside
+    }
+  };
+
+  // Render the component with the modal and comments
   return (
     <motion.div
       className="fixed inset-0 z-50 flex items-center justify-center bg-gray-500/50"
+      onClick={handleClickOutside}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
-      <div className="bg-white rounded-lg max-w-5xl w-full p-6 border border-2 border-custom-main-orange pb-12">
+      <div
+        ref={modalRef}
+        className="bg-white rounded-lg max-w-5xl w-full p-6 border border-2 border-custom-main-orange pb-12 overflow-auto"
+        style={{ maxHeight: '85vh' }}
+        onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside
+      >
         <div className="flex justify-end mb-4">
           <button onClick={onClose} className="text-white">
             <XMarkIcon className="bg-red-500 w-6 h-6" />
@@ -183,7 +190,7 @@ console.log()
                     className="text-red-500 hover:text-red-700"
                     onClick={() => handleDeleteComment(comment.id)}
                   >
-                    <TrashIcon className="w-5 h-5" />
+                    {parseInt(userId) === comment.id_user && <TrashIcon className="w-5 h-5" />}
                   </button>
                 </div>
               </div>
