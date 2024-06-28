@@ -31,7 +31,11 @@
 }
 
 .fc-event-main {
-  background-color: #CF9845  !important; 
+    background-color: #CF9845 !important; 
     border-color: #CF9845 !important;
     color: white; 
+}
+
+.fc-v-event  {
+  border-color: #CF9845 !important;
 }

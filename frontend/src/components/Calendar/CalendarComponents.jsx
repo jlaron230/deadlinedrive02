@@ -237,9 +237,9 @@ export default function CalendarComponents() {
             plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
             themeSystem={"Slate"}
             headerToolbar={{
-              left: "prev,next today",
+              left: "prev,next",
               center: "title",
-              right: "dayGridMonth,timeGridWeek,timeGridDay",
+              right: "today",
             }}
             initialView="dayGridMonth"
             locale={frLocale}
