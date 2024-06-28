@@ -1,10 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Pagination from "@components/Pagination/Pagination";
-import {
-  ChevronUpIcon,
-  ChevronDownIcon,
-} from "@heroicons/react/24/solid";
+import { ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/24/solid";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import CommentSection from "@components/CommentSection/CommentSection";
@@ -82,7 +79,10 @@ function QuoteCard() {
       <div className="flex flex-col max-w-7xl m-auto py-6">
         <ul className="flex flex-wrap justify-center gap-14 mb-8">
           {category.map((c) => (
-            <li
+            <motion.li
+              whileHover={{ scale: 1.1 }}
+              onHoverStart={(e) => {}}
+              onHoverEnd={(e) => {}}
               key={c.id}
               className={`cursor-pointer ${
                 selectedCategory === c.name
@@ -92,14 +92,15 @@ function QuoteCard() {
               onClick={() => handleCategoryClick(c.name)}
             >
               {c.name}
-            </li>
+            </motion.li>
           ))}
-          <Link
-            to="/customize-quotes"
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.6 }}
             className="rounded bg-custom-main-orange text-black font-normal px-3"
           >
-            Créer une citation
-          </Link>
+            Gérer mes citations
+          </motion.button>
         </ul>
         <AnimatePresence mode="wait">
           <motion.div
@@ -161,13 +162,13 @@ function QuoteCard() {
         />
       </div>
       <AnimatePresence>
-      {isModalOpen && (
-        <CommentSection
-          quote={selectedQuote}
-          category={getCategoryName(selectedQuote.id)}
-          onClose={() => setIsModalOpen(false)}
-        />
-      )}
+        {isModalOpen && (
+          <CommentSection
+            quote={selectedQuote}
+            category={getCategoryName(selectedQuote.id)}
+            onClose={() => setIsModalOpen(false)}
+          />
+        )}
       </AnimatePresence>
     </>
   );

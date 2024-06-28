@@ -1,9 +1,9 @@
-import CommentSection from "@components/CommentSection/CommentSection";
+import CitationHome from "@pages/CitationHome";
 
 export default function Test (){
     return (
        <>
-        <CommentSection />
+       <CitationHome />
        </> 
     )
 }

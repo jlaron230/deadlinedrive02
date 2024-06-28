@@ -1,5 +1,4 @@
 const models = require("../models");
-const { validationResult } = require("express-validator");
 
 const browse = async (req, res) => {
     try {
@@ -43,12 +42,8 @@ const edit = async (req, res) => {
 };
 
 const add = async (req, res) => {
-    // FIXME const errors = validationResult(req);
-    // console.log(errors);
-    // if (!errors.isEmpty()) {
-    //     return res.status(400).json({ errors: errors.array() }); // Bad Request
-    // }
     const quote = req.body;
+    quote.id_user = req.user.id;
     try {
         const [quoteResult] = await models.quote.insert(quote);
         const quoteId = quoteResult.insertId;
