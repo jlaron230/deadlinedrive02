@@ -20,26 +20,14 @@ class UserManager extends AbstractManager {
     );
   }
   
-  // Method to update an existing user in the database
-  update(user) { 
+  update(user) {
     return this.database.query(
-      `update ${this.table} SET 
-      firstName = ?, 
-      lastName = ?, 
-      email = ?, 
-      password = ?, 
-      where id = ?`, // SQL query to update a user
-      [
-        user.firstName, 
-        user.lastName, 
-        user.email, 
-        user.password, 
-        user.id
-      ] // Array of values to be updated and the user ID
-    );
+      `UPDATE ${this.table} SET firstName = ?, lastName = ?, email = ? WHERE id = ?`,
+      [user.firstName, user.lastName, user.email, user.id]
+    ).then(([result]) => result); // Renvoi du bon résultat
   }
- 
 
+  
   // Method to find a user by their email
   findUserByEmail(email) {
     return this.database.query(
@@ -47,6 +35,22 @@ class UserManager extends AbstractManager {
       [email] // Array of values to be used in the query
     );
   }
+
+   modifyPassword(id, hashPassword){
+     return this.database.query(
+       `UPDATE ${this.table} SET password = ? WHERE id = ?`,
+       [hashPassword, id]
+     );
+   }
+
+   findById(id) {
+    return this.database.query(
+      `SELECT * FROM ${this.table} WHERE id = ?`,
+      [id]
+    ).then(results => results[0]);
+  }
+
+
 }
 
 module.exports = UserManager; // Export the UserManager class

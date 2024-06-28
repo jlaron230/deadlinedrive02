@@ -3,7 +3,7 @@ function NotFound (){
     return (
         <>
           <section className="relative z-10 bg-404 py-[30px] min-h-screen">
-            <div className="container mx-auto">
+            <div className="container mx-auto pt-20">
               <div className="flex">
                 <div className="w-full">
                   <div className="mx-auto text-center">
