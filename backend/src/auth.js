@@ -23,7 +23,7 @@ const verifyPassword = (req, res) => {
       if (isVerified) {
         console.log("acceptée"); // Log a message indicating successful verification
 
-        const payload = { sub: req.user.id }; // Create a JWT payload with the user's ID
+        const payload = { sub: { id : req.user.id, firstName : req.user.firstName, lastName : req.user.lastName, email : req.user.email} }; // Create a JWT payload with the user's ID
 
         const token = jwt.sign(payload, process.env.JWT_SECRET, {
           expiresIn: "99h", // Set the token to expire in 99 hours

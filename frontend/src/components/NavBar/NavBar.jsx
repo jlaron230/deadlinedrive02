@@ -45,10 +45,10 @@ const NavBar = () => {
             </Link>
             <div className="hidden md:block">
               <div className="ml-10 flex items-baseline space-x-4">
-                {['/deadlines', '/customize-quotes', '/quotes', '/favoris', '/about'].map((path, index) => (
+                {['/deadlines', '/customize-quotes', '/quotes', '/about'].map((path, index) => (
                   <motion.div variants={linkVariants} whileHover="hover" key={index}>
                     <Link to={path} className="text-custom-black hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">
-                      {['Deadlines', 'Personnaliser', 'Citations', 'Favoris', 'À propos'][index]}
+                      {['Deadlines', 'Personnaliser', 'Citations', 'À propos'][index]}
                     </Link>
                   </motion.div>
                 ))}
@@ -84,10 +84,10 @@ const NavBar = () => {
         className="md:hidden"
       >
         <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-          {['/about', '/deadlines', '/customize-quotes', '/quotes', '/favoris'].map((path, index) => (
+          {['/about', '/deadlines', '/customize-quotes', '/quotes'].map((path, index) => (
             <motion.div variants={linkVariants} whileHover="hover" key={index}>
               <Link to={path} className="text-custom-black hover:text-gray-200 block px-3 py-2 rounded-md text-base font-medium">
-                {['À propos', 'Deadlines', 'Créer Citation', 'Citations', 'Favoris'][index]}
+                {['À propos', 'Deadlines', 'Créer Citation', 'Citations'][index]}
               </Link>
             </motion.div>
           ))}
