@@ -9,6 +9,7 @@ const taskControllers = require("./controllers/taskControllers");
 const deadlineControllers = require("./controllers/deadlineControllers");
 const quote_categoryControllers = require("./controllers/quote_categoryControllers");
 const commentControllers = require("./controllers/commentControllers");
+const notificationControllers = require('./controllers/notificationControllers');
 
 const {
     verifyPassword,hashPassword,verifyToken,verifyId,
@@ -67,6 +68,25 @@ router.get("/comments/by-quote/:quoteId", commentControllers.findByQuote);
 router.put("/comment/:id", commentControllers.edit);
 router.post("/comment", commentControllers.add);
 router.delete("/comment/:id", commentControllers.destroy);
+
+
+// Route pour obtenir toutes les notifications
+router.get('/notifications', notificationControllers.browse);
+
+// Route pour obtenir une notification spécifique par id
+router.get('/notifications/:id', notificationControllers.read);
+
+// Route pour créer une nouvelle notification
+router.post('/notifications', notificationControllers.add);
+
+// Route pour marquer une notification comme lue
+router.put('/notifications/:id/read', notificationControllers.edit);
+
+// Route pour supprimer une notification
+router.delete('/notifications/:id', notificationControllers.destroy);
+
+module.exports = router;
+
  
  // authentication wall : verifyToken is activated for each route after this line
 //  router.use(verifyToken); 
