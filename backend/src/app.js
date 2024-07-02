@@ -3,6 +3,7 @@
 const fs = require("node:fs");
 const path = require("node:path");
 const bodyParser = require("body-parser");
+const { scheduleDailyNotifications } = require('./services/cronJob')
 
 // create express app
 
@@ -15,6 +16,9 @@ app.use(bodyParser.json());
 // use some application-level middlewares
 
 app.use(express.json());
+
+// Start the scheduled jobs
+scheduleDailyNotifications();
 
 const cors = require("cors");
 

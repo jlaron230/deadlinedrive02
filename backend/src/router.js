@@ -43,6 +43,8 @@ router.get("/quotes/:id", quoteControllers.read);
 router.put("/quotes/:id", quoteControllers.edit);
 router.post("/quotes", quoteControllers.add);
 router.delete("/quotes/:id", quoteControllers.destroy);
+// Route to get a random or daily quote
+router.get('/daily-quote', quoteControllers.getDailyQuote);
 
 router.get("/tasks", taskControllers.browse);
 router.get("/tasks/:id", taskControllers.read);

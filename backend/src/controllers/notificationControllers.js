@@ -1,7 +1,4 @@
-const NotificationManager = require("../models/NotificationManager");
-const database = require('../database'); // Assurez-vous que ce chemin est correct
-
-const notificationManager = new NotificationManager(database);
+const models = require("../models");
 
 const browse = async (req, res) => {
     try {
@@ -66,10 +63,28 @@ const destroy = async (req, res) => {
     }
 };
 
+const markAsRead = async (req, res) => {
+    try {
+        const result = await notificationManager.markAsRead(req.params.id);
+        if (result.affectedRows > 0) {
+            res.sendStatus(200);
+        } else {
+            res.sendStatus(404);
+        }
+    } catch (error) {
+        console.error(error);
+        res.sendStatus(500);
+    }
+};
+
+// Ajoutez cette méthode à votre exportation de module
+
+
 module.exports = {
     browse,
     read,
     edit,
     add,
     destroy,
+    markAsRead,
 };

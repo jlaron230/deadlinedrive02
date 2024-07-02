@@ -58,6 +58,14 @@ class QuoteManager extends AbstractManager {
         return this.database.query(query, values);
     }
 
+
+    // Fetch a random quote
+    getRandomQuote() {
+        return this.database.query(
+            `SELECT * FROM ${this.table} ORDER BY RAND() LIMIT 1`
+        );
+    }
+
     delete(id) {
         try {
             return this.database.query(
@@ -70,5 +78,6 @@ class QuoteManager extends AbstractManager {
         }
     }
 }
+
 
 module.exports = QuoteManager;
