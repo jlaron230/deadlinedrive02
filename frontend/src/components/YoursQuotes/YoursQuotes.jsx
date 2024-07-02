@@ -39,7 +39,7 @@ const App = () => {
       
       {/* A grid container with padding, gap between items, and custom styling */}
       <div className=" bg-custom-main-orange m-3 rounded-lg">
-        <h3 className="flex flex-col items-center font-semibold px-2 py-3">Citations tendances</h3>
+        <h3 className=" text-white flex flex-col items-center font-semibold px-2 py-3">Citations tendances</h3>
         {/* Map over the quotes array and render each quote in a div */}
         <div className="grid md:grid-cols-3 gap-5 p-4 justify-center">
         {quotes.map((quote, index) => (

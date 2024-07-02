@@ -11,7 +11,7 @@ import './CalendarStyle.css'; // CSS file for calendar styling
 // Function to recup the id of the user
 const idUser = () => {
   const user_id = JSON.parse(localStorage.getItem('id')); // assuming the whole user object is stored with key 'user'
-  return user_id  // return the id if user exists, otherwise return null
+  return user_id ? user_id : null;  // return the id if user exists, otherwise return null
 };
 
 export default function CalendarComponents() {
@@ -333,7 +333,7 @@ return (
               <textarea
                 value={newTask.description}
                 onChange={(e) => setNewTask({ ...newTask, description: e.target.value })}
-                className="my-1 p-8 rounded"
+                className="my-1 p-2 rounded"
               />
             </label>
             <label className="my-1">

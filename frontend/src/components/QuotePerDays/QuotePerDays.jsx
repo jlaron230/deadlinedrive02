@@ -74,19 +74,19 @@ return (
     {isLoggedIn ? (
       // If the user is logged in, display a random quote.
       <div className="p-4 flex flex-col items-center bg-custom-main-orange m-3 rounded-lg">
-        <h3 className="flex flex-col items-center font-semibold px-2 py-3">Random Quotes</h3>
+        <h3 className=" text-white  flex flex-col items-center font-semibold px-2 py-3">Citations aléatoires</h3>
         {randomQuote ? (
           <section>
-            <p><strong>Quote:</strong> {randomQuote.text}</p>
-            <p><strong>Author:</strong> {randomQuote.author}</p>
-            <p><strong>Category:</strong> {randomQuote.category}</p>
+            <p><strong>Citation:</strong> {randomQuote.text}</p>
+            <p><strong>Auteur:</strong> {randomQuote.author}</p>
+            <p><strong>Categorie:</strong> {randomQuote.category}</p>
           </section>
         ) : (
           // If the random quote is not loaded yet, show a loading message.
           <p>Loading...</p>
         )}
         <button onClick={handleNewRandomQuote} className="hover:text-black mt-12 inline-block rounded-lg border border-white px-4 py-3 text-center text-base font-semibold text-white transition hover:bg-white hover:text-primary">
-          Get another quote
+          Avoir une autre citation
         </button>
       </div>
     ) : (
@@ -94,7 +94,7 @@ return (
       <div className="flex flex-col items-center">
         <a href={'/signup'}>
           <button className="font-semibold p-4 bg-custom-main-orange rounded-lg">
-            Click here to sign up or log in!
+            Appuyez ici pour vous inscrire ou vous connecter !
           </button>
         </a>
       </div>
