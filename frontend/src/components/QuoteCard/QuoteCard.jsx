@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import Pagination from "@components/Pagination/Pagination";
 import { ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/24/solid";
-import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import CommentSection from "@components/CommentSection/CommentSection";
 
@@ -27,9 +26,9 @@ function QuoteCard() {
       setQuote(resQuote.data);
       setCategory(resCategory.data);
       setQuoteCategory(resQuoteCategory.data);
-      console.log(resQuoteCategory.data);
+      console.log("Fetched data:", resQuoteCategory.data);
     } catch (error) {
-      console.error(error);
+      console.error("Error fetching data:", error);
     }
   };
 
@@ -73,6 +72,57 @@ function QuoteCard() {
     setSelectedQuote(quote);
     setIsModalOpen(true);
   };
+
+  const handleUpvote = async (quoteId) => {
+    console.log(`Upvoting quote ID: ${quoteId}`);
+    try {
+      const token = localStorage.getItem("token"); // Assuming you store the token in localStorage
+      const response = await axios.post(
+        `http://localhost:5000/quotes/${quoteId}/upvote`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log("Upvote response:", response.data);
+      setQuote((prevQuotes) =>
+        prevQuotes.map((q) =>
+          q.id === quoteId ? { ...q, vote: q.vote + 1 } : q
+        )
+      );
+      console.log("Upvote successful");
+    } catch (error) {
+      console.error("Failed to upvote", error);
+    }
+  };
+  
+  const handleDownvote = async (quoteId) => {
+    console.log(`Downvoting quote ID: ${quoteId}`);
+    try {
+      const token = localStorage.getItem("token"); // Assuming you store the token in localStorage
+      const response = await axios.post(
+        `http://localhost:5000/quotes/${quoteId}/downvote`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log("Downvote response:", response.data);
+      setQuote((prevQuotes) =>
+        prevQuotes.map((q) =>
+          q.id === quoteId ? { ...q, vote: q.vote - 1 } : q
+        )
+      );
+      console.log("Downvote successful");
+    } catch (error) {
+      console.error("Failed to downvote", error);
+    }
+  };
+  
 
   return (
     <>
@@ -135,12 +185,12 @@ function QuoteCard() {
                   <section className="flex border-2 border-dashed border-custom-main-orange rounded p-px px-4">
                     <ChevronUpIcon
                       className="w-6 hover:fill-green-500 cursor-pointer"
-                      // onClick={() => handleUpvote(quote.id)}
+                      onClick={() => handleUpvote(quote.id)}
                     />
                     <p className="text-2xl px-1">{quote.vote}</p>
                     <ChevronDownIcon
                       className="w-6 hover:fill-red-500 cursor-pointer"
-                      // onClick={() => handleDownvote(quote.id)}
+                      onClick={() => handleDownvote(quote.id)}
                     />
                   </section>
                   <button className="rounded bg-custom-main-orange w-1/3 text-white font-normal cursor-copy">

@@ -43,7 +43,7 @@ const edit = async (req, res) => {
 
 const add = async (req, res) => {
     const quote = req.body;
-    quote.id_user = req.user.id;
+    // quote.id_user = req.user.id;
     try {
         const [quoteResult] = await models.quote.insert(quote);
         const quoteId = quoteResult.insertId;
@@ -72,6 +72,7 @@ const destroy = async (req, res) => {
         res.sendStatus(500);
     }
 };
+
 
 module.exports = {
     browse,
