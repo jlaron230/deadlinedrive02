@@ -6,7 +6,7 @@ const WelcomeHome = () => {
   return (
     <main className="md:min-h-[87vh] flex flex-col p-2 items-center justify-center">
       <h1 className=" p-8 font-semibold text-3xl flex justify-center">
-        Bienvenue sur Deadline Drive, votre allié pour rester motiver
+        Bienvenue sur Deadline Drive, votre allié pour rester motiver !
       </h1>
 
       <article className="flex flex-row flex-wrap p-4 m-2 ">
@@ -19,11 +19,12 @@ const WelcomeHome = () => {
         transition={{ duration: 0.5 }} // Add delay for staggered effect
         >
          
-        <div className="bg-contain bg-center h-[70vh] rounded-[45px] bg-[url('src/assets/image-live-work.webp')]">
+        <div className="bg-cover bg-center h-[70vh] rounded-[45px] min-[800px]:bg-[url('src/assets/image-live-work.webp')]">
             <div className="flex items-center h-full bg-opacity-50">
-              <p className="text-white text-2xl font-bold m-8 text-left ">
+              <p className="text-white text-xl font-bold m-8 text-left ">
                 Pour commencer, inscrivez-vous sur notre plateforme. Une fois inscrit, vous pourrez définir vos deadlines personnelles. Vous pourrez aussi accéder à des citations inspirantes correspondant à un thème que vous aurez choisi parmi nos catégories : sport, personnalité, auteurs, manga, série, film, histoire, poésie.
               </p>
+              <p></p>
             </div>
         </div>
 
