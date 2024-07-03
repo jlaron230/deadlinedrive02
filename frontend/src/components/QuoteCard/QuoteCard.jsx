@@ -4,6 +4,7 @@ import Pagination from "@components/Pagination/Pagination";
 import { ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/24/solid";
 import { motion, AnimatePresence } from "framer-motion";
 import CommentSection from "@components/CommentSection/CommentSection";
+import { Link } from "react-router-dom";
 
 function QuoteCard() {
   const [quote, setQuote] = useState([]);
@@ -19,9 +20,9 @@ function QuoteCard() {
   const fetchData = async () => {
     try {
       const [resQuote, resCategory, resQuoteCategory] = await Promise.all([
-        axios.get("http://localhost:5000/quotes"),
-        axios.get("http://localhost:5000/categories"),
-        axios.get("http://localhost:5000/quote_category"),
+        axios.get(`${import.meta.env.VITE_BACKEND_URL}/quotes`),
+        axios.get(`${import.meta.env.VITE_BACKEND_URL}/categories`),
+        axios.get(`${import.meta.env.VITE_BACKEND_URL}/quote_category`),
       ]);
       setQuote(resQuote.data);
       setCategory(resCategory.data);
@@ -78,7 +79,7 @@ function QuoteCard() {
     try {
       const token = localStorage.getItem("token"); // Assuming you store the token in localStorage
       const response = await axios.post(
-        `http://localhost:5000/quotes/${quoteId}/upvote`,
+        `${import.meta.env.VITE_BACKEND_URL}/quotes/${quoteId}/upvote`,
         {},
         {
           headers: {
@@ -103,7 +104,7 @@ function QuoteCard() {
     try {
       const token = localStorage.getItem("token"); // Assuming you store the token in localStorage
       const response = await axios.post(
-        `http://localhost:5000/quotes/${quoteId}/downvote`,
+        `${import.meta.env.VITE_BACKEND_URL}/quotes/${quoteId}/downvote`,
         {},
         {
           headers: {
@@ -123,14 +124,21 @@ function QuoteCard() {
     }
   };
   
-
   return (
     <>
-      <div className="flex flex-col max-w-7xl m-auto py-6">
-        <ul className="flex flex-wrap justify-center gap-14 mb-8">
+      <motion.div
+      initial={{ opacity: 0, y: 50 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 2, ease: "easeOut" }} 
+      className="flex flex-col max-w-7xl m-auto py-6">
+        <motion.ul
+        initial={{ opacity: 0, y: -50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1, delay: 0.4, ease: "easeOut" }} 
+        className="flex flex-wrap justify-center gap-14 mb-8">
           {category.map((c) => (
             <motion.li
-              whileHover={{ scale: 1.1 }}
+              whileHover={{ scale: 1.2 }}
               onHoverStart={(e) => {}}
               onHoverEnd={(e) => {}}
               key={c.id}
@@ -149,16 +157,16 @@ function QuoteCard() {
             whileTap={{ scale: 0.6 }}
             className="rounded bg-custom-main-orange text-black font-normal px-3"
           >
-            Gérer mes citations
+           <Link to="/manage-my-quotes">Gérer mes citations</Link>
           </motion.button>
-        </ul>
+        </motion.ul>
         <AnimatePresence mode="wait">
           <motion.div
             key={selectedCategory}
             initial={{ y: 10, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: -10, opacity: 0 }}
-            transition={{ duration: 0.2 }}
+            transition={{ duration: 0.5 }}
             className="flex flex-wrap flex-row gap-9 m-auto justify-center"
           >
             {currentQuotes.map((quote) => (
@@ -181,19 +189,24 @@ function QuoteCard() {
                 <hr className="w-3/4 border border-black" />
                 <p className="mt-3 text-xl font-semibold">Catégorie</p>
                 <p className="mt-2 pb-4">{getCategoryName(quote.id)}</p>
-                <footer className="mt-4 text-lg font-semibold flex justify-between mt-auto">
-                  <section className="flex border-2 border-dashed border-custom-main-orange rounded p-px px-4">
+                <footer className="mt-4 text-lg font-semibold flex justify-between mt-auto"
+                onClick={(e) => e.stopPropagation()}
+                >
+                  <section className="flex border-2 border-dashed border-custom-main-orange rounded p-px px-4"
+                  onClick={(e) => e.stopPropagation()}
+                  >
                     <ChevronUpIcon
                       className="w-6 hover:fill-green-500 cursor-pointer"
-                      onClick={() => handleUpvote(quote.id)}
+                      onClick={(e) => { e.stopPropagation(); handleUpvote(quote.id); }}
                     />
                     <p className="text-2xl px-1">{quote.vote}</p>
                     <ChevronDownIcon
                       className="w-6 hover:fill-red-500 cursor-pointer"
-                      onClick={() => handleDownvote(quote.id)}
-                    />
+                      onClick={(e) => { e.stopPropagation(); handleDownvote(quote.id); }}                    />
                   </section>
-                  <button className="rounded bg-custom-main-orange w-1/3 text-white font-normal cursor-copy">
+                  <button className="rounded bg-custom-main-orange w-1/3 text-white font-normal cursor-copy"
+                  onClick={(e) => e.stopPropagation()}
+                  >
                     Partager
                   </button>
                 </footer>
@@ -210,7 +223,7 @@ function QuoteCard() {
           )}
           onPageChange={handlePageClick}
         />
-      </div>
+      </motion.div>
       <AnimatePresence>
         {isModalOpen && (
           <CommentSection

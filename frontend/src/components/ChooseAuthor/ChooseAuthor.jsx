@@ -11,7 +11,7 @@ function ChooseAuthor({ selectedAuthor, onSelectAuthor }) {
 
   const fetchData = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/quotes");
+      const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/quotes`);
       setQuotes(res.data);
       const uniqueAuthors = [...new Set(res.data.map((quote) => quote.author))];
       setAuthors(uniqueAuthors);
