@@ -14,7 +14,7 @@ module.exports = {
         'african-violet' : '#C98BB9',
         'butterscotch' : '#CF9845',
         'caramel' : '#C97D50',
-        'ivory' : 'FFFFF0',
+        'ivory' : '#FFFFF0',
       },
       fontFamily: {
         serif: ['Laila', 'serif'],
