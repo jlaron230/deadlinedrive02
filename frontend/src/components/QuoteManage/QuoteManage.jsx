@@ -85,10 +85,12 @@ export default function QuoteManage() {
         }
       );
       setSuccessMessage("Citation mise à jour avec succès !");
+      setTimeout(() => setSuccessMessage(""), 5000);
       setEditingQuote(null);
       fetchMyQuotes();
     } catch (error) {
       setErrorMessage("Erreur lors de la mise à jour de la citation.");
+      setTimeout(() => setErrorMessage(""), 5000);
       console.error("Erreur lors de la mise à jour de la citation :", error);
     }
   };
@@ -101,9 +103,11 @@ export default function QuoteManage() {
         },
       });
       setSuccessMessage("Citation supprimée avec succès !");
+      setTimeout(() => setSuccessMessage(""), 5000);
       fetchMyQuotes();
     } catch (error) {
       setErrorMessage("Erreur lors de la suppression de la citation.");
+      setTimeout(() => setErrorMessage(""), 5000);
       console.error("Erreur lors de la suppression de la citation :", error);
     }
   };
