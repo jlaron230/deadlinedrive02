@@ -21,7 +21,7 @@ const YoursEvents = () => {
         const user_id = idUser();
 
         // Make a GET request to the server to retrieve tasks
-        const response = await axios.get('http://localhost:5000/tasks');
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/tasks`);
         
 
          // Filter tasks by the authenticated user's ID

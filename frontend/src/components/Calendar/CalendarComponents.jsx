@@ -41,7 +41,7 @@ const createModalRef = useRef(null); // Ref for create modal
 // Function to fetch tasks from backend
 const fetchTasks = async () => {
   try {
-    const response = await axios.get("http://localhost:5000/tasks");
+    const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/tasks`);
     const userTasks = response.data.filter(task => task.id_user === user_id); // Filter tasks by authenticated user ID
     const tasks = userTasks.map((task) => ({
       title: task.title,
@@ -128,7 +128,7 @@ const handleCreateTask = async () => {
   calendarApi.addEvent(task); // Add event to FullCalendar
 
   try {
-    await axios.post("http://localhost:5000/tasks", task); // POST request to save task
+    await axios.post(`${import.meta.env.VITE_BACKEND_URL}/tasks`, task); // POST request to save task
     fetchTasks(); // Refresh tasks after creation
     setCreateModalIsOpen(false); // Close create modal
   } catch (error) {
@@ -163,7 +163,7 @@ const handleEventUpdate = async () => {
       deadline: formatDateTime(selectedEvent.start),
     };
 
-    await axios.put(`http://localhost:5000/tasks/${selectedEvent.id}`, updatedEvent); // PUT request to update task
+    await axios.put(`${import.meta.env.VITE_BACKEND_URL}/tasks/${selectedEvent.id}`, updatedEvent); // PUT request to update task
     fetchTasks(); // Refresh tasks after update
     setModalIsOpen(false); // Close update modal
   } catch (error) {
@@ -180,7 +180,7 @@ const handleEventDelete = async () => {
 
   if (window.confirm(`Are you sure you want to delete the event '${selectedEvent.title}'`)) {
     try {
-      await axios.delete(`http://localhost:5000/tasks/${selectedEvent.id}`); // DELETE request to delete task
+      await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/tasks/${selectedEvent.id}`); // DELETE request to delete task
       fetchTasks(); // Refresh tasks after deletion
       setModalIsOpen(false); // Close delete modal
     } catch (error) {

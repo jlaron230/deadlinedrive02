@@ -18,9 +18,9 @@ const App = () => {
     const fetchQuotes = async () => {
       try {
         // Make a GET request to the server to retrieve quotes, categories and quote_category.
-        const response = await axios.get('http://localhost:5000/quotes'); 
-        const resCategory = await axios.get('http://localhost:5000/categories')
-        const resQuoteCategory = await axios.get('http://localhost:5000/quote_category')
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/quotes`); 
+        const resCategory = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/categories`)
+        const resQuoteCategory = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/quote_category`)
         // Sort the quotes by vote count in descending order.
         const sortedQuotes = response.data.sort((a, b) => b.vote - a.vote);
         // Extract the top three quotes based on the vote count.

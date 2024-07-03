@@ -22,9 +22,9 @@ const QuotePerDays = () => {
     try {
       // Fetch quotes, categories, and quote-category relationships simultaneously.
       const [resQuote, resCategory, resQuoteCategory] = await Promise.all([
-        axios.get("http://localhost:5000/quotes"),
-        axios.get("http://localhost:5000/categories"),
-        axios.get("http://localhost:5000/quote_category"),
+        axios.get(`${import.meta.env.VITE_BACKEND_URL}/quotes`),
+        axios.get(`${import.meta.env.VITE_BACKEND_URL}/categories`),
+        axios.get(`${import.meta.env.VITE_BACKEND_URL}/quote_category`),
       ]);
       
       // Update state with fetched data.
