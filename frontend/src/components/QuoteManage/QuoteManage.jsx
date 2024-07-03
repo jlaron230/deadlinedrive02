@@ -114,7 +114,7 @@ export default function QuoteManage() {
 
   return (
     <div className="flex flex-col max-w-7xl m-auto py-6">
-      <h1 className="text-2xl font-bold mb-6">Mes citations</h1>
+      <h1 className="text-3xl py-6 font-semibold flex justify-center">Mes citations</h1>
       {successMessage && (
         <motion.div
           initial={{ opacity: 0 }}
