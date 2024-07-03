@@ -41,10 +41,12 @@ router.delete("/categories/:id", categoryControllers.destroy);
 router.get("/quotes", quoteControllers.browse);
 router.get("/quotes/:id", quoteControllers.read);
 router.put("/quotes/:id", quoteControllers.edit);
-router.post("/quotes", quoteControllers.add);
+router.post("/quotes", verifyToken, quoteControllers.add);
 router.delete("/quotes/:id", quoteControllers.destroy);
 router.post('/quotes/:quoteId/upvote', verifyToken, userVoteControllers.upvote);
 router.post('/quotes/:quoteId/downvote', verifyToken, userVoteControllers.downvote);
+router.get("/quotes/by-user/:userId", verifyToken, quoteControllers.findByUser);
+
 
 router.get("/tasks", taskControllers.browse);
 router.get("/tasks/:id", taskControllers.read);

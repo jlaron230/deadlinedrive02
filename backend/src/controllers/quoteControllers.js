@@ -29,7 +29,7 @@ const edit = async (req, res) => {
     quote.id = parseInt(req.params.id, 10);
 
     try {
-        await models.quote.update(quote);
+        await models.quote.update(quote, { where: { id: quote.id }});
         res.sendStatus(204);
     } catch (error) {
         console.error(error);
@@ -43,7 +43,6 @@ const edit = async (req, res) => {
 
 const add = async (req, res) => {
     const quote = req.body;
-    // quote.id_user = req.user.id;
     try {
         const [quoteResult] = await models.quote.insert(quote);
         const quoteId = quoteResult.insertId;
@@ -73,6 +72,19 @@ const destroy = async (req, res) => {
     }
 };
 
+const findByUser = async (req, res) => {
+    try {
+        const userId = req.params.userId;
+        console.log('Fetching quotes for userId:', userId);
+        const quotes = await models.quote.getByIdUser(userId);
+        console.log('Fetched quotes:', quotes);
+        res.status(200).json(quotes);
+    } catch (error) {
+        console.error('Error fetching quotes by user:', error);
+        res.sendStatus(500);
+    }
+}
+
 
 module.exports = {
     browse,
@@ -80,4 +92,5 @@ module.exports = {
     edit,
     add,
     destroy,
+    findByUser,
 };

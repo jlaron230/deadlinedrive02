@@ -86,6 +86,13 @@ class QuoteManager extends AbstractManager {
             [quoteId]
         );
     }
+
+    getByIdUser(userId) {
+        return this.database.query(
+            `SELECT * FROM ${this.table} WHERE id_user = ?`,
+            [userId]
+        );
+    }
 }
 
 module.exports = QuoteManager;
