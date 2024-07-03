@@ -6,7 +6,9 @@ const App = () => {
   // Declare a state variable 'quotes' with an initial value of an empty array.
   // setQuotes is a function to update the 'quotes' state.
   const [quotes, setQuotes] = useState([]);
+  // setCategory is a function to update the 'category' state.
   const [category, setCategory] = useState([]);
+  // setQuotesCategory is a function to update the 'quotesCategory' state.
   const [quoteCategory, setQuoteCategory] = useState([]);
 
   // useEffect is a hook that runs the provided function after the initial render.
@@ -15,7 +17,7 @@ const App = () => {
     // Define an asynchronous function to fetch quotes from the server.
     const fetchQuotes = async () => {
       try {
-        // Make a GET request to the server to retrieve quotes.
+        // Make a GET request to the server to retrieve quotes, categories and quote_category.
         const response = await axios.get('http://localhost:5000/quotes'); 
         const resCategory = await axios.get('http://localhost:5000/categories')
         const resQuoteCategory = await axios.get('http://localhost:5000/quote_category')
@@ -38,15 +40,26 @@ const App = () => {
   }, []);
 
   const getCategoryName = (quoteId) => {
+    // This function takes a quoteId as a parameter and returns the name of the category associated with the quote.
+    
+    // Find the quoteCategory object that matches the provided quoteId.
     const quoteCat = quoteCategory.find((qc) => qc.id_quote === quoteId);
+    
+    // Check if a matching quoteCategory object was found.
     if (quoteCat) {
+      // If found, search for the category object that matches the id_category from the quoteCategory object.
       const categories = category.find(
         (cat) => cat.id === quoteCat.id_category
       );
+      
+      // Return the name of the category if found, otherwise return "Unknown Category".
       return categories ? categories.name : "Unknown Category";
     }
+    
+    // If no matching quoteCategory object was found, return "No Category".
     return "No Category";
   };
+  
 
   // Return the JSX to render the component.
   return (
