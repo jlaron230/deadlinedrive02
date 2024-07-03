@@ -204,7 +204,7 @@ function Sidebar({ weekendsVisible, handleWeekendsToggle }) {
   return (
     <div className="flex flex-row justify-center">
       <div className="py-7 content-start text-center">
-        <h2 className="font-semibold">Instructions</h2>
+        <h2 className="font-semibold  text-xl">Instructions</h2>
         <ul>
           <li>Scroll pour voir le calendrier</li>
           <li>Clique sur une date pour ajouter une tâche</li>
@@ -261,7 +261,7 @@ return (
       {modalIsOpen && (
         <div className="modal" ref={updateModalRef}> {/* Add ref to update modal */}
           <div className="modal-content p-4 flex flex-col bg-custom-main-orange m-3 rounded-lg">
-            <h2 className="font-semibold text-xl pb-4">Modifier une tâche</h2>
+            <h2 className="font-semibold text-xl pb-4 text-ivory">Modifier une tâche</h2>
             <label className="my-1">
             <strong>Titre:</strong>
               <input
@@ -318,7 +318,7 @@ return (
       {createModalIsOpen && (
         <div className="modal" ref={createModalRef}> {/* Add ref to create modal */}
           <div className="modal-content p-4 flex flex-col bg-custom-main-orange m-3 rounded-lg">
-            <h2 className="font-semibold text-xl pb-4">Créer une tâche</h2>
+            <h2 className="font-semibold text-xl pb-4 text-ivory">Créer une tâche</h2>
             <label className="my-1">
             <strong>Titre:</strong>
               <input

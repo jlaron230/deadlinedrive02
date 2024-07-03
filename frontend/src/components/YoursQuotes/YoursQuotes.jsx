@@ -70,14 +70,14 @@ const App = () => {
       {/* A grid container with padding, gap between items, and custom styling */}
       <div className="  m-3 rounded-lg">
         <div className="flex justify-center "> 
-          <h3 className="w-64 text-white flex flex-col items-center font-semibold p-4 bg-custom-main-orange rounded-md ">Citations tendances</h3>
+          <h3 className="w-64 flex flex-col items-center font-semibold p-4 text-xl ">Citations tendances</h3>
         </div>
        
         {/* Map over the quotes array and render each quote in a div */}
         <div className="grid md:grid-cols-3 gap-5 p-4 justify-center">
         {quotes.map((quote, index) => (
           <section key={index} className=" mb-4 p-4 border-2 rounded-md border-custom-main-orange shadow">
-             <h3 className="text-xl font-bold">Nombre d'upvote : {quote.vote}</h3>
+              <h2 className="text-xl font-bold">Citation n°{quote.id}</h2>
              <p className="mt-1 pb-4">
                   {quote.text}
                 </p>
@@ -87,6 +87,9 @@ const App = () => {
                 <hr className="w-3/4 border border-black" />
                 <p className="mt-3 text-xl font-semibold">Catégorie</p>
                 <p className="mt-2 pb-4">{getCategoryName(quote.id)}</p>
+                <hr className="w-3/4 border border-black" />
+                <p className="mt-3 text-xl font-semibold">Nombre d'upvote :</p>
+                <p className="mt-2 pb-4 "> {quote.vote}</p>
           </section>
         ))}
         </div>  
