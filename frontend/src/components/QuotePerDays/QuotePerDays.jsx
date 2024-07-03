@@ -93,7 +93,7 @@ return (
       // If the user is not logged in, display a button to log in or register.
       <div className="flex flex-col items-center">
         <a href={'/signup'}>
-          <button className="font-semibold p-4 bg-custom-main-orange rounded-lg">
+          <button className=" text-ivory font-semibold p-4 bg-custom-main-orange rounded-lg hover:text-black">
             Appuyez ici pour vous inscrire ou vous connecter !
           </button>
         </a>

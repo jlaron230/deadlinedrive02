@@ -56,12 +56,15 @@ const App = () => {
       
       {/* A grid container with padding, gap between items, and custom styling */}
       <div className="  m-3 rounded-lg">
-        <h3 className=" text-white flex flex-col items-center font-semibold px-2 py-3 bg-custom-main-orange  ">Citations tendances</h3>
+        <div className="flex justify-center "> 
+          <h3 className="w-64 text-white flex flex-col items-center font-semibold p-4 bg-custom-main-orange rounded-md ">Citations tendances</h3>
+        </div>
+       
         {/* Map over the quotes array and render each quote in a div */}
         <div className="grid md:grid-cols-3 gap-5 p-4 justify-center">
         {quotes.map((quote, index) => (
           <section key={index} className=" mb-4 p-4 border-2 rounded-md border-custom-main-orange shadow">
-             <h2 className="text-xl font-bold">Nombre d'upvote : {quote.vote}</h2>
+             <h3 className="text-xl font-bold">Nombre d'upvote : {quote.vote}</h3>
              <p className="mt-1 pb-4">
                   {quote.text}
                 </p>

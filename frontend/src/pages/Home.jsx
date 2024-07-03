@@ -9,9 +9,9 @@ export default function Home() {
     <>
       <WelcomeHome />
 
-      <CardFeatures />
-      
       <QuotePerDays /> 
+
+      <CardFeatures />
 
       <YourQuotes />
     </>
