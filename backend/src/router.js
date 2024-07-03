@@ -9,6 +9,7 @@ const taskControllers = require("./controllers/taskControllers");
 const deadlineControllers = require("./controllers/deadlineControllers");
 const quote_categoryControllers = require("./controllers/quote_categoryControllers");
 const commentControllers = require("./controllers/commentControllers");
+const userVoteControllers = require("./controllers/userVoteControllers");
 
 const {
     verifyPassword,hashPassword,verifyToken,verifyId,
@@ -25,7 +26,7 @@ router.get("/users", userControllers.browse); // Route to browse all users
 
 // Protected routes
 router.get('/users/:id', userControllers.read);
-router.put('/users/:id', verifyToken,verifyId, userControllers.edit);
+router.put('/users/:id', verifyToken, verifyId, userControllers.edit);
 router.delete('/users/:id',  userControllers.destroy);
 router.put('/users/:id/password',userControllers.getUserByEmailWithPasswordAndPassToNext, verifyToken, userControllers.changePassword);
 
@@ -39,9 +40,13 @@ router.delete("/categories/:id", categoryControllers.destroy);
 
 router.get("/quotes", quoteControllers.browse);
 router.get("/quotes/:id", quoteControllers.read);
-router.put("/quotes/:id", quoteControllers.edit);
-router.post("/quotes", quoteControllers.add);
-router.delete("/quotes/:id", quoteControllers.destroy);
+router.put("/quotes/:id", verifyToken, quoteControllers.edit);
+router.post("/quotes", verifyToken, quoteControllers.add);
+router.delete("/quotes/:id", verifyToken, quoteControllers.destroy);
+router.post('/quotes/:quoteId/upvote', verifyToken, userVoteControllers.upvote);
+router.post('/quotes/:quoteId/downvote', verifyToken, userVoteControllers.downvote);
+router.get("/quotes/by-user/:userId", verifyToken, quoteControllers.findByUser);
+
 
 router.get("/tasks", taskControllers.browse);
 router.get("/tasks/:id", taskControllers.read);

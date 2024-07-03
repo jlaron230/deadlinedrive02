@@ -10,7 +10,7 @@ function ChooseTheme({ selectedTheme, onSelectTheme }) {
 
   const fetchData = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/categories");
+      const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/categories`);
       setCategories(res.data);
       setFilteredCategories(categories);
     } catch (error) {
