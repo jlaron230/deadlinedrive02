@@ -1,12 +1,13 @@
 import React from "react"; // Import React to create the component
 import { Link } from "react-router-dom"; // Import Link from react-router-dom for navigation
+import { motion } from 'framer-motion'; // Import Framer Motion for animations
 import amirProfil from "../../assets/amirProfil.svg"; // Import profile images
 import calliProfil from "../../assets/calliProfil.svg";
 import jeromeProfil from "../../assets/jeromeProfil.svg";
 import faysoilProfil from "../../assets/faysoilProfil.svg";
 import history from "../../assets/OurHistory.webp";
 import Faq from "@components/Faq/Faq"; // Import the FAQ component
-import ScrollToTopButton from '../ScrollToTopButton/ScrollToTopButton'; 
+import ScrollToTopButton from '../ScrollToTopButton/ScrollToTopButton'; // Import the ScrollToTopButton component
 
 const AboutContent = () => {
   // Define team members data
@@ -56,7 +57,12 @@ const AboutContent = () => {
                 alt="Notre Histoire"
               />
             </div>
-            <p className="flex-1 basis-80 text-1xl text-grey-600">
+            <motion.p
+              className="flex-1 basis-80 text-1xl text-grey-600"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5, duration: 1 }}
+            >
               Imaginez quatre étudiants en développement web, entourés de
               livres, de café et de code, se battant contre la procrastination
               comme des chevaliers en quête de motivation. Un jour, alors qu'ils
@@ -72,7 +78,7 @@ const AboutContent = () => {
               étaient en train de conquérir le Saint Graal du succès. Et voilà
               comment ces quatre étudiants ont transformé leur combat contre la
               procrastination en une quête épique pour la motivation.
-            </p>
+            </motion.p>
           </div>
         </section>
         <section className="my-8 px-2 py-8">
@@ -105,10 +111,13 @@ const AboutContent = () => {
             Our Lovely Team
           </h2>
           <div className="flex justify-center items-center flex-wrap">
-            {teamMembers.map((member) => (
-              <div
+            {teamMembers.map((member, index) => (
+              <motion.div
                 key={member.id}
                 className="max-w-xs w-full sm:max-w-[200px] sm:h-[260px] min-h-[140px] bg-white rounded-lg shadow-md p-4 flex flex-col items-center m-2"
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 * index, duration: 0.5 }}
               >
                 <img
                   src={member.image}
@@ -138,16 +147,16 @@ const AboutContent = () => {
                       viewBox="0 0 24 24"
                     >
                       <path d="M19 0h-14c-2.76 0-5 2.24-5 5v14c0 2.76 2.24 5 5 5h14c2.76 0 5-2.24 5-5v-14c0-2.76-2.24-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.2c-.97 0-1.75-.79-1.75-1.75s.78-1.75 1.75-1.75 1.75.78 1.75 1.75-.78 1.75-1.75 1.75zm13.5 12.2h-3v-5.5c0-1.38-.45-2.33-1.57-2.33-.86 0-1.37.58-1.6 1.14-.08.2-.1.48-.1.76v6h-3s.04-10 0-11h3v1.56c.4-.62 1.1-1.5 2.68-1.5 1.95 0 3.42 1.28 3.42 4.04v6.9z" />
-                    </svg>
+                      </svg>
                   </a>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </section>
         <Faq /> {/* FAQ component */}
       </div>
-      < ScrollToTopButton />
+      <ScrollToTopButton />
     </main>
   );
 };
