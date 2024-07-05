@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Pagination from "@components/Pagination/Pagination";
-import { ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/24/solid";
+import { ChevronUpIcon, ChevronDownIcon, HeartIcon } from "@heroicons/react/24/solid";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import CommentSection from "@components/CommentSection/CommentSection";
+
+
 
 function QuoteCard() {
   const [quote, setQuote] = useState([]);

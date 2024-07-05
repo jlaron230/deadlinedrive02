@@ -32,88 +32,71 @@ const read = (req, res) => {
     });
 };
 
+//function for changing a user information
 const edit = async (req, res) => {
   try {
-    const userId = parseInt(req.params.id, 10);
-    const newUserDetails = req.body;
+    const userId = parseInt(req.params.id, 10); // Extract user ID from request parameters
+    const newUserDetails = req.body; // Extract new user details from request body
 
-    console.log('UserId:', userId); // Debugging log
-    console.log('New User Details:', newUserDetails); // Debugging log
-
-    // Vérifiez si l'utilisateur existe
+    // Check if the user exists
     const existingUser = await models.user.findById(userId);
     console.log('Existing User:', existingUser); // Debugging log
+
+    // Return 404 if user does not exist
     if (!existingUser) {
       return res.status(404).send('User not found'); // Envoyer un statut 404 si aucun utilisateur n'est trouvé
     }
 
-    // Mise à jour des informations utilisateur
+    // Update user information by merging existing and new details
     const updatedUser = {
       ...existingUser,
       ...newUserDetails,
     };
 
-    console.log('Updated User:', updatedUser); // Debugging log
-
     const result = await models.user.update(updatedUser);
-    console.log('Update Result:', result); // Debugging log
+
+    // Return 404 if user informations nothing updating
     if (result.affectedRows === 0) {
-      return res.status(404).send('No user updated'); // Envoyer un statut 404 si aucun utilisateur n'a été mis à jour
+      return res.status(404).send('No user updated');
     }
 
     console.log("User details updated successfully for user:", userId);
     return res.status(204).send(); // Envoyer un statut 204 pour indiquer le succès
+
   } catch (err) {
     console.error('Error updating user:', err);
+    
     if (!res.headersSent) {
-      return res.status(500).send('Internal Server Error'); // Envoyer un statut 500 en cas d'erreur
+      return res.status(500).send('Internal Server Error');
     }
   }
 };
 
-const changePassword = async (req, res) => {
+//function for changing password
+const changePassword = async (req, res) => { 
   try {
-    const userId = parseInt(req.params.id, 10);
-    const {newPassword } = req.body;
-    console.log(newPassword, "useridddddddddddddd")
+    const userId = parseInt(req.params.id, 10); // Extract user ID from request parameters
+    const {newPassword } = req.body; // Extract newPassword from request body
+    console.log(newPassword, "New password")
 
-
-    // Fetch user to validate old password
-    // const user = await models.user.findById(userId);
-    console.log(req.body, "okkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk")
-
-    // if (!user) {
-    //   return res.status(404).send('User not found');
-    // }
-console.log(req.body, "user password");
-    // Ensure user.password is a non-empty string
-    // const storedPassword = String(user.password);
-    // if (!storedPassword || typeof storedPassword !== 'string' || storedPassword.trim() === '') {
-    //   return res.status(400).send('Invalid user password data');
-    // }
-    // console.log(storedPassword, "stored password");
-
-    // const validPassword = await argon2.verify(newPassword);
-    // console.log(newPassword, 'loggggggggggggggggggggggggggg')
-
-    // if (!validPassword) {
-    //   return res.status(400).send('Old password is incorrect');
-    // }
-
-    console.log(newPassword, 'newwwwwwwwwwwww"')
+    // Hash the new password using argon2
     const hashPassword = await argon2.hash(newPassword.newPassword);
-    const result = await models.user.modifyPassword(userId, hashPassword);
-    if (result.affectedRows === 0) {
-      // return res.sendStatus(404);
-    }
 
+    // Call the database model method to modify the user's password
+    const result = await models.user.modifyPassword(userId, hashPassword);
+
+    // Check if no rows were affected (user not found)
+    if (result.affectedRows === 0) {
+       return res.sendStatus(404);
+    }
     console.log("Password updated successfully for user:", userId);
-    return res.sendStatus(204);
+    return res.sendStatus(204); // Send 204 No Content status indicating success
   } catch (err) {
     console.error('Error updating password:', err);
-    res.sendStatus(500);
+    res.sendStatus(500); // Send 500 Internal Server Error status for any unexpected errors
   }
 };
+
 // Function to add a new user
 const add = async (req, res) => {
   try {
@@ -153,7 +136,6 @@ const getUserByEmailWithPasswordAndPassToNext = (req, res, next) => {
       if (users[0] != null) {
         const [firstUser] = users;
         req.user = firstUser; // Attach the user to the request object
-        console.log(req.user, 'userControllerrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr')
         next(); // Call the next middleware
       } else {
         res.sendStatus(401); // Send a 401 status if no user is found

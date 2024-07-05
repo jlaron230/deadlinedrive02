@@ -88,9 +88,9 @@ const destroy = (req, res) => {
 };
 
 module.exports = {
-  browse,  // Exports the browse function
-  read,    // Exports the read function
-  edit,    // Exports the edit function
-  add,     // Exports the add function
-  destroy, // Exports the destroy function
+  browse,  
+  read,    
+  edit,    
+  add,     
+  destroy, 
 };

@@ -18,6 +18,15 @@
     background-color: var(--theme1)!important;
     color: white!important;
   }
+
+  .lien{
+    background-color: var(--theme1)!important;
+    color: white;
+  }
+
+  .btn:hover{
+    background-color: black!important;
+  }
     html{
       font-family: "Imprima", sans-serif;
     }
@@ -29,6 +38,13 @@
         background-repeat: no-repeat;
         background-position: center;
         background-size: cover;
+    }
+
+    .img-contact {
+      background-image: url("../src/assets/still-2607441_1920.webp");
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
     }
   }
 }

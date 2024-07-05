@@ -1,110 +1,189 @@
-import { useState } from "react";
-import QuoteEdit from "./QuoteEdit";
+import { useState, useEffect } from "react";
+import axios from "axios";
+import { motion, AnimatePresence } from "framer-motion"; // Importing motion and AnimatePresence from Framer Motion
+import {
+  ChevronUpIcon,
+  ChevronDownIcon,
+  HeartIcon as HeartIconSolid,
+  HeartIcon as HeartIconOutline,
+} from "@heroicons/react/24/solid"; // Importing icons from HeroIcons
+import CommentSection from "@components/CommentSection/CommentSection"; // Importing CommentSection component
 
 function Quote() {
-  // State variable to manage the editing state
+  // State variables for managing quote data and UI states
   const [isEditing, setIsEditing] = useState(true);
+  const [quote, setQuote] = useState([]); // State for storing fetched quotes
+  console.log(quote);
+  const [currentQuotes, setCurrentQuotes] = useState([]); // State for storing filtered quotes
+  const [selectedCategory, setSelectedCategory] = useState(null); // State for selected category filter
+  const [isModalOpen, setIsModalOpen] = useState(false); // State for modal open/close
+  const [selectedQuote, setSelectedQuote] = useState(null); // State for selected quote in modal
+  const [fav, setFav] = useState(false); // State for managing favorite toggle
 
-  // Function to toggle the editing state
-  const Edit = () => {
-    setIsEditing(!isEditing);
+  // Function to fetch quotes from API
+  const fetchData = async () => {
+    try {
+      const token = localStorage.getItem("token"); // Fetching token from localStorage
+      if (!token) {
+        console.error("No token found");
+        navigate("/login"); // Redirecting user to login page if token is missing
+        return;
+      }
+
+      const userId = localStorage.getItem("id"); // Fetching user ID from localStorage
+      if (!userId) {
+        console.error("No user ID found"); 
+        navigate("/login");
+        return;
+      }
+
+      // Fetching favorite quotes for the logged-in user
+      const response = await axios.get(
+        `${import.meta.env.VITE_BACKEND_URL}/favorites/${userId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Passing token in request headers
+          },
+        }
+      );
+
+      setQuote(response.data);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
+  useEffect(() => {
+      fetchData(); // Fetching data on component mount
+
+  }, []);
+
+  // Filtering quotes based on selected category
+  useEffect(() => {
+    // Filtering quotes based on selected category (if any)
+    const filteredQuotes = quote.filter((q) =>
+      selectedCategory ? q.category === selectedCategory : true
+    );
+    setCurrentQuotes(filteredQuotes);
+  }, [quote, selectedCategory]);
+
+  // Function to handle click on a quote and open modal
+  const handleQuoteClick = (quote) => {
+    setSelectedQuote(quote);
+    setIsModalOpen(true); 
+  };
+
+  // Function to toggle favorite status of a quote
+  const handleFavoriteToggle = async (quoteId) => {
+    try {
+      // Making PUT request to update quote's favorite status
+      const updatedQuote = await axios.put(
+        `${import.meta.env.VITE_BACKEND_URL}/quotes/${quoteId}`
+      );
+      setQuote((prevQuotes) =>
+        prevQuotes.map((q) => (q.id === quoteId ? updatedQuote.data : q))
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // Function for editing quotes
+  const edit = () => {
+    setIsEditing(isEditing);
+  };
+
+  // Function for handling favorite toggle
+  const favorisHandle = () => {
+    setFav((prev) => !prev);
+  };
+
+  // Filtering quotes based on selected category (Favorites or All)
+  const filteredQuotes = selectedCategory === "Favorites"? currentQuotes.filter((q) => q.isFavorite): currentQuotes;
+
   return (
-    <div className="relative isolate overflow-hidden lg:flex lg:gap-x-20 lg:pt-0">
-      <div className="mx-auto max-w-7xl text-center lg:mx-0 lg:flex-auto lg:text-left">
-        {!isEditing ? (
-          // If isEditing is false, render the QuoteEdit component
-          <QuoteEdit />
-        ) : (
-          <>
-            <div className="lg:flex max-lg:block">
-              {/* First quote section */}
-              <div className="py-1.5">
-                <h2 className="text-2xl font-bold tracking-tight">
-                  Titre citation
-                </h2>
-                <h3 className="text-md font-bold tracking-tight">Auteur</h3>
-                <p className="mt-6 text-lg leading-8">
-                  Ac euismod vel sit maecenas id pellentesque eu sed
-                  consectetur. Malesuada adipiscing sagittis vel nulla.
-                </p>
-                <div className="mt-10 flex items-center justify-center gap-x-6 lg:justify-start">
-                  <a
-                    href="#"
-                    onClick={Edit} // Trigger the Edit function when the link is clicked
-                    className="shadow-2xl rounded-md bg-black px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-gray-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+    <div>
+      {!fav ? (
+        <>
+          {/* Displaying favorite quotes */}
+          <div className="flex flex-col max-w-7xl m-auto py-6">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={selectedCategory}
+                initial={{ y: 10, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                exit={{ y: -10, opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                className="flex flex-wrap flex-row gap-9 m-auto justify-center"
+              >
+                {/* Mapping through filtered quotes */}
+                {filteredQuotes.map((quote) => (
+                  <motion.article
+                    key={quote.id}
+                    className="mb-4 p-4 border-2 rounded-md border-custom-main-orange shadow w-80 min-h-80 flex flex-col hover:bg-slate-50"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.9 }}
+                    onClick={() => handleQuoteClick(quote)}
                   >
-                    Éditer
-                  </a>
-                  <a
-                    href="#"
-                    className="shadow-md px-3.5 py-2.5 rounded-md text-sm font-semibold leading-6 hover:bg-gray-300"
-                  >
-                    Supprimer
-                  </a>
-                </div>
-              </div>
-
-              {/* Second quote section */}
-              <div className="py-1.5">
-                <h2 className="text-2xl font-bold tracking-tight">
-                  Titre citation
-                </h2>
-                <h3 className="text-md font-bold tracking-tight">Auteur</h3>
-                <p className="mt-6 text-lg leading-8">
-                  Ac euismod vel sit maecenas id pellentesque eu sed
-                  consectetur. Malesuada adipiscing sagittis vel nulla.
-                </p>
-                <div className="mt-10 flex items-center justify-center gap-x-6 lg:justify-start">
-                  <a
-                    href="#"
-                    onClick={Edit} // Trigger the Edit function when the link is clicked
-                    className="shadow-2xl rounded-md bg-black px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-gray-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
-                  >
-                    Éditer
-                  </a>
-                  <a
-                    href="#"
-                    className="shadow-2xl px-3.5 py-2.5 rounded-md text-sm font-semibold leading-6 hover:bg-gray-300"
-                  >
-                    Supprimer
-                  </a>
-                </div>
-              </div>
-
-              {/* Third quote section */}
-              <div className="py-1.5">
-                <h2 className="text-2xl font-bold tracking-tight">
-                  Titre citation
-                </h2>
-                <h3 className="text-md font-bold tracking-tight">Auteur</h3>
-                <p className="mt-6 text-lg leading-8">
-                  Ac euismod vel sit maecenas id pellentesque eu sed
-                  consectetur. Malesuada adipiscing sagittis vel nulla.
-                </p>
-                <div className="mt-10 flex items-center justify-center gap-x-6 lg:justify-start ">
-                  <a
-                    href="#"
-                    onClick={Edit} // Trigger the Edit function when the link is clicked
-                    className="shadow-2xl rounded-md bg-black px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-gray-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
-                  >
-                    Éditer
-                  </a>
-                  <a
-                    href="#"
-                    className="shadow-2xl px-3.5 py-2.5 rounded-md text-sm font-semibold leading-6 hover:bg-gray-300"
-                  >
-                    Supprimer
-                  </a>
-                </div>
-              </div>
-            </div>
-          </>
-        )}
-      </div>
+                    <h2 className="text-xl font-bold">Quote #{quote.id}</h2>
+                    {/* Truncating quote text if longer than 89 characters */}
+                    <p className="mt-1 pb-4">
+                      {quote.text.length > 89
+                        ? `${quote.text.substring(0, 88)} [...]`
+                        : quote.text}
+                    </p>
+                    <hr className="w-3/4 border border-black" />
+                    <p className="mt-3 text-xl font-semibold">From</p>
+                    <p className="mt-2 pb-4">{quote.author}</p>
+                    <hr className="w-3/4 border border-black" />
+                    <footer className="mt-4 text-lg font-semibold flex justify-between mt-auto">
+                      {/* Vote section with upvote and downvote icons */}
+                      <section className="flex border-2 border-dashed border-custom-main-orange rounded p-px px-4">
+                        <ChevronUpIcon className="w-6 hover:fill-green-500 cursor-pointer" />
+                        <p className="text-2xl px-1">{quote.vote}</p>
+                        <ChevronDownIcon className="w-6 hover:fill-red-500 cursor-pointer" />
+                      </section>
+                      {/* Share button */}
+                      <button className="rounded bg-custom-main-orange w-1/3 text-white font-normal cursor-copy">
+                        Share
+                      </button>
+                      {/* Favorite button */}
+                      <button onClick={() => handleFavoriteToggle(quote.id)}>
+                        {quote.isFavorite ? (
+                          <HeartIconSolid className="w-6 text-red-700" />
+                        ) : (
+                          <HeartIconOutline className="w-6 text-gray-700" />
+                        )}
+                      </button>
+                    </footer>
+                  </motion.article>
+                ))}
+              </motion.div>
+            </AnimatePresence>
+          </div>
+          <AnimatePresence>
+            {isModalOpen && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+              >
+                <CommentSection
+                  quote={selectedQuote}
+                  onClose={() => setIsModalOpen(false)}
+                  editing={edit}
+                  fav={favorisHandle}
+                />
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </>
+      ) : (
+        // Displaying Quote if not in favorites view
+        <Quote />
+      )}
     </div>
   );
 }
 
-export default Quote; // Export the Quote component as default
+export default Quote;
