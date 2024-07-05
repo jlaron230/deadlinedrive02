@@ -1,10 +1,8 @@
 const axios = require('axios');
-const UserManager = require('../models/UserManager');
-const NotificationManager = require('../models/NotificationManager');
+const models = require("../models");
+
 
 const API_BASE_URL = 'http://localhost:5000';
-const userManager = new UserManager();
-const notificationManager = new NotificationManager();
 
 async function fetchDailyQuote() {
     try {
@@ -21,19 +19,17 @@ async function fetchDailyQuote() {
 }
 
 async function sendNotificationsToUsers(quote) {
-    try {
-        const users = await userManager.findAll();
-        users.forEach(async (user) => {
-            try {
-                await notificationManager.create(user.id, quote.id);
-                console.log(`Notification sent to user ${user.id} for quote ${quote.id}`);
-            } catch (error) {
-                console.error(`Failed to send notification to user ${user.id}:`, error);
-            }
-        });
-    } catch (error) {
-        console.error("Error fetching users:", error);
-    }
+    // Fetch all user IDs to whom the quote should be sent
+    const users = await models.user.findAll(); 
+    users[0].forEach(async (user) => {
+        try {
+            // Create a notification for each user
+            await models.notification.create(user.id, quote.id);  // Assume quote.id is available
+            console.log(`Notification sent to user ${user.id} for quote ${quote.id}`);
+        } catch (error) {
+            console.error(`Failed to send notification to user ${user.id}:`, error);
+        }
+    });
 }
 
 exports.sendDailyNotification = async () => {

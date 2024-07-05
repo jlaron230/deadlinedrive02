@@ -87,10 +87,14 @@ router.put('/notifications/:id/read', notificationControllers.edit);
 // Route pour supprimer une notification
 router.delete('/notifications/:id', notificationControllers.destroy);
 
+// Route pour obtenir toutes les notifications d'un utilisateur spécifique
+router.get('/notifications/user/:userId', notificationControllers.findByUserId);
+
+
 module.exports = router;
 
  
- // authentication wall : verifyToken is activated for each route after this line
+//  authentication wall : verifyToken is activated for each route after this line
 //  router.use(verifyToken); 
 
 module.exports = router;

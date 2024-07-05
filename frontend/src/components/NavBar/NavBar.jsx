@@ -111,7 +111,6 @@ const NavBar = () => {
           ))}
         </div>
       </motion.div>
-      {/* Daily quote notification modal triggered by clicking the bell icon */}
       <Notifications isOpen={isModalOpen} onClose={toggleModal} userId={userId} />
     </nav>
   );
