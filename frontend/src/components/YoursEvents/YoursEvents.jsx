@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { motion } from 'framer-motion';
 
-const simulateAuth = () => {
-  const user = JSON.parse(localStorage.getItem('user'));
-  return user || { id: 22 }; // Default user for testing
+const idUser = () => {
+  const user_id = JSON.parse(localStorage.getItem('id')); // assuming the whole user object is stored with key 'user'
+  return user_id  // return the id if user exists, otherwise return null
 };
 
 
@@ -18,14 +18,14 @@ const YoursEvents = () => {
     const fetchTasks = async () => {
       try {
 
-        const user = simulateAuth();
+        const user_id = idUser();
 
         // Make a GET request to the server to retrieve tasks
-        const response = await axios.get('http://localhost:5000/tasks');
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/tasks`);
         
 
          // Filter tasks by the authenticated user's ID
-         const userTasks = response.data.filter(task => task.id_user === user.id);
+         const userTasks = response.data.filter(task => task.id_user === user_id);
 
        // Get the current date
        const now = new Date();

@@ -68,6 +68,11 @@ const TaskManager = require("./TaskManager");
 models.task = new TaskManager();
 models.task.setDatabase(pool);
 
+// Import and set up the UserVoteManager
+const UserVoteManager = require("./UserVoteManager");
+models.user_votes = new UserVoteManager();
+models.user_votes.setDatabase(pool);
+
 // Use a proxy to personalize error messages when asking for a non-existing model
 const CommentManager = require("./CommentManager");
 models.comment = new CommentManager();

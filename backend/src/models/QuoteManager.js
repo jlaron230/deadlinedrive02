@@ -9,9 +9,7 @@ class QuoteManager extends AbstractManager {
     }
 
     validateQuote(quote) {
-        // REVIEW the development phase requires that testing be done only on a certain type of restrictions
-        // if (typeof quote.author !== 'string' || typeof quote.text !== 'string' || typeof quote.vote !== 'number' || typeof quote.id_user !== 'number') {
-            if (typeof quote.text !== 'string') {
+        if (typeof quote.text !== 'string') {
             return false;
         }
         return true;
@@ -21,13 +19,11 @@ class QuoteManager extends AbstractManager {
         if (!this.validateQuote(quote)) {
             throw new Error("Invalid data.");
         }
-        // REVIEW the development phase requires that testing be done only on a certain type of restrictions
         const { author, text, id_user } = quote;
         return this.database.query(
             `INSERT INTO ${TABLE_NAME} (author, text, vote, id_user) VALUES (?, ?, ?, ?)`,
             [author, text, 0, id_user]
         );
-
     }
 
     update(quote) {
@@ -41,7 +37,7 @@ class QuoteManager extends AbstractManager {
 
         const fields = [];
         const values = [];
-        
+
         for (const field of FIELDS) {
             if (quote[field] !== undefined) {
                 fields.push(`${field} = ?`);
@@ -76,6 +72,34 @@ class QuoteManager extends AbstractManager {
             console.error(error);
             throw error;
         }
+    }
+
+    incrementVote(quoteId) {
+        return this.database.query(
+          `UPDATE ${this.table} SET vote = vote + 1 WHERE id = ?`,
+          [quoteId]
+        );
+      }
+    
+      decrementVote(quoteId) {
+        return this.database.query(
+          `UPDATE ${this.table} SET vote = vote - 1 WHERE id = ?`,
+          [quoteId]
+        );
+      }
+
+      getById(quoteId) {
+        return this.database.query(
+            `SELECT * FROM ${this.table} WHERE id = ?`,
+            [quoteId]
+        );
+    }
+
+    getByIdUser(userId) {
+        return this.database.query(
+            `SELECT * FROM ${this.table} WHERE id_user = ?`,
+            [userId]
+        );
     }
 }
 

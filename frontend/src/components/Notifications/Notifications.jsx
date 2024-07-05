@@ -73,8 +73,8 @@ function NotificationsComponent({ isOpen, onClose }) {
                         {notifications.map(notification => (
                             <div key={notification.id} className="my-6 p-4 border-b flex justify-between items-center gap-4">
                                 <div>
-                                    <p className="text-custom-black">Daily Quote: {notification.quoteText} - {notification.quoteAuthor}</p>
-                                    <p className="text-sm mt-2 text-gray-600">Received on {new Date(notification.date_sent).toLocaleDateString("fr-FR")}</p>
+                                    <p className="text-custom-black">Citation du jour : {notification.quoteText} - {notification.quoteAuthor}</p>
+                                    <p className="text-sm mt-2 text-gray-600">Reçu le {new Date(notification.date_sent).toLocaleDateString("fr-FR")}</p>
                                 </div>
                                 <div className="flex items-center">
                                     {notification.is_read ? (

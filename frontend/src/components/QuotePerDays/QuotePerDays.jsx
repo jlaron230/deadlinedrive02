@@ -12,7 +12,7 @@ const QuotePerDays = () => {
 
   // useEffect to check if user is logged in by checking for a JWT token in localStorage.
   useEffect(() => {
-    const token = localStorage.getItem("jwtToken");
+    const token = localStorage.getItem("token");
     setIsLoggedIn(!!token); // Simplify token check
   }, []);
 
@@ -22,9 +22,9 @@ const QuotePerDays = () => {
     try {
       // Fetch quotes, categories, and quote-category relationships simultaneously.
       const [resQuote, resCategory, resQuoteCategory] = await Promise.all([
-        axios.get("http://localhost:5000/quotes"),
-        axios.get("http://localhost:5000/categories"),
-        axios.get("http://localhost:5000/quote_category"),
+        axios.get(`${import.meta.env.VITE_BACKEND_URL}/quotes`),
+        axios.get(`${import.meta.env.VITE_BACKEND_URL}/categories`),
+        axios.get(`${import.meta.env.VITE_BACKEND_URL}/quote_category`),
       ]);
       
       // Update state with fetched data.
@@ -69,37 +69,39 @@ const QuotePerDays = () => {
   };
 
   // Render component UI
-  return (
-    <div className="p-8">
-      {!isLoggedIn ? (
-        // If user is not logged in, show a button to log in or register.
-        <div className="flex flex-col items-center">
-          <a href={'/signup'}>
-            <button className="font-semibold p-4 bg-custom-main-orange rounded-lg">
-              Cliquez ici pour vous inscrire ou vous connecter !
-            </button>
-          </a>
-        </div>
-      ) : (
-        // If user is logged in, show a random quote.
-        <div className="p-4 flex flex-col items-center bg-custom-main-orange m-3 rounded-lg">
-          <h3 className="flex flex-col items-center font-semibold px-2 py-3">Citations aléatoires</h3>
-          {randomQuote ? (
-            <section>
-              <p><strong>Citation:</strong> {randomQuote.text}</p>
-              <p><strong>Auteur:</strong> {randomQuote.author}</p>
-              <p><strong>Categorie:</strong> {randomQuote.category}</p>
-            </section>
-          ) : (
-            <p>Loading...</p>
-          )}
-          <button onClick={handleNewRandomQuote} className="hover:text-black mt-12 inline-block rounded-lg border border-white px-4 py-3 text-center text-base font-semibold text-white transition hover:bg-white hover:text-primary">
-            Avoir une autre citation
+return (
+  <div className="p-8">
+    {isLoggedIn ? (
+      // If the user is logged in, display a random quote.
+      <div className="p-4 flex flex-col items-center bg-custom-main-orange m-3 rounded-lg">
+        <h3 className=" text-white  flex flex-col items-center font-semibold px-2 py-3">Citations aléatoires</h3>
+        {randomQuote ? (
+          <section>
+            <p><strong>Citation:</strong> {randomQuote.text}</p>
+            <p><strong>Auteur:</strong> {randomQuote.author}</p>
+            <p><strong>Categorie:</strong> {randomQuote.category}</p>
+          </section>
+        ) : (
+          // If the random quote is not loaded yet, show a loading message.
+          <p>Loading...</p>
+        )}
+        <button onClick={handleNewRandomQuote} className="hover:text-black mt-12 inline-block rounded-lg border border-white px-4 py-3 text-center text-base font-semibold text-white transition hover:bg-white hover:text-primary">
+          Avoir une autre citation
+        </button>
+      </div>
+    ) : (
+      // If the user is not logged in, display a button to log in or register.
+      <div className="flex flex-col items-center">
+        <a href={'/signup'}>
+          <button className=" text-ivory font-semibold p-4 bg-custom-main-orange rounded-lg hover:text-black">
+            Appuyez ici pour vous inscrire ou vous connecter !
           </button>
-        </div>
-      )}
-    </div>
-  );
+        </a>
+      </div>
+    )}
+  </div>
+);
 };
+
 
 export default QuotePerDays;

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import AsideImage from "../assets/citation-home.jpg";
+import AsideImage from "../assets/example.gif";
 import CustomizeQuotes from "./CustomizeQuotes";
 
 export default function CitationHome() {
@@ -59,7 +59,7 @@ export default function CitationHome() {
               initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 1, delay: 0.8, ease: "easeOut" }}
-              className=""
+              className="border border-gray"
             />
           </div>
         </motion.div>

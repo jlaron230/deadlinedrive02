@@ -67,7 +67,8 @@ const verifyToken = async (req, res, next) => {
     if (!user) {
       return res.status(404).send('User not found');
     }
-
+    
+    req.user = user;
 
     next(); // Call the next middleware function
   } catch (err) {
