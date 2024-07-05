@@ -12,7 +12,7 @@ export default function QuoteManage() {
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem("token");
 
   const getUserFromToken = (token) => {
     try {
@@ -27,11 +27,14 @@ export default function QuoteManage() {
   const fetchMyQuotes = async () => {
     try {
       const userId = getUserFromToken(token);
-      const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/quotes/by-user/${userId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`
+      const res = await axios.get(
+        `${import.meta.env.VITE_BACKEND_URL}/quotes/by-user/${userId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
-      });
+      );
       setMyQuotes(res.data[0]);
       console.log(res.data[0]);
     } catch (error) {
@@ -97,11 +100,14 @@ export default function QuoteManage() {
 
   const handleDeleteQuote = async (quoteId) => {
     try {
-      await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/quotes/${quoteId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      await axios.delete(
+        `${import.meta.env.VITE_BACKEND_URL}/quotes/${quoteId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       setSuccessMessage("Citation supprimée avec succès !");
       setTimeout(() => setSuccessMessage(""), 5000);
       fetchMyQuotes();
@@ -113,8 +119,16 @@ export default function QuoteManage() {
   };
 
   return (
-    <div className="flex flex-col max-w-7xl m-auto py-6">
-      <h1 className="text-3xl py-6 font-semibold flex justify-center">Mes citations</h1>
+    <motion.div
+      initial={{ opacity: 0, y: 50 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 2, ease: "easeOut" }}
+      className="flex flex-col max-w-7xl m-auto py-6 p-4 sm:p-6"
+    >
+      {" "}
+      <h1 className="text-3xl py-6 font-semibold flex justify-center">
+        Mes citations
+      </h1>
       {successMessage && (
         <motion.div
           initial={{ opacity: 0 }}
@@ -142,7 +156,7 @@ export default function QuoteManage() {
           myQuotes.map((quote) => (
             <motion.article
               key={quote.id}
-              className="mb-4 p-4 border-2 rounded-md border-custom-main-orange shadow w-96 min-h-80 flex flex-col hover:bg-slate-50"
+              className="mb-4 p-4 border-2 rounded-md border-custom-main-orange shadow w-full sm:w-1/2 md:w-96 lg:w-96 xl:w-96 flex flex-col hover:bg-slate-50"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.9 }}
             >
@@ -212,6 +226,6 @@ export default function QuoteManage() {
           </div>
         </div>
       )}
-    </div>
+    </motion.div>
   );
 }

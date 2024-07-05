@@ -15,6 +15,8 @@ function QuoteCard() {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedQuote, setSelectedQuote] = useState(null);
+  const [isMenuOpen, setIsMenuOpen] = useState(false); // Ajout de l'état pour le menu déroulant
+
   const itemsPerPage = 9;
 
   const fetchData = async () => {
@@ -67,6 +69,7 @@ function QuoteCard() {
   const handleCategoryClick = (categoryName) => {
     setSelectedCategory(categoryName);
     setItemOffset(0);
+    setIsMenuOpen(false);
   };
 
   const handleQuoteClick = (quote) => {
@@ -123,6 +126,10 @@ function QuoteCard() {
       console.error("Failed to downvote", error);
     }
   };
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
   
   return (
     <>
@@ -130,12 +137,46 @@ function QuoteCard() {
       initial={{ opacity: 0, y: 50 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 2, ease: "easeOut" }} 
-      className="flex flex-col max-w-7xl m-auto py-6">
+      className="flex flex-col max-w-7xl m-auto py-6 p-4 sm:p-6">
+        <div className="block lg:hidden mb-8 relative flex justify-center">
+          <button
+            onClick={toggleMenu}
+            className="flex items-center px-3 py-2 border border-custom-main-orange rounded-lg focus:outline-none text-lg"
+          >
+            Catégorie
+            {isMenuOpen ? (
+              <ChevronUpIcon className="w-5 h-5 ml-2" />
+            ) : (
+              <ChevronDownIcon className="w-5 h-5 ml-2" />
+            )}
+          </button>
+          {isMenuOpen && (
+            <ul className="absolute text-lg mt-2 bg-white border border-custom-main-orange rounded-lg shadow-lg z-10">
+              {category.map((c) => (
+                <motion.li
+                  key={c.id}
+                  whileHover={{ scale: 1.2 }}
+                  onHoverStart={(e) => {}}
+                  onHoverEnd={(e) => {}}
+                  className={`cursor-pointer px-3 py-2 ${
+                    selectedCategory === c.name
+                      ? "font-semibold border border-2 border-custom-main-orange text-lg"
+                      : ""
+                  }`}
+                  onClick={() => handleCategoryClick(c.name)}
+                >
+                  {c.name}
+                </motion.li>
+              ))}
+            </ul>
+          )}
+        </div>
         <motion.ul
-        initial={{ opacity: 0, y: -50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1, delay: 0.4, ease: "easeOut" }} 
-        className="flex flex-wrap justify-center gap-14 mb-8">
+          initial={{ opacity: 0, y: -50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.4, ease: "easeOut" }} 
+          className="hidden lg:flex flex-wrap justify-center gap-14 mb-8"
+        >
           {category.map((c) => (
             <motion.li
               whileHover={{ scale: 1.2 }}
@@ -157,7 +198,7 @@ function QuoteCard() {
             whileTap={{ scale: 0.6 }}
             className="rounded bg-custom-main-orange text-black font-normal px-3"
           >
-           <Link to="/manage-my-quotes">Gérer mes citations</Link>
+            <Link to="/manage-my-quotes">Gérer mes citations</Link>
           </motion.button>
         </motion.ul>
         <AnimatePresence mode="wait">
@@ -172,7 +213,7 @@ function QuoteCard() {
             {currentQuotes.map((quote) => (
               <motion.article
                 key={quote.id}
-                className="mb-4 p-4 border-2 rounded-md border-custom-main-orange shadow w-96 min-h-80 flex flex-col hover:bg-slate-50"
+                className="mb-4 p-4 border-2 rounded-md border-custom-main-orange shadow w-full sm:w-1/2 md:w-96 lg:w-96 xl:w-96 flex flex-col hover:bg-slate-50"           
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.9 }}
                 onClick={() => handleQuoteClick(quote)}
