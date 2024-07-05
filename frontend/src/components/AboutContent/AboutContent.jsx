@@ -6,6 +6,7 @@ import jeromeProfil from "../../assets/jeromeProfil.svg";
 import faysoilProfil from "../../assets/faysoilProfil.svg";
 import history from "../../assets/OurHistory.webp";
 import Faq from "@components/Faq/Faq"; // Import the FAQ component
+import ScrollToTopButton from '../ScrollToTopButton/ScrollToTopButton'; 
 
 const AboutContent = () => {
   // Define team members data
@@ -144,8 +145,9 @@ const AboutContent = () => {
             ))}
           </div>
         </section>
-        <Faq /> {/* Include the FAQ component */}
+        <Faq /> {/* FAQ component */}
       </div>
+      < ScrollToTopButton />
     </main>
   );
 };

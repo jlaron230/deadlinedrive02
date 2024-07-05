@@ -32,6 +32,11 @@ const ItemManager = require("./ItemManager");
 models.item = new ItemManager();
 models.item.setDatabase(pool);
 
+// Import and set up the NotificationManager
+const NotificationManager = require("./NotificationManager");
+models.notification = new NotificationManager();
+models.notification.setDatabase(pool);
+
 // Import and set up the UserManager
 const UserManager = require("./UserManager");
 models.user = new UserManager();

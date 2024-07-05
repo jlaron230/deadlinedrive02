@@ -72,6 +72,21 @@ const destroy = async (req, res) => {
   }
 };
 
+const getDailyQuote = async (req, res) => {
+    try {
+        const [rows] = await models.quote.getRandomQuote();
+        if (rows.length > 0) {
+            res.json(rows[0]);
+        } else {
+            res.status(404).send('No quote available');
+        }
+    } catch (error) {
+        console.error('Error fetching a random quote:', error);
+        res.status(500).send('Error retrieving a random quote');
+    }
+};
+
+
 const findByUser = async (req, res) => {
   try {
     const userId = req.params.userId;
@@ -92,4 +107,5 @@ module.exports = {
   add,
   destroy,
   findByUser,
+  getDailyQuote,
 };

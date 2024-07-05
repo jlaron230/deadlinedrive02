@@ -51,7 +51,7 @@ const SignupForm = () => {
             })} // Validation schema for form fields
             onSubmit={(values, { setSubmitting, setFieldError, resetForm }) => {
               // HTTP POST request to send signup data to the backend using axios
-              axios.post('http://localhost:5000/users', values) // Ensure this URL is correct and corresponds to your backend route
+              axios.post(`${import.meta.env.VITE_BACKEND_URL}/users`, values) // Ensure this URL is correct and corresponds to your backend route
                 .then(response => {
                   console.log('Inscription réussie:', response.data);
                   resetForm(); // Reset the form
