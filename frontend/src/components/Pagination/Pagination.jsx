@@ -1,17 +1,17 @@
-import React from 'react';
 import ReactPaginate from 'react-paginate';
 
 function Pagination({ pageCount, onPageChange }) {
   return (
     <ReactPaginate
       breakLabel="..."
-      nextLabel="Suivant >"
+      nextLabel=">"
       onPageChange={onPageChange}
       pageRangeDisplayed={3}
+      marginPagesDisplayed={1} // Ajouté pour mobile
       pageCount={pageCount}
-      previousLabel="< Précédent"
+      previousLabel="<"
       renderOnZeroPageCount={null}
-      containerClassName="flex justify-center space-x-2 mt-4"
+      containerClassName="flex flex-wrap justify-center space-x-2 mt-4"
       pageClassName="bg-white border border-gray-300 rounded px-3 py-1 cursor-pointer hover:bg-gray-200"
       activeClassName="bg-blue-500 text-black"
       previousClassName="bg-white border border-gray-300 rounded px-3 py-1 cursor-pointer hover:bg-gray-200"
