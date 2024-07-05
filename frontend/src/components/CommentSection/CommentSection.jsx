@@ -6,12 +6,11 @@ import {
   TrashIcon,
   HeartIcon,
 } from "@heroicons/react/24/solid";
-import { HeartIcon as HeartIconOutline } from "@heroicons/react/24/outline";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import ModalFavorites from "@components/Favorites/ModalFavorites";
+import QuotesFavoris from "@components/Favorites/QuotesFavoris";
 
 function CommentSection({
   quote,
@@ -28,20 +27,24 @@ function CommentSection({
   const [editingComment, setEditingComment] = useState(null);
   const [editedContent, setEditedContent] = useState("");
   const [favIcon, setFavIcon] = useState(false);
-  const [updatedQuote, setUpdatedQuote] = useState({
-    text: quote.text,
-    author: quote.author,
-    category: quote.category,
-  });
-  const [maxQuote, setMaxQuote] = useState(false);
   const navigate = useNavigate();
   const userId = localStorage.getItem("id");
   // Fetch comments related to the specified quote on component mount or when quote.id changes
 
   useEffect(() => {
     fetchComments(); // Fetch comments when the component mounts or when quote.id changes
-    checkFavorite(); // Check if the current quote is marked as favorite when the component mounts or when quote.id changes
+    // checkFavorite(); // Check if the current quote is marked as favorite when the component mounts or when quote.id changes
+
+    axios
+      .get("http://localhost:5000/users")
+      .then((response) => setUsers(response.data))
+      .catch((error) => console.error("Error loading users:", error));
   }, [quote.id]);
+
+  // Function to toggle favorite icon state
+  const toggleFavorite = () => {
+    setFavIcon((prev) => !prev);
+  };
 
   const fetchComments = async () => {
     try {
@@ -55,44 +58,44 @@ function CommentSection({
     }
   };
 
-  const checkFavorite = async () => {
-    try {
-      const token = localStorage.getItem("token"); // Retrieve token from localStorage
-      const userId = localStorage.getItem("id"); // Retrieve user ID from localStorage
+  // const checkFavorite = async () => {
+  //   try {
+  //     const token = localStorage.getItem("token"); // Retrieve token from localStorage
+  //     const userId = localStorage.getItem("id"); // Retrieve user ID from localStorage
 
-        // Check if token or userId is missing
-      if (!token || !userId) {
-        console.error("Token or user ID not found");
-        return;
-      }
+  //       // Check if token or userId is missing
+  //     if (!token || !userId) {
+  //       console.error("Token or user ID not found");
+  //       return;
+  //     }
 
-      // Fetch user's favorites from the server
-      const response = await axios.get(
-        // Remplacer par variable d'environnement
-        `http://localhost:5000/favorites/${userId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      const favorites = response.data;
+  //     // Fetch user's favorites from the server
+  //     const response = await axios.get(
+  //       // Remplacer par variable d'environnement
+  //       `http://localhost:5000/favorites/${userId}`,
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       }
+  //     );
 
-      // Check if favorites is an array
-      if (Array.isArray(favorites)) {
-      // Check if the current quote ID exists in the favorites array
-        const isFavorite = favorites.some(
-          (favorite) => favorite.id === quote.id
-        );
+  //     const favorites = response.data;
+  //     // Check if favorites is an array
+  //     if (Array.isArray(favorites)) {
+  //     // Check if the current quote ID exists in the favorites array
+  //       const isFavorite = favorites.some(
+  //         (favorite) => favorite.id === quote.id
+  //       );
 
-        setFavIcon(isFavorite);
-      } else {
-        console.error("Favorites is not an array:", favorites);
-      }
-    } catch (error) {
-      console.error("Failed to check favorites:", error);
-    }
-  };
+  //       setFavIcon(isFavorite);
+  //     } else {
+  //       console.error("Favorites is not an array:", favorites);
+  //     }
+  //   } catch (error) {
+  //     console.error("Failed to check favorites:", error);
+  //   }
+  // };
 
   // Add a new comment
   const handleAddComment = () => {
@@ -177,61 +180,61 @@ function CommentSection({
     return user ? user.firstName : "Unknown User";
   };
 
-  // Function for add or delete favorite item
-  const handleFavoriteToggle = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      const userId = localStorage.getItem("id");
+  // // Function for add or delete favorite item
+  // const handleFavoriteToggle = async () => {
+  //   try {
+  //     const token = localStorage.getItem("token");
+  //     const userId = localStorage.getItem("id");
 
-      // If either the token or user ID is missing, navigate to the login page
-      if (!token || !userId) {
-        navigate("/login");
-        return;
-      }
+  //     // If either the token or user ID is missing, navigate to the login page
+  //     if (!token || !userId) {
+  //       navigate("/login");
+  //       return;
+  //     }
 
-      if (favIcon) {
-        setFavIcon((prev) => !prev);
-        // Make a DELETE request to remove the favorite
-        await axios.delete(`http://localhost:5000/favorites/${quote.id}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          data: {
-            id_user: userId,
-            id_quote: quote.id,
-          },
-        });
-        console.log("suppression");
-        fav((prev) => !prev);
-      } else {
-        // Toggle the favorite icon state
-        setFavIcon((prev) => !prev);
-        // Check if the maximum number of quotes (10) is not exceeded
-        if (quote.id <= 10) {
-          setMaxQuote(false);
-          // Make a POST request to add the quote as a favorite
-          await axios.post(
-            `http://localhost:5000/favorites`,
-            {
-              id_user: userId,
-              id_quote: quote.id,
-            },
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
-        } else {
-          // Set the max quote state to true if the limit is exceeded
-          setMaxQuote(true);
-          null;
-        }
-      }
-    } catch (error) {
-      console.error("Failed to add/remove favorite:", error);
-    }
-  };
+  //     if (favIcon) {
+  //       setFavIcon((prev) => !prev);
+  //       // Make a DELETE request to remove the favorite
+  //       await axios.delete(`http://localhost:5000/favorites/${quote.id}`, {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //         data: {
+  //           id_user: userId,
+  //           id_quote: quote.id,
+  //         },
+  //       });
+  //       console.log("suppression");
+  //       fav((prev) => !prev);
+  //     } else {
+  //       // Toggle the favorite icon state
+  //       setFavIcon((prev) => !prev);
+  //       // Check if the maximum number of quotes (10) is not exceeded
+  //       if (quote.id <= 10) {
+  //         setMaxQuote(false);
+  //         // Make a POST request to add the quote as a favorite
+  //         await axios.post(
+  //           `http://localhost:5000/favorites`,
+  //           {
+  //             id_user: userId,
+  //             id_quote: quote.id,
+  //           },
+  //           {
+  //             headers: {
+  //               Authorization: `Bearer ${token}`,
+  //             },
+  //           }
+  //         );
+  //       } else {
+  //         // Set the max quote state to true if the limit is exceeded
+  //         setMaxQuote(true);
+  //         null;
+  //       }
+  //     }
+  //   } catch (error) {
+  //     console.error("Failed to add/remove favorite:", error);
+  //   }
+  // };
 
   // Render the comment section with UI for viewing and managing comments
   return (
@@ -242,7 +245,6 @@ function CommentSection({
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
       >
-        <div>{!maxQuote ? null : <ModalFavorites />}</div>
         <div className="bg-white rounded-lg max-w-5xl w-full p-6 border border-2 border-custom-main-orange pb-12">
           <div className="flex justify-end mb-4">
             <button onClick={onClose} className="text-white">
@@ -271,23 +273,13 @@ function CommentSection({
                   Partager
                 </button>
               </div>
-
               <div>
-                {favIcon ? (
-                  <button className="flex" href="#">
-                    <HeartIcon
-                      onClick={handleFavoriteToggle}
-                      className="w-2/12 text-red-700"
-                    />
-                  </button>
-                ) : (
-                  <button className="flex" href="#">
-                    <HeartIconOutline
-                      onClick={handleFavoriteToggle}
-                      className="w-2/12 text-gray-700"
-                    />
-                  </button>
-                )}
+                <QuotesFavoris
+                  quote={quote}
+                  favIcon={favIcon}
+                  toggleFavorite={toggleFavorite}
+                  fav={fav}
+                />
               </div>
             </footer>
             <div className="w-full mt-4">
