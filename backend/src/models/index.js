@@ -32,6 +32,11 @@ const ItemManager = require("./ItemManager");
 models.item = new ItemManager();
 models.item.setDatabase(pool);
 
+// Import and set up the NotificationManager
+const NotificationManager = require("./NotificationManager");
+models.notification = new NotificationManager();
+models.notification.setDatabase(pool);
+
 // Import and set up the UserManager
 const UserManager = require("./UserManager");
 models.user = new UserManager();
@@ -62,6 +67,11 @@ models.quote_category.setDatabase(pool);
 const TaskManager = require("./TaskManager");
 models.task = new TaskManager();
 models.task.setDatabase(pool);
+
+// Import and set up the UserVoteManager
+const UserVoteManager = require("./UserVoteManager");
+models.user_votes = new UserVoteManager();
+models.user_votes.setDatabase(pool);
 
 // Use a proxy to personalize error messages when asking for a non-existing model
 const CommentManager = require("./CommentManager");

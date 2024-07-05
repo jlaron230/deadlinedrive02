@@ -41,7 +41,7 @@ const edit = async (req, res) => {
 
   try {
     // Attempt to update the quote in the database using the `update` method from the `models.quote` object
-    await models.quote.update(quote);
+    await models.quote.update(quote, { where: { id: quote.id }});
     res.sendStatus(204);
   } catch (error) {
     console.error(error);
@@ -60,16 +60,10 @@ const edit = async (req, res) => {
 // Function to add a new quote
 const add = async (req, res) => {
   const quote = req.body;
-  // Attach the user ID to the quote
-  quote.id_user = req.user.id;
-
   try {
-    // Insert the quote into the database and get the result
     const [quoteResult] = await models.quote.insert(quote);
-    // Extract the ID of the newly inserted quote
     const quoteId = quoteResult.insertId;
 
-    // If the quote has a category, insert the category into the quote_category table
     if (quote.id_category) {
       await models.quote_category.insert(quoteId, quote.id_category);
     }
@@ -98,6 +92,20 @@ const destroy = async (req, res) => {
     console.error(err);
     res.sendStatus(500);
   }
+};
+
+const getDailyQuote = async (req, res) => {
+    try {
+        const [rows] = await models.quote.getRandomQuote();
+        if (rows.length > 0) {
+            res.json(rows[0]);
+        } else {
+            res.status(404).send('No quote available');
+        }
+    } catch (error) {
+        console.error('Error fetching a random quote:', error);
+        res.status(500).send('Error retrieving a random quote');
+    }
 };
 
 const addFavorite = async (req, res) => {
@@ -182,6 +190,20 @@ const removeFavorite = async (req, res) => {
   }
 };
 
+
+const findByUser = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    console.log('Fetching quotes for userId:', userId);
+    const quotes = await models.quote.getByIdUser(userId);
+    console.log('Fetched quotes:', quotes);
+    res.status(200).json(quotes);
+  } catch (error) {
+    console.error('Erreur lors de la récupération des citations par utilisateur:', error);
+    res.sendStatus(500);
+  }
+}
+
 module.exports = {
   browse,
   read,
@@ -191,4 +213,6 @@ module.exports = {
   addFavorite,
   getFavoritesById: getFavorites,
   removeFavorite,
+  findByUser,
+  getDailyQuote,
 };

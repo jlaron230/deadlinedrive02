@@ -62,16 +62,6 @@ class QuoteManager extends AbstractManager {
     return this.database.query(query, values);
   }
 
-  delete(id) {
-    try {
-      return this.database.query(`DELETE FROM ${this.table} WHERE id = ?`, [
-        id,
-      ]);
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
-  }
 
   // Method to add a quote to user's favorites
   async addFavorite(userId, quoteId) {
@@ -90,22 +80,6 @@ class QuoteManager extends AbstractManager {
     }
   }
 
-  // Method to check if a quote is favorited by a user
-  async checkFavorite(userId, quoteId) {
-    try {
-     // Execute an SQL query to select records from 'favorites' table based on user ID and quote ID
-      const [rows] = await this.database.query(
-        `SELECT * FROM favorites WHERE id_user = ? AND id_quote = ?`,
-        [userId, quoteId]
-      );
-
-      // Return the result rows from the query
-      return rows;
-    } catch (error) {
-      console.error("Error when checking favorite from the database:", error);
-      throw error;
-    }
-  }
     // Method to find all favorite quotes of a specific user
   findFavorites(userId) {
     // Execute an SQL query to select favorite quotes from 'favorites' table joined with 'quotes' table
@@ -114,6 +88,23 @@ class QuoteManager extends AbstractManager {
       [userId]
     );
   }
+
+    // Method to check if a quote is favorited by a user
+    async checkFavorite(userId, quoteId) {
+      try {
+       // Execute an SQL query to select records from 'favorites' table based on user ID and quote ID
+        const [rows] = await this.database.query(
+          `SELECT * FROM favorites WHERE id_user = ? AND id_quote = ?`,
+          [userId, quoteId]
+        );
+  
+        // Return the result rows from the query
+        return rows;
+      } catch (error) {
+        console.error("Error when checking favorite from the database:", error);
+        throw error;
+      }
+    }
 
   // Method to remove a quote from favorites
   removeFavorite(userId, quoteId) {
@@ -124,6 +115,54 @@ class QuoteManager extends AbstractManager {
       [userId, quoteId]
     );
   }
+
+    // Fetch a random quote
+    getRandomQuote() {
+        return this.database.query(
+            `SELECT * FROM ${this.table} ORDER BY RAND() LIMIT 1`
+        );
+    }
+
+    delete(id) {
+        try {
+            return this.database.query(
+                `DELETE FROM ${this.table} WHERE id = ?`,
+                [id]
+            );
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
+
+    incrementVote(quoteId) {
+        return this.database.query(
+          `UPDATE ${this.table} SET vote = vote + 1 WHERE id = ?`,
+          [quoteId]
+        );
+      }
+    
+      decrementVote(quoteId) {
+        return this.database.query(
+          `UPDATE ${this.table} SET vote = vote - 1 WHERE id = ?`,
+          [quoteId]
+        );
+      }
+
+      getById(quoteId) {
+        return this.database.query(
+            `SELECT * FROM ${this.table} WHERE id = ?`,
+            [quoteId]
+        );
+    }
+
+    getByIdUser(userId) {
+        return this.database.query(
+            `SELECT * FROM ${this.table} WHERE id_user = ?`,
+            [userId]
+        );
+    }
 }
+
 
 module.exports = QuoteManager;

@@ -1,14 +1,37 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Bars3Icon, XMarkIcon, BellIcon, EnvelopeIcon, UserIcon } from '@heroicons/react/24/outline';
+import { Bars3Icon, XMarkIcon, BellIcon, EnvelopeIcon, UserIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
 import logo from '../../assets/Logo-Deadlines.svg';
 import { motion } from 'framer-motion';
+import Notifications from '../Notifications/Notifications.jsx'; // Ensure correct import path for the Notifications component
 
 const NavBar = () => {
+  // State to control the visibility of the mobile menu
   const [isOpen, setIsOpen] = useState(false);
+  // State to control the visibility of the Notifications modal
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
+  // State for tracking the user ID from local storage
+  const [userId, setUserID] = useState(localStorage.getItem("id"));
+
+  // Function to toggle the mobile menu open/close
   const toggleMenu = () => {
     setIsOpen(!isOpen);
+  };
+
+  // Function to toggle the Notifications modal open/close
+  const toggleModal = () => {
+    setIsModalOpen(!isModalOpen);
+  };
+
+  // Variants for animating links on hover using Framer Motion
+  const handleMouseEnter = () => {
+    setIsDropdownOpen(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsDropdownOpen(false);
   };
 
   const linkVariants = {
@@ -18,6 +41,7 @@ const NavBar = () => {
     }
   };
 
+  // Variants for animating the mobile menu sliding in and out
   const menuVariants = {
     opened: {
       x: 0,
@@ -35,6 +59,21 @@ const NavBar = () => {
     }
   };
 
+  const dropdownVariants = {
+    opened: {
+      opacity: 1,
+      display: "block",
+      transition: { duration: 0.3 }
+    },
+    closed: {
+      opacity: 0,
+      transitionEnd: {
+        display: "none"
+      },
+      transition: { duration: 0.3 }
+    }
+  };
+
   return (
     <nav className="bg-butterscotch">
       <div className="max-w-7xl mx-auto p-2 sm:px-6 lg:px-8">
@@ -47,9 +86,26 @@ const NavBar = () => {
               <div className="ml-10 flex items-baseline space-x-4">
                 {['/deadlines', '/customize-quotes', '/quotes', '/about'].map((path, index) => (
                   <motion.div variants={linkVariants} whileHover="hover" key={index}>
-                    <Link to={path} className="text-custom-black hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">
-                      {['Deadlines', 'Personnaliser', 'Citations', 'À propos'][index]}
-                    </Link>
+                    {path === '/quotes' ? (
+                      <div className="relative" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+                        <Link to="/quotes" className="text-custom-black hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium flex items-center">
+                          Citations
+                          <ChevronDownIcon className="h-5 w-5 ml-1" />
+                        </Link>
+                        <motion.div
+                          variants={dropdownVariants}
+                          initial="closed"
+                          animate={isDropdownOpen ? "opened" : "closed"}
+                          className="absolute left-0 w-48 rounded-md shadow-lg bg-butterscotch z-10"
+                        >
+                          <Link to="/manage-my-quotes" className="block px-4 py-2 text-sm text-custom-black hover:text-gray-200">Gérer mes citations</Link>
+                        </motion.div>
+                      </div>
+                    ) : (
+                      <Link to={path} className="text-custom-black hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">
+                        {['Deadlines', 'Personnaliser', 'Citations', 'À propos'][index]}
+                      </Link>
+                    )}
                   </motion.div>
                 ))}
               </div>
@@ -58,10 +114,13 @@ const NavBar = () => {
           <div className="flex items-center space-x-6">
             {[
               { icon: <EnvelopeIcon className="h-7 w-7" />, href: '/contact' },
-              { icon: <BellIcon className="h-7 w-7" />, href: '#' },
+              { icon: <BellIcon className="h-7 w-7" />, href: '#', onClick: toggleModal },
               { icon: <UserIcon className="h-7 w-7" />, href: '/user-account' }
             ].map((item, index) => (
-              <motion.button whileHover="hover" onClick={() => window.location.href = item.href} className="text-custom-black hover:text-gray-200" key={index}>
+              <motion.button whileHover="hover" onClick={() => {
+                if (item.onClick) item.onClick();
+                else window.location.href = item.href;
+              }} className="text-custom-black hover:text-gray-200" key={index}>
                 <motion.div variants={linkVariants}>
                   {item.icon}
                 </motion.div>
@@ -86,13 +145,31 @@ const NavBar = () => {
         <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
           {['/about', '/deadlines', '/customize-quotes', '/quotes'].map((path, index) => (
             <motion.div variants={linkVariants} whileHover="hover" key={index}>
-              <Link to={path} className="text-custom-black hover:text-gray-200 block px-3 py-2 rounded-md text-base font-medium">
-                {['À propos', 'Deadlines', 'Créer Citation', 'Citations'][index]}
-              </Link>
+              {path === '/quotes' ? (
+                <div className="relative" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+                  <Link to="/quotes" className="text-custom-black hover:text-gray-200 block px-3 py-2 rounded-md text-base font-medium flex items-center">
+                    Citations
+                    <ChevronDownIcon className="h-5 w-5 ml-1" />
+                  </Link>
+                  <motion.div
+                    variants={dropdownVariants}
+                    initial="closed"
+                    animate={isDropdownOpen ? "opened" : "closed"}
+                    className="absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-butterscotch z-10"
+                  >
+                    <Link to="/manage-my-quotes" className="block px-4 py-2 text-sm text-custom-black hover:text-gray-200">Gérer mes citations</Link>
+                  </motion.div>
+                </div>
+              ) : (
+                <Link to={path} className="text-custom-black hover:text-gray-200 block px-3 py-2 rounded-md text-base font-medium">
+                  {['À propos', 'Deadlines', 'Créer Citation', 'Citations'][index]}
+                </Link>
+              )}
             </motion.div>
           ))}
         </div>
       </motion.div>
+      <Notifications isOpen={isModalOpen} onClose={toggleModal} userId={userId} />
     </nav>
   );
 };

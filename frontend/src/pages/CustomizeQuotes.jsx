@@ -5,20 +5,36 @@ import YoursQuote from "../components/YoursQuotes/YoursQuotes";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
 
 export default function CustomizeQuotes() {
   const [categories, setCategories] = useState([]);
   const [quotes, setQuotes] = useState([]);
-  const [newQuote, setNewQuote] = useState({ author:"", text: "", id_category:"" });
+  const [newQuote, setNewQuote] = useState({ author:"", text: "", id_category:"", id_user: "" });
   const [customAuthor, setCustomAuthor] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
+  const token = localStorage.getItem('token');
+  console.log('token:', token)
+
+  // Fonction pour obtenir l'utilisateur connecté à partir du token
+  const getUserFromToken = (token) => {
+    try {
+      const decodedToken = jwtDecode(token);
+      console.log('decodedToken:', decodedToken)
+      return decodedToken.sub; // Récupère l'ID utilisateur du token
+    } catch (error) {
+      console.error("Error decoding token:", error);
+      return null;
+    }
+  };
+
   const fetchData = async () => {
     try {
       const [resCategories, resQuotes] = await Promise.all([
-        axios.get("http://localhost:5000/categories"),
-        axios.get("http://localhost:5000/quotes"),
+        axios.get(`${import.meta.env.VITE_BACKEND_URL}/categories`),
+        axios.get(`${import.meta.env.VITE_BACKEND_URL}/quotes`),
       ]);
       setCategories(resCategories.data);
       setQuotes(resQuotes.data);
@@ -36,12 +52,13 @@ export default function CustomizeQuotes() {
   const addQuote = async (newQuote, token) => {
     try {
       const author = customAuthor || newQuote.author;
+      const userId = getUserFromToken(token); // Obtenir l'ID utilisateur à partir du token
 
-      const res = await axios.post("http://localhost:5000/quotes", 
+      const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/quotes`, 
         {
         author: author,
         text: newQuote.text,
-        id_user: newQuote.id_user,
+        id_user: userId,
         id_category: newQuote.id_category
         },
         {
@@ -96,7 +113,8 @@ export default function CustomizeQuotes() {
           )}
           <form
             onSubmit={(e) => {
-              addQuote(newQuote);
+              const token = localStorage.getItem("token"); // Obtenez le token depuis le stockage local ou tout autre endroit où vous le stockez
+              addQuote(newQuote, token);
               e.preventDefault();
             }}
             className="flex flex-col gap-6"

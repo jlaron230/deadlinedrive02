@@ -9,6 +9,8 @@ const taskControllers = require("./controllers/taskControllers");
 const deadlineControllers = require("./controllers/deadlineControllers");
 const quote_categoryControllers = require("./controllers/quote_categoryControllers");
 const commentControllers = require("./controllers/commentControllers");
+const notificationControllers = require('./controllers/notificationControllers');
+const userVoteControllers = require("./controllers/userVoteControllers");
 
 //import middleware functions
 const {
@@ -28,7 +30,7 @@ router.get("/users", userControllers.browse); // Route to browse all users
 
 // Protected routes
 router.get('/users/:id', userControllers.read);
-router.put('/users/:id', verifyToken,verifyId, userControllers.edit);
+router.put('/users/:id', verifyToken, verifyId, userControllers.edit);
 router.delete('/users/:id',  userControllers.destroy);
 router.put('/users/:id/password',userControllers.getUserByEmailWithPasswordAndPassToNext, verifyToken, userControllers.changePassword);
 
@@ -53,6 +55,16 @@ router.get('/favorites/:id', verifyToken, quoteControllers.getFavoritesById);
 router.delete('/favorites/:quoteId', quoteControllers.removeFavorite); 
 
 // routes for tasks, post, get, delete, put
+// Route to get a random or daily quote
+router.get('/daily-quote', verifyToken, quoteControllers.getDailyQuote);
+router.put("/quotes/:id", verifyToken, quoteControllers.edit);
+router.post("/quotes", verifyToken, quoteControllers.add);
+router.delete("/quotes/:id", verifyToken, quoteControllers.destroy);
+router.post('/quotes/:quoteId/upvote', verifyToken, userVoteControllers.upvote);
+router.post('/quotes/:quoteId/downvote', verifyToken, userVoteControllers.downvote);
+router.get("/quotes/by-user/:userId", verifyToken, quoteControllers.findByUser);
+
+
 router.get("/tasks", taskControllers.browse);
 router.get("/tasks/:id", taskControllers.read);
 router.put("/tasks/:id", taskControllers.edit);
@@ -80,8 +92,31 @@ router.get("/comments/by-quote/:quoteId", commentControllers.findByQuote);
 router.put("/comment/:id", commentControllers.edit);
 router.post("/comment", commentControllers.add);
 router.delete("/comment/:id", commentControllers.destroy);
+
+
+// Route pour obtenir toutes les notifications
+router.get('/notifications', notificationControllers.browse);
+
+// Route pour obtenir une notification spécifique par id
+router.get('/notifications/:id', notificationControllers.read);
+
+// Route pour créer une nouvelle notification
+router.post('/notifications', notificationControllers.add);
+
+// Route pour marquer une notification comme lue
+router.put('/notifications/:id/read', notificationControllers.edit);
+
+// Route pour supprimer une notification
+router.delete('/notifications/:id', notificationControllers.destroy);
+
+// Route pour obtenir toutes les notifications d'un utilisateur spécifique
+router.get('/notifications/user/:userId', notificationControllers.findByUserId);
+
+
+module.exports = router;
+
  
- // authentication wall : verifyToken is activated for each route after this line
+//  authentication wall : verifyToken is activated for each route after this line
 //  router.use(verifyToken); 
 
 module.exports = router;
