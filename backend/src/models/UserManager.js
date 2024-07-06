@@ -24,7 +24,7 @@ class UserManager extends AbstractManager {
     return this.database.query(
       `UPDATE ${this.table} SET firstName = ?, lastName = ?, email = ? WHERE id = ?`,
       [user.firstName, user.lastName, user.email, user.id]
-    ).then(([result]) => result); // Renvoi du bon résultat
+    ).then(([result]) => result); // return a good result
   }
 
   
@@ -36,14 +36,17 @@ class UserManager extends AbstractManager {
     );
   }
 
+  // Method to modify the user's password in the database
    modifyPassword(id, hashPassword){
      return this.database.query(
        `UPDATE ${this.table} SET password = ? WHERE id = ?`,
-       [hashPassword, id]
+       [hashPassword, id] // Parameters to replace the placeholders in the query
      );
    }
 
+   // Method to find a user by their ID
    findById(id) {
+    // Execute an SQL query to select all fields from the table for the user with the specified ID
     return this.database.query(
       `SELECT * FROM ${this.table} WHERE id = ?`,
       [id]

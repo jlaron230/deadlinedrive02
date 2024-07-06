@@ -1,5 +1,5 @@
 
-// Composant fonctionnel réutilisable pour une zone de texte dans un formulaire de contact
+// Reusable functional component for a textarea in a contact form
 const ContactTextArea = ({ rows, name, placeholder, value, onChange, onBlur }) => {
     return (
       <div className="mb-4">

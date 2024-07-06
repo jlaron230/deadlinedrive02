@@ -61,7 +61,7 @@ function NotificationsComponent({ isOpen, onClose }) {
         <AnimatePresence>
             {isOpen && (
                 <motion.div
-                    className="fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center"
+                    className="fixed  z-10 inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}

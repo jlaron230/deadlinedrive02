@@ -4,13 +4,23 @@ import {
   XMarkIcon,
   PencilIcon,
   TrashIcon,
+  HeartIcon,
 } from "@heroicons/react/24/solid";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
+import QuotesFavoris from "@components/Favorites/QuotesFavoris";
 
-function CommentSection({ quote, category, onClose }) {
-  // State to store the list of comments for the current quote.
+function CommentSection({
+  quote,
+  category,
+  onClose,
+  editing,
+  setEditing,
+  fav,
+}) {
+  // State variables for managing comments, user data, and new comment inputs
   const [comments, setComments] = useState([]);
   // State to store user data for reference in comments display.
   const [users, setUsers] = useState([]);
@@ -24,6 +34,7 @@ function CommentSection({ quote, category, onClose }) {
   const [userId, setUserID] = useState(localStorage.getItem("id"));
   // Ref to manage clicks outside the modal to close it.
   const modalRef = useRef(null);
+  const [favIcon, setFavIcon] = useState(false);
 
   // Effect to fetch comments when the component mounts or when quote changes.
   useEffect(() => {
@@ -35,12 +46,17 @@ function CommentSection({ quote, category, onClose }) {
       .catch(error => console.error("Error loading comments:", error));
   }, [quote.id, comments]);  // Dependency array includes comments to update on new comment addition.
 
-  // Effect to fetch user data once when the component mounts.
-  useEffect(() => {
-    axios.get(`${import.meta.env.VITE_BACKEND_URL}/users`)
-      .then(response => setUsers(response.data))
-      .catch(error => console.error("Error loading users:", error));
-  }, []);
+    // Effect to fetch user data once when the component mounts.
+    useEffect(() => {
+      axios.get(`${import.meta.env.VITE_BACKEND_URL}/users`)
+        .then(response => setUsers(response.data))
+        .catch(error => console.error("Error loading users:", error));
+    }, []);
+
+  // Function to toggle favorite icon state
+  const toggleFavorite = () => {
+    setFavIcon((prev) => !prev);
+  };
 
   // Adds a new comment to the backend and updates local state.
   const handleAddComment = () => {
@@ -166,6 +182,14 @@ return (
         <button className="rounded bg-custom-main-orange w-36 text-white font-normal cursor-pointer">
           Partager
         </button>
+        <div>
+          <QuotesFavoris
+            quote={quote}
+            favIcon={favIcon}
+            toggleFavorite={toggleFavorite}
+            fav={fav}
+          />
+        </div>
       </footer>
       <div className="w-full mt-4">
         {comments.map((comment, index) => (

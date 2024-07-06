@@ -1,10 +1,12 @@
 import React from "react";
+//import formik for form
 import { useFormik } from "formik";
+//import yup schema
 import * as Yup from "yup";
 import ContactTextArea from "@components/Contact/ContactTextArea";
 import ContactInputBox from "@components/Contact/ContactInputBox";
 
-// Schéma de validation
+// Initial form values
 const initialValues = {
   firstName: "",
   lastName: "",
@@ -13,23 +15,27 @@ const initialValues = {
   terms: false,
 };
 
-const validationSchema = Yup.object({
+// Validation schema using Yup
+const validationSchema = Yup.object({ // First name, lastName, email, message and terms is required
   firstName: Yup.string().required("Le prénom est obligatoire"),
   lastName: Yup.string().required("Le nom est obligatoire"),
-  email: Yup.string().email("Email invalide").required("L'email est obligatoire"),
+  email: Yup.string()
+    .email("Email invalide")
+    .required("L'email est obligatoire"),
   message: Yup.string().required("Le message est obligatoire"),
   terms: Yup.boolean().oneOf([true], "Vous devez accepter les conditions"),
 });
 
+// Simulated registration function
 const register = async (values) => {
-  // Simulate asynchronous registration function
   // Replace with your own registration logic
   return new Promise((resolve, reject) => {
     setTimeout(() => {
+
       if (values.email === "error@example.com") {
-        reject({ Error: { email: "Cet email est déjà pris" } });
+        reject({ Error: { email: "Cet email est déjà pris" } }); // Simulate email already taken error
       } else {
-        resolve();
+        resolve(); // Simulate successful registration
       }
     }, 1000);
   });
@@ -39,21 +45,23 @@ const Formik = () => {
   const formik = useFormik({
     initialValues,
     validationSchema,
+
     onSubmit: async (values, { setSubmitting, resetForm, setFieldError }) => {
       try {
         // Call registration function with form values
         await register(values);
         resetForm(); // Reset form after successful submission
-        alert("Le message s'est bien envoyé"); // Show success message
+        alert("Le message s'est bien envoyé");
       } catch (error) {
         if (error.Error) {
+
           // Handle specific form errors
           const errors = error.Error;
           for (let key in errors) {
-            setFieldError(key, errors[key]); // Display individual field errors
+            setFieldError(key, errors[key]);
           }
         } else {
-          alert("Une erreur s'est produite. Veuillez réessayer."); // Show general error message
+          alert("Une erreur s'est produite. Veuillez réessayer."); 
         }
       }
       setSubmitting(false); // Disable form submission state
@@ -63,9 +71,12 @@ const Formik = () => {
   return (
     <form onSubmit={formik.handleSubmit}>
       {/* First name input field */}
-      {formik.touched.firstName && formik.errors.firstName && (
-        <small className="error text-red-800 font-semibold">{formik.errors.firstName}</small>
-      )}
+      {formik.submitForm.firstName ||
+        (!formik.isValid && formik.errors.firstName && (
+          <small className="error text-red-800 font-semibold">
+            {formik.errors.firstName}
+          </small>
+        ))}
       <ContactInputBox
         type="text"
         name="firstName"
@@ -76,9 +87,12 @@ const Formik = () => {
       />
 
       {/* Last name input field */}
-      {formik.touched.lastName && formik.errors.lastName && (
-        <small className="error text-red-800 font-semibold">{formik.errors.lastName}</small>
-      )}
+      {formik.submitForm.lastName ||
+        (!formik.isValid && formik.errors.lastName && (
+          <small className="error text-red-800 font-semibold">
+            {formik.errors.lastName}
+          </small>
+        ))}
       <ContactInputBox
         type="text"
         name="lastName"
@@ -89,9 +103,12 @@ const Formik = () => {
       />
 
       {/* Email input field */}
-      {formik.touched.email && formik.errors.email && (
-        <small className="error text-red-800 font-semibold">{formik.errors.email}</small>
-      )}
+      {formik.submitForm.email ||
+        (!formik.isValid && formik.errors.email && (
+          <small className="error text-red-800 font-semibold">
+            {formik.errors.email}
+          </small>
+        ))}
       <ContactInputBox
         type="email"
         name="email"
@@ -102,9 +119,12 @@ const Formik = () => {
       />
 
       {/* Message textarea field */}
-      {formik.touched.message && formik.errors.message && (
-        <small className="error text-red-800 font-semibold">{formik.errors.message}</small>
-      )}
+      {formik.submitForm.message ||
+        (!formik.isValid && formik.errors.message && (
+          <small className="error text-red-800 font-semibold">
+            {formik.errors.message}
+          </small>
+        ))}
       <ContactTextArea
         rows="6"
         name="message"
@@ -127,17 +147,23 @@ const Formik = () => {
         />
         <label
           htmlFor="terms"
-          className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+          className="text-red ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
         >
           J'accepte les{" "}
-          <a href="#" className="text-blue-600 dark:text-blue-500 hover:underline">
+          <a
+            href="/privacy-policy"
+            className="text-blue-600 dark:text-blue-500 hover:underline"
+          >
             termes et conditions
           </a>
           .
         </label>
-        {formik.touched.terms && formik.errors.terms && (
-          <small className="error text-red ml-2">{formik.errors.terms}</small>
-        )}
+        {formik.submitForm.terms ||
+          (!formik.isValid && formik.errors.terms && (
+            <small className="error text-red-600 ml-2">
+              {formik.errors.terms}
+            </small>
+          ))}
       </div>
 
       {/* Submit button */}

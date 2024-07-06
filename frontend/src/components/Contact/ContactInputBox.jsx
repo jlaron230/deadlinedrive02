@@ -1,4 +1,4 @@
-// Composant fonctionnel réutilisable pour un champ de saisie dans un formulaire de contact
+// Reusable functional component for an input field in a contact form
 const ContactInputBox = ({ type, name, placeholder, value, onChange, onBlur }) => {
     return (
       <div className="mb-9">

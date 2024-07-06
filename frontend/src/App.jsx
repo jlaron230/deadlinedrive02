@@ -38,8 +38,7 @@ function App() {
     //Ajouter vos composants dans le router pour la réutilisation de vos props dans chaque pages.
     value={{
       UserAccountProps
-         }}
-   >
+         }}>
     
     <Router>
       <NavBar />

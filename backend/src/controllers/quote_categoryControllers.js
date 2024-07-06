@@ -21,11 +21,11 @@ const read = (req, res) => {
       if (rows[0] == null) {
         res.sendStatus(404); // Sends a 404 response if the quote_category is not found
       } else {
-        res.send(rows[0]); // Sends the found quote_category in response
+        res.send(rows[0]); 
       }
     })
     .catch((err) => {
-      console.error(err); // Logs the error to the console
+      console.error(err); 
       res.sendStatus(500); // Sends a server error response
     });
 };
@@ -33,10 +33,10 @@ const read = (req, res) => {
 // Function to update an existing quote_category
 const edit = async (req, res) => {
   const quote_category = req.body;
-  const id_quote = parseInt(req.params.id_quote, 10); // Récupérez l'id_quote depuis les paramètres
-  const id_category = parseInt(req.params.id_category, 10); // Récupérez l'id_category depuis les paramètres
+  const id_quote = parseInt(req.params.id_quote, 10); // get id_quote from settings
+  const id_category = parseInt(req.params.id_category, 10); // get id_category from settings
 
-  // Validez et mettez à jour les données en utilisant id_quote et id_category
+  // Validation and update the data in used id_quote and id_category
   try {
     await models.quote_category.update({ id_quote, id_category, ...quote_category });
     res.sendStatus(204);
@@ -51,7 +51,6 @@ const edit = async (req, res) => {
 const add = async (req, res) => {
   const quote_category = req.body;
 
-  // Assurez-vous que vous avez les bonnes valeurs pour id_quote et id_category
   const id_quote = quote_category.id_quote;
   const id_category = quote_category.id_category;
 
@@ -71,21 +70,21 @@ const destroy = (req, res) => {
     .delete(req.params.id)
     .then(([result]) => {
       if (result.affectedRows === 0) {
-        res.sendStatus(404); // Sends a 404 response if the quote_category to be deleted is not found
+        res.sendStatus(404); 
       } else {
-        res.sendStatus(204); // Sends a 204 response to indicate the deletion was successful
+        res.sendStatus(204);
       }
     })
     .catch((err) => {
-      console.error(err); // Logs the error to the console
-      res.sendStatus(500); // Sends a server error response
+      console.error(err); 
+      res.sendStatus(500); 
     });
 };
 
 module.exports = {
-  browse,  // Exports the browse function
-  read,    // Exports the read function
-  edit,    // Exports the edit function
-  add,     // Exports the add function
-  destroy, // Exports the destroy function
+  browse,  
+  read,    
+  edit,   
+  add,     
+  destroy, 
 };
