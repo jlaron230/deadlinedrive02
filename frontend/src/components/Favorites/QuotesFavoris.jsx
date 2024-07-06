@@ -15,10 +15,12 @@ import { useNavigate } from "react-router-dom";
 function QuotesFavoris({ quote, category, onClose, editing, setEditing, fav, outline, fill }) {
     const [favIcon, setFavIcon] = useState(false);
     const [maxQuote, setMaxQuote] = useState(false);
+    const [dataQuote, setDataQuote] = useState([]);
 
   useEffect(() => {
     checkFavorite(); // Check if the current quote is marked as favorite when the component mounts or when quote.id changes
-  }, [quote.id]);
+
+  }, [dataQuote]);
 
   const checkFavorite = async () => {
     try {
@@ -43,6 +45,8 @@ function QuotesFavoris({ quote, category, onClose, editing, setEditing, fav, out
       );
 
       const favorites = response.data;
+      setDataQuote(favorites)
+
       // Check if favorites is an array
       if (Array.isArray(favorites)) {
         // Check if the current quote ID exists in the favorites array
@@ -89,7 +93,7 @@ function QuotesFavoris({ quote, category, onClose, editing, setEditing, fav, out
         // Toggle the favorite icon state
         setFavIcon((prev) => !prev);
         // Check if the maximum number of quotes (10) is not exceeded
-        if (quote.id <= 10) {
+        if (dataQuote.length < 10 ){
           setMaxQuote(false);
           // Make a POST request to add the quote as a favorite
           await axios.post(
@@ -117,7 +121,7 @@ function QuotesFavoris({ quote, category, onClose, editing, setEditing, fav, out
 
   return (
     <div>
-        {!maxQuote ? null : <ModalFavorites />}
+        {maxQuote && <ModalFavorites />}
       {favIcon ? (
         <button onClick={fill} className="flex" href="#">
           <HeartIcon

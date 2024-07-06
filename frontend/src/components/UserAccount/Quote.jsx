@@ -1,111 +1,185 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { motion, AnimatePresence } from "framer-motion"; // Importing motion and AnimatePresence from Framer Motion
+import { motion, AnimatePresence } from "framer-motion";
 import {
   ChevronUpIcon,
   ChevronDownIcon,
   HeartIcon as HeartIconSolid,
   HeartIcon as HeartIconOutline,
-} from "@heroicons/react/24/solid"; // Importing icons from HeroIcons
-import CommentSection from "@components/CommentSection/CommentSection"; // Importing CommentSection component
+} from "@heroicons/react/24/solid";
+import CommentSection from "@components/CommentSection/CommentSection";
 
 function Quote() {
-  // State variables for managing quote data and UI states
   const [isEditing, setIsEditing] = useState(true);
-  const [quote, setQuote] = useState([]); // State for storing fetched quotes
-  console.log(quote);
+  const [quotes, setQuotes] = useState([]); // State for storing fetched quotes
   const [currentQuotes, setCurrentQuotes] = useState([]); // State for storing filtered quotes
   const [selectedCategory, setSelectedCategory] = useState(null); // State for selected category filter
   const [isModalOpen, setIsModalOpen] = useState(false); // State for modal open/close
   const [selectedQuote, setSelectedQuote] = useState(null); // State for selected quote in modal
   const [fav, setFav] = useState(false); // State for managing favorite toggle
+  const [categoriesMap, setCategoriesMap] = useState({}); // State for storing categories
 
-  // Function to fetch quotes from API
+  // Fetch quotes from API
   const fetchData = async () => {
     try {
-      const token = localStorage.getItem("token"); // Fetching token from localStorage
+      const token = localStorage.getItem("token");
       if (!token) {
         console.error("No token found");
-        navigate("/login"); // Redirecting user to login page if token is missing
-        return;
-      }
-
-      const userId = localStorage.getItem("id"); // Fetching user ID from localStorage
-      if (!userId) {
-        console.error("No user ID found"); 
         navigate("/login");
         return;
       }
 
-      // Fetching favorite quotes for the logged-in user
+      const userId = localStorage.getItem("id");
+      if (!userId) {
+        console.error("No user ID found");
+        navigate("/login");
+        return;
+      }
+
       const response = await axios.get(
         `${import.meta.env.VITE_BACKEND_URL}/favorites/${userId}`,
         {
           headers: {
-            Authorization: `Bearer ${token}`, // Passing token in request headers
+            Authorization: `Bearer ${token}`,
           },
         }
       );
 
-      setQuote(response.data);
+      setQuotes(response.data);
     } catch (error) {
-      console.error(error);
+      console.error("Error fetching quotes:", error);
     }
   };
 
   useEffect(() => {
-      fetchData(); // Fetching data on component mount
-
+    fetchData();
   }, []);
 
-  // Filtering quotes based on selected category
-  useEffect(() => {
-    // Filtering quotes based on selected category (if any)
-    const filteredQuotes = quote.filter((q) =>
-      selectedCategory ? q.category === selectedCategory : true
-    );
-    setCurrentQuotes(filteredQuotes);
-  }, [quote, selectedCategory]);
+  // Fetch categories for a quote
+  const fetchCategories = async (quoteId) => {
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_BACKEND_URL}/categories/${quoteId}`
+      );
 
-  // Function to handle click on a quote and open modal
-  const handleQuoteClick = (quote) => {
-    setSelectedQuote(quote);
-    setIsModalOpen(true); 
+      setCategoriesMap((prevCategoriesMap) => ({
+        ...prevCategoriesMap,
+        [quoteId]: response.data,
+      }));
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+    }
   };
 
-  // Function to toggle favorite status of a quote
+  // Load categories for all quotes
+  useEffect(() => {
+    const loadCategoriesForAllQuotes = async () => {
+      try {
+        const promises = quotes.map((quote) => fetchCategories(quote.id));
+        await Promise.all(promises);
+      } catch (error) {
+        console.error("Error loading categories for all quotes:", error);
+      }
+    };
+
+    loadCategoriesForAllQuotes();
+  }, [quotes]);
+
+  // Toggle favorite for a quote
   const handleFavoriteToggle = async (quoteId) => {
     try {
-      // Making PUT request to update quote's favorite status
       const updatedQuote = await axios.put(
         `${import.meta.env.VITE_BACKEND_URL}/quotes/${quoteId}`
       );
-      setQuote((prevQuotes) =>
+
+      setQuotes((prevQuotes) =>
         prevQuotes.map((q) => (q.id === quoteId ? updatedQuote.data : q))
       );
     } catch (error) {
-      console.error(error);
+      console.error("Error toggling favorite:", error);
     }
   };
 
-  // Function for editing quotes
-  const edit = () => {
-    setIsEditing(isEditing);
+  // Handle click on a quote
+  const handleQuoteClick = (quote) => {
+    const quoteCategory = categoriesMap[quote.id]?.[0]?.name || "No Category"; // Fetch the category name or provide a default
+    setSelectedQuote({ ...quote, category: quoteCategory });
+    setIsModalOpen(true);
   };
+
+  // Filter quotes based on selected category
+  useEffect(() => {
+    const filteredQuotes = quotes.filter((q) =>
+      selectedCategory ? q.category === selectedCategory : true
+    );
+    setCurrentQuotes(filteredQuotes);
+  }, [quotes, selectedCategory]);
+
+  // Filtering quotes based on selected category (Favorites or All)
+  const filteredQuotes =
+    selectedCategory === "Favorites"
+      ? currentQuotes.filter((q) => q.isFavorite)
+      : currentQuotes;
 
   // Function for handling favorite toggle
   const favorisHandle = () => {
     setFav((prev) => !prev);
   };
 
-  // Filtering quotes based on selected category (Favorites or All)
-  const filteredQuotes = selectedCategory === "Favorites"? currentQuotes.filter((q) => q.isFavorite): currentQuotes;
+  const handleUpvote = async (quoteId) => {
+    console.log(`Upvoting quote ID: ${quoteId}`);
+    try {
+      const token = localStorage.getItem("token"); // Assuming you store the token in localStorage
+      const response = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/quotes/${quoteId}/upvote`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log("Upvote response:", response.data);
+      setQuotes((prevQuotes) =>
+        prevQuotes.map((q) =>
+          q.id === quoteId ? { ...q, vote: q.vote + 1 } : q
+        )
+      );
+      console.log("Upvote successful");
+    } catch (error) {
+      console.error("Failed to upvote", error);
+    }
+  };
+  
+  const handleDownvote = async (quoteId) => {
+    console.log(`Downvoting quote ID: ${quoteId}`);
+    try {
+      const token = localStorage.getItem("token"); // Assuming you store the token in localStorage
+      const response = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/quotes/${quoteId}/downvote`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log("Downvote response:", response.data);
+      setQuotes((prevQuotes) =>
+        prevQuotes.map((q) =>
+          q.id === quoteId ? { ...q, vote: q.vote - 1 } : q
+        )
+      );
+      console.log("Downvote successful");
+    } catch (error) {
+      console.error("Failed to downvote", error);
+    }
+  };
 
   return (
     <div>
       {!fav ? (
         <>
-          {/* Displaying favorite quotes */}
           <div className="flex flex-col max-w-7xl m-auto py-6">
             <AnimatePresence mode="wait">
               <motion.div
@@ -116,7 +190,6 @@ function Quote() {
                 transition={{ duration: 0.2 }}
                 className="flex flex-wrap flex-row gap-9 m-auto justify-center"
               >
-                {/* Mapping through filtered quotes */}
                 {filteredQuotes.map((quote) => (
                   <motion.article
                     key={quote.id}
@@ -125,29 +198,42 @@ function Quote() {
                     whileTap={{ scale: 0.9 }}
                     onClick={() => handleQuoteClick(quote)}
                   >
-                    <h2 className="text-xl font-bold">Quote #{quote.id}</h2>
-                    {/* Truncating quote text if longer than 89 characters */}
+                    <h2 className="text-xl font-bold">Citation n°{quote.id}</h2>
                     <p className="mt-1 pb-4">
                       {quote.text.length > 89
                         ? `${quote.text.substring(0, 88)} [...]`
                         : quote.text}
                     </p>
                     <hr className="w-3/4 border border-black" />
-                    <p className="mt-3 text-xl font-semibold">From</p>
+                    <p className="mt-3 text-xl font-semibold">Tirée de</p>
                     <p className="mt-2 pb-4">{quote.author}</p>
                     <hr className="w-3/4 border border-black" />
+                    <p className="mt-3 text-xl font-semibold">Catégorie</p>
+                    <div className="mb-6 mt-1 w-full text-xl text-custom-black">
+                      {categoriesMap[quote.id]?.map((category) => (
+                        <span key={category.id}>{category.name}</span>
+                      ))}
+                    </div>
                     <footer className="mt-4 text-lg font-semibold flex justify-between mt-auto">
-                      {/* Vote section with upvote and downvote icons */}
-                      <section className="flex border-2 border-dashed border-custom-main-orange rounded p-px px-4">
-                        <ChevronUpIcon className="w-6 hover:fill-green-500 cursor-pointer" />
-                        <p className="text-2xl px-1">{quote.vote}</p>
-                        <ChevronDownIcon className="w-6 hover:fill-red-500 cursor-pointer" />
-                      </section>
-                      {/* Share button */}
-                      <button className="rounded bg-custom-main-orange w-1/3 text-white font-normal cursor-copy">
-                        Share
+                    <section className="flex border-2 border-dashed border-custom-main-orange rounded p-px px-4"
+                  onClick={(e) => e.stopPropagation()}
+                  >
+                    <button className="p-1.5 w-full">
+                    <ChevronUpIcon
+                      className="w-6 hover:fill-green-500 cursor-pointer"
+                      onClick={(e) => { e.stopPropagation(); handleUpvote(quote.id); }}
+                    />
+                    </button>
+                    <p className="text-2xl px-1">{quote.vote}</p>
+                    <button className="w-full p-1.5">
+                    <ChevronDownIcon
+                      className="w-6 hover:fill-red-500 cursor-pointer"
+                      onClick={(e) => { e.stopPropagation(); handleDownvote(quote.id); }}/>
                       </button>
-                      {/* Favorite button */}
+                  </section>
+                      <button className="rounded bg-custom-main-orange w-1/3 text-white font-normal cursor-copy">
+                        Partager
+                      </button>
                       <button onClick={() => handleFavoriteToggle(quote.id)}>
                         {quote.isFavorite ? (
                           <HeartIconSolid className="w-6 text-red-700" />
@@ -162,7 +248,7 @@ function Quote() {
             </AnimatePresence>
           </div>
           <AnimatePresence>
-            {isModalOpen && (
+            {isModalOpen && selectedQuote && (
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -170,8 +256,10 @@ function Quote() {
               >
                 <CommentSection
                   quote={selectedQuote}
+                  category={selectedQuote.category} // Pass the category here
                   onClose={() => setIsModalOpen(false)}
-                  editing={edit}
+                  editing={isEditing}
+                  setEditing={setIsEditing}
                   fav={favorisHandle}
                 />
               </motion.div>
@@ -179,7 +267,6 @@ function Quote() {
           </AnimatePresence>
         </>
       ) : (
-        // Displaying Quote if not in favorites view
         <Quote />
       )}
     </div>

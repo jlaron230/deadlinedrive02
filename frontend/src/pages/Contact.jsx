@@ -59,7 +59,7 @@ function Contact() {
   // JSX structure for the Contact component
   return (
     <>
-      <section className="relative z-10 overflow-hidden py-20 dark:bg-dark lg:py-[120px] text-black p-12 max-lg:flex max-lg:justify-center">
+      <section className="relative overflow-hidden py-20 dark:bg-dark lg:py-[120px] text-black p-12 max-lg:flex max-lg:justify-center">
         <div className="container">
           <div className="-mx-4 flex flex-wrap lg:justify-center">
             {/* Left Column with Contact Information */}
