@@ -1,0 +1,65 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+:root{
+--theme1: #C97D50;
+}
+
+input:disabled {
+  background-color: #f0f0f0; /* Light grey background */
+  color: black; /* Grey text */
+  cursor: not-allowed; /* Cursor indicating the field is disabled */
+  opacity: 0.6; /* Slightly transparent */
+}
+
+.disabled-input {
+  background-color: #f0f0f0;
+  color: black;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+@layer base {
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Laila', sans-serif;
+    font-weight: 700; /* Correspond à la définition de @font-face */
+    font-style: normal;
+    color: var(--theme1);
+  }
+  .btn{
+    background-color: var(--theme1)!important;
+    color: white!important;
+  }
+
+  .lien{
+    background-color: var(--theme1)!important;
+    color: white;
+  }
+
+  .btn:hover{
+    background-color: black!important;
+  }
+    html{
+      font-family: "Imprima", sans-serif;
+    }
+    
+@layer base {
+    
+    .bg-404{
+        background-image: url("../src/assets/Imagehommequimarche-ezgif.com-png-to-webp-converter.webp");
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+    }
+
+    .img-contact {
+      background-image: url("../src/assets/still-2607441_1920.webp");
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
+    }
+  }
+}

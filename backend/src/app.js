@@ -2,6 +2,8 @@
 
 const fs = require("node:fs");
 const path = require("node:path");
+const bodyParser = require("body-parser");
+const { scheduleDailyNotifications } = require('./services/cronJob')
 
 // create express app
 
@@ -9,15 +11,20 @@ const express = require("express");
 
 const app = express();
 
+// Middleware
+app.use(bodyParser.json());
 // use some application-level middlewares
 
 app.use(express.json());
+
+// Start the scheduled jobs
+scheduleDailyNotifications();
 
 const cors = require("cors");
 
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL ?? "http://localhost:3000",
+    origin: process.env.FRONTEND_URL ?? "http://localhost:5173",
     optionsSuccessStatus: 200,
   })
 );
@@ -43,6 +50,8 @@ const reactIndexFile = path.join(
   "index.html"
 );
 
+
+
 if (fs.existsSync(reactIndexFile)) {
   // serve REACT resources
 
@@ -54,6 +63,7 @@ if (fs.existsSync(reactIndexFile)) {
     res.sendFile(reactIndexFile);
   });
 }
+
 
 // ready to export
 
