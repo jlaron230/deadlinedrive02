@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import { motion } from "framer-motion";
+import { AnimatePresence,motion } from "framer-motion";
 import { jwtDecode } from "jwt-decode";
+import { XMarkIcon, ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/24/solid";
 
 export default function QuoteManage() {
   const [myQuotes, setMyQuotes] = useState([]);
@@ -11,6 +12,8 @@ export default function QuoteManage() {
   const [updatedText, setUpdatedText] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedQuote, setSelectedQuote] = useState(null);
 
   const token = localStorage.getItem("token");
 
@@ -118,6 +121,24 @@ export default function QuoteManage() {
     }
   };
 
+  const handleOpenModal = (quote) => {
+    setSelectedQuote(quote);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedQuote(null);
+  };
+
+  const handleClickOutside = (e) => {
+    if (modalRef.current && !modalRef.current.contains(e.target)) {
+      handleCloseModal();
+    }
+  };
+
+  const modalRef = useRef(null);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 50 }}
@@ -159,6 +180,7 @@ export default function QuoteManage() {
               className="mb-4 p-4 border-2 rounded-md border-custom-main-orange shadow w-full sm:w-1/2 md:w-96 lg:w-96 xl:w-96 flex flex-col hover:bg-slate-50"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.9 }}
+              onClick={() => handleOpenModal(quote)}
             >
               <h2 className="text-xl font-bold">Citation n°{quote.id}</h2>
               <p className="mt-1 pb-4">
@@ -183,7 +205,7 @@ export default function QuoteManage() {
                   <p className="text-2xl px-1">{quote.vote}</p>
                 </section>
                 <button
-                  className="rounded bg-purple-400 hover:bg-african-violet w-1/3 text-white font-normal cursor-pointer"
+                  className="rounded bg-blue-500 hover:bg-blue-400 w-1/3 text-white font-normal cursor-pointer"
                   onClick={() => handleEditQuote(quote)}
                 >
                   Modifier
@@ -226,6 +248,52 @@ export default function QuoteManage() {
           </div>
         </div>
       )}
+      <AnimatePresence>
+        {isModalOpen && selectedQuote && (
+          <motion.div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-gray-500/50"
+            onClick={handleClickOutside}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <div
+              ref={modalRef}
+              className="bg-white rounded-lg max-w-5xl w-full p-6 border border-2 border-custom-main-orange pb-12 overflow-auto"
+              style={{ maxHeight: '85vh' }}
+              onClick={(e) => e.stopPropagation()} // Prevents propagation of click events to the modal's backdrop.
+            >
+              <div className="flex justify-end mb-4">
+                <button onClick={handleCloseModal} className="text-white">
+                  <XMarkIcon className="bg-red-500 w-6 h-6" />
+                </button>
+              </div>
+              <div className="flex flex-col items-center justify-center px-10">
+                <div className="text-butterscotch text-6xl leading-none">
+                  &ldquo;
+                </div>
+                <p className="mb-4 w-full text-custom-black text-center text-3xl italic bg-gray-100 py-5 px-10 rounded">
+                  {selectedQuote.text}
+                </p>
+                <div className="text-butterscotch text-end text-6xl leading-none">
+                  &rdquo;
+                </div>
+                <p className="mb-6 w-full font-semibold text-custom-black text-center text-xl">
+                  &ndash; {selectedQuote.author}, {getCategoryName(selectedQuote.id)}
+                </p>
+              </div>
+              <footer className="mt-4 text-lg font-semibold flex w-full justify-center gap-2">
+                <section className="flex items-center border-2 border-dashed border-custom-main-orange rounded p-px px-4">
+                  <p className="text-2xl px-5">{selectedQuote.vote}</p>
+                </section>
+                <button className="rounded bg-custom-main-orange w-36 text-white font-normal cursor-pointer">
+                  Partager
+                </button>
+              </footer>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 }
