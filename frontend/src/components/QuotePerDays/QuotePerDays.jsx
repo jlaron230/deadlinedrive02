@@ -73,7 +73,8 @@ return (
   <div className="p-8">
     {isLoggedIn ? (
       // If the user is logged in, display a random quote.
-      <div className="p-4 flex flex-col items-center bg-custom-main-orange m-3 rounded-lg">
+      <div className=" flex flex-col items-center ">
+        <div className="p-4 bg-custom-main-orange m-3 rounded-lg">
         <h3 className=" text-white  flex flex-col items-center font-semibold px-2 py-3">Citations aléatoires</h3>
         {randomQuote ? (
           <section>
@@ -85,9 +86,12 @@ return (
           // If the random quote is not loaded yet, show a loading message.
           <p>Loading...</p>
         )}
-        <button onClick={handleNewRandomQuote} className="hover:text-black mt-12 inline-block rounded-lg border border-white px-4 py-3 text-center text-base font-semibold text-white transition hover:bg-white hover:text-primary">
+        </div>
+        <div>
+        <button onClick={handleNewRandomQuote} className=" mt-12 inline-block rounded-lg border   px-4 py-3 text-center text-base font-semibold transition  text-ivory bg-butterscotch  hover:bg-caramel hover:text-primary">
           Avoir une autre citation
         </button>
+        </div>
       </div>
     ) : (
       // If the user is not logged in, display a button to log in or register.
