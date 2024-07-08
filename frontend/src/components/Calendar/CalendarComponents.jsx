@@ -7,6 +7,7 @@ import interactionPlugin from "@fullcalendar/interaction";
 import { createEventId } from "./event-utils"; // Importing utility function for event IDs
 import frLocale from "@fullcalendar/core/locales/fr"; // French locale for FullCalendar
 import "./CalendarStyle.css"; // CSS file for calendar styling
+import ScrollToTopButton from '../ScrollToTopButton/ScrollToTopButton'; // Import the ScrollToTopButton component
 
 export default function CalendarComponents({ tasks, setTasks, fetchTasks }) {
   // Simulate user authentication
@@ -431,6 +432,7 @@ export default function CalendarComponents({ tasks, setTasks, fetchTasks }) {
           </div>
         )}
       </div>
+      < ScrollToTopButton />
     </div>
   );
 }
