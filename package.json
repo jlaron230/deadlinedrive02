@@ -22,14 +22,13 @@
     "concurrently": "^7.6.0",
     "cross-env": "^7.0.3",
     "husky": "^8.0.3",
-    "postcss": "^8.4.38",
-    "tailwindcss": "^3.4.4"
+    "postcss": "^8.4.39"
   },
   "dependencies": {
-    "@heroicons/react": "^2.1.4",
     "@fullcalendar/core": "^6.1.14",
     "@fullcalendar/daygrid": "^6.1.14",
     "@fullcalendar/react": "^6.1.14",
+    "@heroicons/react": "^2.1.4",
     "@testing-library/react": "^16.0.0",
     "animejs": "^3.2.2",
     "antd": "^5.18.1",
