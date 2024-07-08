@@ -19,7 +19,7 @@ function Quote() {
   const [fav, setFav] = useState(false); // State for managing favorite toggle
   const [categoriesMap, setCategoriesMap] = useState({}); // State for storing categories
 
-  // Fetch quotes from API
+  // Function to fetch quotes from the API
   const fetchData = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -35,7 +35,7 @@ function Quote() {
         navigate("/login");
         return;
       }
-
+  // Make a GET request to fetch favorite quotes for the user
       const response = await axios.get(
         `${import.meta.env.VITE_BACKEND_URL}/favorites/${userId}`,
         {
@@ -126,10 +126,12 @@ function Quote() {
     setFav((prev) => !prev);
   };
 
+  // Function to handle upvoting a quote
   const handleUpvote = async (quoteId) => {
     console.log(`Upvoting quote ID: ${quoteId}`);
     try {
-      const token = localStorage.getItem("token"); // Assuming you store the token in localStorage
+      const token = localStorage.getItem("token");
+      // Make a POST request to the server to upvote the quote
       const response = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/quotes/${quoteId}/upvote`,
         {},
@@ -151,10 +153,12 @@ function Quote() {
     }
   };
   
+  // Function to handle downvoting a quote
   const handleDownvote = async (quoteId) => {
     console.log(`Downvoting quote ID: ${quoteId}`);
     try {
-      const token = localStorage.getItem("token"); // Assuming you store the token in localStorage
+      const token = localStorage.getItem("token");
+       // Make a POST request to the server to downvote the quote
       const response = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/quotes/${quoteId}/downvote`,
         {},
@@ -165,6 +169,7 @@ function Quote() {
         }
       );
       console.log("Downvote response:", response.data);
+      // Update the quotes state with the new vote count
       setQuotes((prevQuotes) =>
         prevQuotes.map((q) =>
           q.id === quoteId ? { ...q, vote: q.vote - 1 } : q
@@ -178,8 +183,10 @@ function Quote() {
 
   return (
     <div>
+      {/* Render if not in favorite mode */}
       {!fav ? (
         <>
+        {/* Container for quotes */}
           <div className="flex flex-col max-w-7xl m-auto py-6">
             <AnimatePresence mode="wait">
               <motion.div
@@ -214,6 +221,7 @@ function Quote() {
                         <span key={category.id}>{category.name}</span>
                       ))}
                     </div>
+                    {/* Footer with voting and favorite options */}
                     <footer className="mt-4 text-lg font-semibold flex justify-between mt-auto">
                     <section className="flex border-2 border-dashed border-custom-main-orange rounded p-px px-4"
                   onClick={(e) => e.stopPropagation()}
@@ -234,6 +242,7 @@ function Quote() {
                       <button className="rounded bg-custom-main-orange w-1/3 text-white font-normal cursor-copy">
                         Partager
                       </button>
+                      {/* Favorite toggle button */}
                       <button onClick={() => handleFavoriteToggle(quote.id)}>
                         {quote.isFavorite ? (
                           <HeartIconSolid className="w-6 text-red-700" />
@@ -247,6 +256,7 @@ function Quote() {
               </motion.div>
             </AnimatePresence>
           </div>
+          {/* Modal for comment section */}
           <AnimatePresence>
             {isModalOpen && selectedQuote && (
               <motion.div

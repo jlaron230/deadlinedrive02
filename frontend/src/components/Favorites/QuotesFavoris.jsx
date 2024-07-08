@@ -1,26 +1,35 @@
 import { useState, useEffect } from "react";
 import {
-    ChevronUpIcon,
-    ChevronDownIcon,
-    XMarkIcon,
-    PencilIcon,
-    TrashIcon,
-    HeartIcon,
-  } from "@heroicons/react/24/solid";
-  import { HeartIcon as HeartIconOutline } from "@heroicons/react/24/outline";
-  import ModalFavorites from "@components/Favorites/ModalFavorites";
-  import axios from "axios";
+  ChevronUpIcon,
+  ChevronDownIcon,
+  XMarkIcon,
+  PencilIcon,
+  TrashIcon,
+  HeartIcon,
+} from "@heroicons/react/24/solid";
+import { HeartIcon as HeartIconOutline } from "@heroicons/react/24/outline";
+import ModalFavorites from "@components/Favorites/ModalFavorites";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-function QuotesFavoris({ quote, category, onClose, editing, setEditing, fav, outline, fill }) {
-    const [favIcon, setFavIcon] = useState(false);
-    const [maxQuote, setMaxQuote] = useState(false);
-    const [dataQuote, setDataQuote] = useState([]);
+function QuotesFavoris({
+  quote,
+  category,
+  onClose,
+  editing,
+  setEditing,
+  fav,
+  outline,
+  fill,
+}) {
+  const [favIcon, setFavIcon] = useState(false);
+  const [maxQuote, setMaxQuote] = useState(false);
+  const [dataQuote, setDataQuote] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     checkFavorite(); // Check if the current quote is marked as favorite when the component mounts or when quote.id changes
-
-  }, [dataQuote]);
+  }, []);
 
   const checkFavorite = async () => {
     try {
@@ -35,8 +44,7 @@ function QuotesFavoris({ quote, category, onClose, editing, setEditing, fav, out
 
       // Fetch user's favorites from the server
       const response = await axios.get(
-        // Remplacer par variable d'environnement
-        `http://localhost:5000/favorites/${userId}`,
+        `${import.meta.env.VITE_BACKEND_URL}/favorites/${userId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -45,7 +53,7 @@ function QuotesFavoris({ quote, category, onClose, editing, setEditing, fav, out
       );
 
       const favorites = response.data;
-      setDataQuote(favorites)
+      setDataQuote(favorites);
 
       // Check if favorites is an array
       if (Array.isArray(favorites)) {
@@ -76,9 +84,9 @@ function QuotesFavoris({ quote, category, onClose, editing, setEditing, fav, out
       }
 
       if (favIcon) {
-        setFavIcon((prev) => !prev);
+        setFavIcon(false);
         // Make a DELETE request to remove the favorite
-        await axios.delete(`http://localhost:5000/favorites/${quote.id}`, {
+        await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/favorites/${quote.id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -87,17 +95,16 @@ function QuotesFavoris({ quote, category, onClose, editing, setEditing, fav, out
             id_quote: quote.id,
           },
         });
-        console.log("suppression");
+        console.log("Favorite removed");
         fav((prev) => !prev);
       } else {
-        // Toggle the favorite icon state
-        setFavIcon((prev) => !prev);
         // Check if the maximum number of quotes (10) is not exceeded
-        if (dataQuote.length < 10 ){
+        if (dataQuote.length < 10) {
+          setFavIcon(true);
           setMaxQuote(false);
           // Make a POST request to add the quote as a favorite
           await axios.post(
-            `http://localhost:5000/favorites`,
+            `${import.meta.env.VITE_BACKEND_URL}/favorites`,
             {
               id_user: userId,
               id_quote: quote.id,
@@ -108,10 +115,11 @@ function QuotesFavoris({ quote, category, onClose, editing, setEditing, fav, out
               },
             }
           );
+          console.log("Favorite added");
         } else {
           // Set the max quote state to true if the limit is exceeded
           setMaxQuote(true);
-          null;
+          setFavIcon(false); // Ensure the heart icon returns to outline
         }
       }
     } catch (error) {
@@ -121,7 +129,7 @@ function QuotesFavoris({ quote, category, onClose, editing, setEditing, fav, out
 
   return (
     <div>
-        {maxQuote && <ModalFavorites />}
+      {maxQuote && <ModalFavorites />} {/* Display modal if max quote limit is reached */}
       {favIcon ? (
         <button onClick={fill} className="flex" href="#">
           <HeartIcon
