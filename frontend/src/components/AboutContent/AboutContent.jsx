@@ -108,7 +108,7 @@ const AboutContent = () => {
         </section>
         <section className="my-8 px-2 py-8">
           <h2 className="text-4xl text-caramel font-bold text-center mb-8">
-            Our Lovely Team
+            Notre Equipe
           </h2>
           <div className="flex justify-center items-center flex-wrap">
             {teamMembers.map((member, index) => (
