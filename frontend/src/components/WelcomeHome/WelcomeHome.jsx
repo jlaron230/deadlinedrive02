@@ -1,5 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
+import ScrollToTopButton from '../ScrollToTopButton/ScrollToTopButton'; // Import the ScrollToTopButton component
 
 
 const WelcomeHome = () => {
@@ -39,6 +40,7 @@ const WelcomeHome = () => {
       </article>
 
       
+      < ScrollToTopButton />
     </main>
   );
 };
