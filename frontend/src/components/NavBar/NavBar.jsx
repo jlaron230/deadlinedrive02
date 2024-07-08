@@ -3,29 +3,22 @@ import { Link } from 'react-router-dom';
 import { Bars3Icon, XMarkIcon, BellIcon, EnvelopeIcon, UserIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
 import logo from '../../assets/Logo-Deadlines.svg';
 import { motion } from 'framer-motion';
-import Notifications from '../Notifications/Notifications.jsx'; // Ensure correct import path for the Notifications component
+import Notifications from '../Notifications/Notifications.jsx'; // Ensure the import path is correct for the Notifications component
 
 const NavBar = () => {
-  // State to control the visibility of the mobile menu
   const [isOpen, setIsOpen] = useState(false);
-  // State to control the visibility of the Notifications modal
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-
-  // State for tracking the user ID from local storage
   const [userId, setUserID] = useState(localStorage.getItem("id"));
 
-  // Function to toggle the mobile menu open/close
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
 
-  // Function to toggle the Notifications modal open/close
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
   };
 
-  // Variants for animating links on hover using Framer Motion
   const handleMouseEnter = () => {
     setIsDropdownOpen(true);
   };
@@ -41,7 +34,6 @@ const NavBar = () => {
     }
   };
 
-  // Variants for animating the mobile menu sliding in and out
   const menuVariants = {
     opened: {
       x: 0,
@@ -113,18 +105,24 @@ const NavBar = () => {
           </div>
           <div className="flex items-center space-x-6">
             {[
-              { icon: <EnvelopeIcon className="h-7 w-7" />, href: '/contact' },
-              { icon: <BellIcon className="h-7 w-7" />, href: '#', onClick: toggleModal },
-              { icon: <UserIcon className="h-7 w-7" />, href: '/user-account' }
+              { icon: <EnvelopeIcon className="h-7 w-7" />, to: '/contact' },
+              { icon: <BellIcon className="h-7 w-7" />, onClick: toggleModal },
+              { icon: <UserIcon className="h-7 w-7" />, to: '/user-account' }
             ].map((item, index) => (
-              <motion.button whileHover="hover" onClick={() => {
-                if (item.onClick) item.onClick();
-                else window.location.href = item.href;
-              }} className="text-custom-black hover:text-gray-200" key={index}>
-                <motion.div variants={linkVariants}>
-                  {item.icon}
-                </motion.div>
-              </motion.button>
+              // Use Link for navigation, and a button for modal toggling
+              item.to ? (
+                <Link to={item.to} className="text-custom-black hover:text-gray-200" key={index}>
+                  <motion.div variants={linkVariants}>
+                    {item.icon}
+                  </motion.div>
+                </Link>
+              ) : (
+                <motion.button whileHover="hover" onClick={item.onClick} className="text-custom-black hover:text-gray-200" key={index}>
+                  <motion.div variants={linkVariants}>
+                    {item.icon}
+                  </motion.div>
+                </motion.button>
+              )
             ))}
           </div>
           <div className="-mr-2 flex md:hidden">
