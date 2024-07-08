@@ -3,6 +3,7 @@ import ChooseAuthor from "@components/ChooseAuthor/ChooseAuthor";
 import InspirationalImage from "../assets/prateek-katyal-8Aq6t-Khe5k-unsplash.jpg";
 import YoursQuote from "../components/YoursQuotes/YoursQuotes";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
@@ -12,6 +13,7 @@ export default function CustomizeQuotes() {
   const [quotes, setQuotes] = useState([]);
   const [newQuote, setNewQuote] = useState({ author:"", text: "", id_category:"", id_user: "" });
   const [customAuthor, setCustomAuthor] = useState("");
+  const [isCustomAuthorDisabled, setIsCustomAuthorDisabled] = useState(true);
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -50,6 +52,12 @@ export default function CustomizeQuotes() {
   }, []);
 
   const addQuote = async (newQuote, token) => {
+    if (!newQuote.author || !newQuote.text || !newQuote.id_category) {
+      setErrorMessage("Tous les champs sont obligatoires.");
+      setTimeout(() => setErrorMessage(""), 5000);
+      return;
+    }
+
     try {
       const author = customAuthor || newQuote.author;
       const userId = getUserFromToken(token); // Obtenir l'ID utilisateur à partir du token
@@ -70,9 +78,9 @@ export default function CustomizeQuotes() {
 
       setQuotes([...quotes, res.data]);
       setSuccessMessage(
-        "Votre citation a été postée avec succès, retrouvez-là dans vos citations postées"
+        <>Votre citation a été postée avec succès, retrouvez-là dans vos <Link to="/manage-my-quotes" className="text-blue-500 hover:text-blue-700 underline">citations postées.</Link></>
       );
-      setTimeout(() => setSuccessMessage(""), 5000);
+      setTimeout(() => setSuccessMessage(""), 6000);
     } catch (error) {
       setErrorMessage("Erreur lors de la publication de votre citation");
       setTimeout(() => setErrorMessage(""), 5000);
@@ -89,8 +97,8 @@ export default function CustomizeQuotes() {
       className="flex flex-col max-w-7xl m-auto"
     >
       <h1 className="text-3xl py-6 font-semibold flex justify-center">Créer une citation</h1>
-      <div className="flex flex-row gap-20 px-2">
-        <div className="flex flex-col w-2/4">
+      <div className="flex flex-row flex-wrap gap-20 px-2 max-sm:gap-0">
+        <div className="flex flex-col w-2/5 max-sm:w-full">
           {successMessage && (
             <motion.div
               initial={{ opacity: 0 }}
@@ -141,12 +149,13 @@ export default function CustomizeQuotes() {
             >
               <ChooseAuthor
                 selectedAuthor={newQuote.author}
-                onSelectAuthor={(author) =>
+                onSelectAuthor={(author) => {
                   setNewQuote({
                     ...newQuote,
                     author: author,
-                  })
-                }
+                  });
+                  setIsCustomAuthorDisabled(author !== "Non trouvé");
+                }}
               />
             </motion.div>
             <motion.input
@@ -157,7 +166,8 @@ export default function CustomizeQuotes() {
               value={customAuthor}
               onChange={(e) => setCustomAuthor(e.target.value)}
               placeholder="Si auteur non répertorié"
-              className="px-4 py-1 border border-gray-400 rounded-md focus:outline-none focus:border-gray-800 w-full bg-custom-main-orange placeholder:text-slate-100"
+              className={`px-4 py-1 border border-gray-400 rounded-md focus:outline-none focus:border-gray-800 w-full bg-custom-main-orange placeholder:text-slate-100 ${isCustomAuthorDisabled ? 'disabled-input' : ''}`}
+              disabled={isCustomAuthorDisabled}
             />
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -179,20 +189,20 @@ export default function CustomizeQuotes() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.5 }}
               type="submit"
-              className="px-4 py-1 bg-african-violet text-white font-semibold rounded hover:bg-butterscotch"
+              className="bg-blue-500 hover:bg-blue-400 text-white font-bold text-lg py-2 px-4 border border-blue-600 rounded w-24 max-sm:w-full"
             >
               Créer
             </motion.button>
           </form>
         </div>
-        <div className="w-2/4">
+        <div className="w-2/4 max-sm:w-full">
           <motion.img
             src={InspirationalImage}
             alt="Citation inspirante"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.6 }}
-            className="mb-4 max-h-96 w-screen rounded"
+            className="mb-4 max-h-96 w-screen rounded max-sm:hidden"
           />
         </div>
       </div>
