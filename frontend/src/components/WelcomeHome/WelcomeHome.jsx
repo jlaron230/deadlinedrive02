@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-import ScrollToTopButton from '../ScrollToTopButton/ScrollToTopButton'; // Import the ScrollToTopButton component
+import bookOpenWhite from "../../assets/bookOpenWhite.jpg";
 
 
 const WelcomeHome = () => {
@@ -24,7 +24,7 @@ const WelcomeHome = () => {
         animate={{ opacity: 1, x: 0 }} // Slide in to the final position
         transition={{ duration: 1 }} // Add delay for staggered effect
         >
-          <div className="bg-cover bg-center h-[60vh] rounded-[45px] max-[800px] bg-[url('src/assets/bookOpenWhite.jpg')]">
+<div className="bg-cover bg-center h-[60vh] rounded-[45px] max-[800px]" style={{ backgroundImage: `url(${bookOpenWhite})` }}>
             <div className="flex items-center h-full bg-opacity-50">
               <p className="text-custom-black text-xl font-bold m-8 text-center ">
                 Pour commencer, inscrivez-vous sur notre plateforme. Une fois inscrit, vous pourrez définir vos deadlines personnelles. Vous pourrez aussi accéder à de nombreuses citations inspirantes.
@@ -40,7 +40,6 @@ const WelcomeHome = () => {
       </article>
 
       
-      < ScrollToTopButton />
     </main>
   );
 };
