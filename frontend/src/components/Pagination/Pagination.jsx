@@ -13,6 +13,7 @@ function Pagination({ pageCount, onPageChange }) {
       renderOnZeroPageCount={null}
       containerClassName="flex flex-wrap justify-center space-x-2 mt-4"
       pageClassName="border border-gray-300 rounded cursor-pointer hover:bg-gray-200 flex items-center justify-center"
+      pageLinkClassName="px-3 py-1"
       activeClassName="bg-blue-400 text-black"
       previousClassName="bg-white border border-gray-300 rounded cursor-pointer hover:bg-gray-200 flex items-center justify-center"
       previousLinkClassName="px-3 py-1"
@@ -20,7 +21,7 @@ function Pagination({ pageCount, onPageChange }) {
       nextLinkClassName="px-3 py-1"
       breakClassName="bg-white border border-gray-300 rounded cursor-pointer hover:bg-gray-200 flex items-center justify-center"
       breakLinkClassName="px-3 py-1"
-      pageLinkClassName="px-3 py-1"
+      initialPage={1}
       disabledClassName="bg-gray-200 cursor-not-allowed"
     />
   );
