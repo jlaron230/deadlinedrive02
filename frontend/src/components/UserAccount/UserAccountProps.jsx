@@ -71,7 +71,7 @@ function UserAccountProps() {
               <div className="bg-neutral-100 flex flex-shrink-0 flex-col max-sm:block max-lg:flex-row lg:w-60 max-lg:justify-center p-6">
               {/* Tab links */}
               <a
-                className={`max-sm:w-2/6 font-bold hover:shadow w-full flex items-center h-12 px-4 text-sm hover:bg-gray-100 focus:lien ${
+                className={`max-sm:w-3/6 font-bold hover:shadow w-full flex items-center h-12 px-4 text-sm hover:bg-gray-100 focus:lien ${
                   activeTab === "general" ? "bg-slate-200 font-medium" : ""
                 }`}
                 onClick={() => handleTabClick("general")}
@@ -80,7 +80,7 @@ function UserAccountProps() {
                 Général
               </a>
               <a
-                className={`max-sm:w-2/6 font-bold hover:shadow w-full flex items-center h-12 px-4 text-sm hover:bg-gray-100 focus:lien ${
+                className={`max-sm:w-3/6 font-bold hover:shadow w-full flex items-center h-12 px-4 text-sm hover:bg-gray-100 focus:lien ${
                   activeTab === "Citations" ? "bg-slate-200 font-medium" : ""
                 }`}
                 onClick={() => handleTabClick("Citations")}
@@ -89,7 +89,7 @@ function UserAccountProps() {
                 Citations
               </a>
               <a
-                className={`max-sm:w-2/6 font-bold hover:shadow w-full flex items-center h-12 px-4 text-sm hover:bg-gray-100 focus:bg-gray-100 focus:lien ${
+                className={`max-sm:w-3/6 font-bold hover:shadow w-full flex items-center h-12 px-4 text-sm hover:bg-gray-100 focus:bg-gray-100 focus:lien ${
                   activeTab === "Motdepasse" ? "bg-slate-200 font-medium" : ""
                 }`}
                 onClick={() => handleTabClick("Motdepasse")}
@@ -98,7 +98,7 @@ function UserAccountProps() {
                 Mot de passe
               </a>
               <a
-                className={`max-sm:w-2/6 font-bold hover:shadow w-full flex items-center h-12 px-4 text-sm hover:bg-gray-100 focus:bg-gray-100 focus:lien ${
+                className={`max-sm:w-3/6 font-bold hover:shadow w-full flex items-center h-12 px-4 text-sm hover:bg-gray-100 focus:bg-gray-100 focus:lien ${
                   activeTab === "Suppression" ? "bg-slate-200 font-medium" : ""
                 }`}
                 onClick={handleOpenModal}
@@ -107,7 +107,7 @@ function UserAccountProps() {
                 Suppression du compte
               </a>
               <a
-            className={`sm:w-full max-sm:w-2/6 max-sm:mt-4 h-12 px-4 flex items-center justify-center hover:bg-gray-100 btn ${
+            className={`sm:w-full max-sm:w-full max-sm:mt-4 h-12 px-4 flex items-center justify-center hover:bg-gray-100 btn ${
               activeTab === "deconnexion" ? "bg-slate-200 font-bold" : ""
             }`}
             onClick={() => {

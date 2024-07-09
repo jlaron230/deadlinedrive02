@@ -55,7 +55,7 @@ const LoginForm = () => {
                   localStorage.setItem('email', data.user.email);
 
                   resetForm(); // Reset the form
-                  navigate('/user-account'); // Redirect the user to the homepage
+                  navigate('/deadlines'); // Redirect the user to the homepage
                 })
                 .catch(error => {
                   console.error('Erreur lors de la connexion:', error);
