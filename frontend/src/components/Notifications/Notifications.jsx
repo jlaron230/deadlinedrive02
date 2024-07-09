@@ -65,7 +65,7 @@ function NotificationsComponent({ isOpen, onClose }) {
                         <div style={{ maxHeight: '60vh', overflowY: 'auto' }}> 
                             {notifications.map(notification => (
                                 <div key={notification.id} className="my-6 p-4 border-b flex justify-between items-center gap-4">
-                                    <div>
+                                    <div className="flex-1">
                                         <p className="text-custom-black">Citation du jour : {notification.quoteText} - {notification.quoteAuthor}</p>
                                         <p className="text-sm mt-2 text-gray-600">Reçu le {new Date(notification.date_sent).toLocaleDateString("fr-FR")}</p>
                                     </div>

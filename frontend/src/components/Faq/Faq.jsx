@@ -23,9 +23,9 @@ const FAQ = () => {
         "Le système de vote affiche les citations les plus populaires et les plus aimées par les utilisateurs.",
     },
     {
-      question: "Comment puis-je choisir mes préférences de citations ?",
+      question: "Comment puis-je garder mes citations préféres ?",
       answer:
-        "Vous pouvez choisir vos préférences de citations dans les paramètres de votre compte.",
+        "DeadlineDrive intègre un système de favoris pratique qui vous permet de sauvegarder jusqu'à 10 de vos citations préférées. Pour ajouter une citation à vos favoris, il suffit de cliquer sur l'icône en forme de cœur située à côté de la citation. Vous pouvez accéder à tout moment à votre liste de citations favorites depuis votre espace utilisateur.",
     },
     {
       question:
@@ -35,9 +35,9 @@ const FAQ = () => {
     },
     {
       question:
-        "Puis-je personnaliser les notifications que je reçois de DeadlineDrive ?",
+        "Comment fonctionne les notifications que je reçois de DeadlineDrive ?",
       answer:
-        "Oui, vous pouvez personnaliser les notifications que vous recevez de DeadlineDrive selon vos préférences. Dans les paramètres de votre compte, vous avez la possibilité de choisir quels types de notifications vous souhaitez recevoir et comment vous souhaitez les recevoir (par exemple, par e-mail ou via l'application). Cela vous permet de rester informé de manière efficace tout en évitant toute surcharge d'informations.",
+        "Chaque jour, DeadlineDrive vous enverra une notification contenant une citation inspirante choisie aléatoirement. Cette petite dose de motivation est conçue pour stimuler votre journée et vous encourager à atteindre vos objectifs.",
     },
   ];
 

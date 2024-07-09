@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import bookOpenWhite from "../../assets/bookOpenWhite.jpg";
 
 
+
 const WelcomeHome = () => {
   return (
     <main className=" flex flex-col p-2 items-center justify-center">

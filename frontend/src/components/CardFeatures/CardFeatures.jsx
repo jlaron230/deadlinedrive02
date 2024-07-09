@@ -52,5 +52,4 @@ function CardFeatures() {
   );
 }
 
-export default CardFeatures
-
+export default CardFeatures;

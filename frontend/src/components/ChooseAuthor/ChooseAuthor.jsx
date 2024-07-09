@@ -74,6 +74,12 @@ function ChooseAuthor({ selectedAuthor, onSelectAuthor }) {
         />
       {isDropdownOpen && (
         <ul className="absolute z-10 w-full bg-custom-main-orange border border-gray-300 rounded-lg max-h-60 overflow-y-auto">
+          <li
+            onClick={() => handleAuthorSelect("Non trouvé")}
+            className="px-4 py-2 hover:bg-orange-300 cursor-pointer text-white"
+          >
+            Non trouvé
+          </li>
           {filteredAuthors.map((author, index) => (
             <li
               key={index}

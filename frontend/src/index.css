@@ -7,6 +7,21 @@
 :root{
 --theme1: #C97D50;
 }
+
+input:disabled {
+  background-color: #f0f0f0; /* Light grey background */
+  color: black; /* Grey text */
+  cursor: not-allowed; /* Cursor indicating the field is disabled */
+  opacity: 0.6; /* Slightly transparent */
+}
+
+.disabled-input {
+  background-color: #f0f0f0;
+  color: black;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
 @layer base {
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Laila', sans-serif;

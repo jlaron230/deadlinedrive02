@@ -138,6 +138,7 @@ function QuoteCard() {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 2, ease: "easeOut" }} 
       className="flex flex-col max-w-7xl m-auto py-6 p-4 sm:p-6">
+        <div className="flex flex-row m-auto gap-10 items-baseline">
         <div className="block lg:hidden mb-8 relative flex justify-center">
           <button
             onClick={toggleMenu}
@@ -193,14 +194,18 @@ function QuoteCard() {
               {c.name}
             </motion.li>
           ))}
+        </motion.ul>
+        {/* Button always visible */}
+        <div className="flex justify-center mb-4">
           <motion.button
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.6 }}
-            className="rounded bg-custom-main-orange text-black font-normal px-3"
+            className="rounded bg-custom-main-orange text-black font-normal px-3 py-1"
           >
             <Link to="/manage-my-quotes">Gérer mes citations</Link>
           </motion.button>
-        </motion.ul>
+        </div>
+        </div>
         <AnimatePresence mode="wait">
           <motion.div
             key={selectedCategory}
