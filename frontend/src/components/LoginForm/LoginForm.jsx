@@ -5,6 +5,7 @@ import { motion } from "framer-motion"; // Import Framer Motion for animations
 import { useNavigate } from "react-router-dom"; // Import useNavigate from react-router-dom
 import axios from "axios"; // Import axios
 import logo from "../../assets/log-in.webp"; // Import logo image
+import { Link } from 'react-router-dom';
 
 const LoginForm = () => {
   // Animation parameters for the image
@@ -107,9 +108,9 @@ const LoginForm = () => {
                     <Field type="checkbox" name="rememberMe" className="mr-2" /> {/* Remember me checkbox */}
                     Se souvenir de moi
                   </label>
-                  <a href="/password-recovery" className="text-caramel"> {/* Forgot password link */}
+                  <Link to ="/password-recovery" className="text-caramel"> {/* Forgot password link */}
                     Mot de passe oublié?
-                  </a>
+                  </Link>
                 </div>
 
                 <button
@@ -133,9 +134,9 @@ const LoginForm = () => {
 
                 <div className="mt-4"> {/* Link to sign-up page */}
                   Vous n'avez pas encore de compte?{" "}
-                  <a href="/signup" className="text-caramel">
+                  <Link to ="/signup" className="text-caramel">
                     Créez-en un dès maintenant !
-                  </a>
+                  </Link>
                 </div>
               </Form>
             )}
