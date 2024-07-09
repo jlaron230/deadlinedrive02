@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
@@ -96,11 +97,11 @@ return (
     ) : (
       // If the user is not logged in, display a button to log in or register.
       <div className="flex flex-col items-center">
-        <a href={'/signup'}>
+        <Link to="/signup">
           <button className=" text-ivory font-semibold p-4 bg-custom-main-orange rounded-lg hover:text-black">
             Appuyez ici pour vous inscrire ou vous connecter !
           </button>
-        </a>
+        </Link>
       </div>
     )}
   </div>
