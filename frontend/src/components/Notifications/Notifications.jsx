@@ -3,7 +3,6 @@ import axios from 'axios';
 import { motion, AnimatePresence } from 'framer-motion';
 import { EyeIcon, EyeSlashIcon, TrashIcon } from '@heroicons/react/24/solid';
 import { Link } from 'react-router-dom';
-import { ArrowRightOnRectangleIcon } from '@heroicons/react/24/solid';
 
 function NotificationsComponent({ isOpen, onClose }) {
     const [notifications, setNotifications] = useState([]);
@@ -19,9 +18,9 @@ function NotificationsComponent({ isOpen, onClose }) {
     // Function to fetch notifications from the server
     const fetchNotifications = async () => {
         try {
-            const response = await axios.get(`http://localhost:5000/notifications/user/${userId}`);
+            const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/notifications/user/${userId}`);
             const notificationsWithQuotes = await Promise.all(response.data.slice(0, 5).map(async (notification) => {
-                const quoteResponse = await axios.get(`http://localhost:5000/quotes/${notification.quote_id}`);
+                const quoteResponse = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/quotes/${notification.quote_id}`);
                 return {
                     ...notification,
                     quoteText: quoteResponse.data.text,
@@ -37,7 +36,7 @@ function NotificationsComponent({ isOpen, onClose }) {
     // Function to mark a notification as read
     const markAsRead = async (notificationId) => {
         try {
-            await axios.put(`http://localhost:5000/notifications/${notificationId}/read`);
+            await axios.put(`${import.meta.env.VITE_BACKEND_URL}/notifications/${notificationId}/read`);
             fetchNotifications();  // Refetch notifications to update the UI
         } catch (error) {
             console.error('Error marking notification as read:', error);
@@ -47,7 +46,7 @@ function NotificationsComponent({ isOpen, onClose }) {
     // Function to delete a notification
     const deleteNotification = async (notificationId) => {
         try {
-            await axios.delete(`http://localhost:5000/notifications/${notificationId}`);
+            await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/notifications/${notificationId}`);
             fetchNotifications();  // Refetch notifications to update the UI
         } catch (error) {
             console.error('Error deleting notification:', error);

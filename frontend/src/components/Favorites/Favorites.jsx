@@ -26,7 +26,7 @@ function Favorites({ quote }) {
 
       // Get favorites for the current user
       const response = await axios.get(
-        `http://localhost:5000/favorites/${userId}`,
+        `${import.meta.env.VITE_BACKEND_URL}/favorites/${userId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -61,7 +61,7 @@ function Favorites({ quote }) {
 
       if (favIcon) {
         // Remove from favorites
-        await axios.delete(`http://localhost:5000/favorites/${quote.id}`, {
+        await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/favorites/${quote.id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -74,7 +74,7 @@ function Favorites({ quote }) {
       } else {
         // Add to favorites
         await axios.post(
-          `http://localhost:5000/favorites`,
+          `${import.meta.env.VITE_BACKEND_URL}/favorites`,
           {
             id_user: userId,
             id_quote: quote.id,
