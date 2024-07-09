@@ -14,10 +14,13 @@ function Pagination({ pageCount, onPageChange }) {
       containerClassName="flex flex-wrap justify-center space-x-2 mt-4"
       pageClassName="border border-gray-300 rounded cursor-pointer hover:bg-gray-200 flex items-center justify-center"
       activeClassName="bg-blue-400 text-black"
-      previousClassName="bg-white border border-gray-300 rounded px-3 py-1 cursor-pointer hover:bg-gray-200 flex items-center justify-center"
-      nextClassName="bg-white border border-gray-300 rounded px-3 py-1 cursor-pointer hover:bg-gray-200 flex items-center justify-center"
-      breakClassName="bg-white border border-gray-300 rounded px-3 py-1 cursor-pointer hover:bg-gray-200 flex items-center justify-center"
-      pageLinkClassName="px-3"
+      previousClassName="bg-white border border-gray-300 rounded cursor-pointer hover:bg-gray-200 flex items-center justify-center"
+      previousLinkClassName="px-3 py-1"
+      nextClassName="bg-white border border-gray-300 rounded cursor-pointer hover:bg-gray-200 flex items-center justify-center"
+      nextLinkClassName="px-3 py-1"
+      breakClassName="bg-white border border-gray-300 rounded cursor-pointer hover:bg-gray-200 flex items-center justify-center"
+      breakLinkClassName="px-3 py-1"
+      pageLinkClassName="px-3 py-1"
       disabledClassName="bg-gray-200 cursor-not-allowed"
     />
   );
