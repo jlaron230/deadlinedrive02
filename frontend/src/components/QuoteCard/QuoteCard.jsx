@@ -138,11 +138,11 @@ function QuoteCard() {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 2, ease: "easeOut" }} 
       className="flex flex-col max-w-7xl m-auto py-6 p-4 sm:p-6">
-        <div className="flex flex-row m-auto gap-10 items-baseline">
+        <div className="flex flex-row m-auto gap-10 items-baseline max-sm:items-start">
         <div className="block lg:hidden mb-8 relative flex justify-center">
           <button
             onClick={toggleMenu}
-            className="flex items-center px-3 py-2 border border-custom-main-orange rounded-lg focus:outline-none text-lg"
+            className="flex items-center px-3 py-2 border border-custom-main-orange rounded-lg focus:outline-none text-lg w-36 h-14"
           >
             Catégorie
             {isMenuOpen ? (
@@ -159,9 +159,9 @@ function QuoteCard() {
                   whileHover={{ scale: 1.2 }}
                   onHoverStart={(e) => {}}
                   onHoverEnd={(e) => {}}
-                  className={`cursor-pointer px-3 py-2 ${
+                  className={`cursor-pointer px-3 py-2 w-36${
                     selectedCategory === c.name
-                      ? "font-semibold border border-2 border-custom-main-orange text-lg"
+                      ? "font-semibold rounded-sm bg-slate-200 border border-custom-main-orange text-lg"
                       : ""
                   }`}
                   onClick={() => handleCategoryClick(c.name)}
@@ -186,7 +186,7 @@ function QuoteCard() {
               key={c.id}
               className={`cursor-pointer ${
                 selectedCategory === c.name
-                  ? "font-semibold border border-2 border-custom-main-orange px-1"
+                  ? "font-semibold border border-2 border-custom-main-orange rounded-md px-1"
                   : ""
               }`}
               onClick={() => handleCategoryClick(c.name)}
@@ -200,7 +200,7 @@ function QuoteCard() {
           <motion.button
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.6 }}
-            className="rounded bg-custom-main-orange text-black font-normal px-3 py-1"
+            className="rounded bg-custom-main-orange text-white font-normal px-3 py-1 max-md:w-36"
           >
             <Link to="/manage-my-quotes">Gérer mes citations</Link>
           </motion.button>

@@ -21,7 +21,7 @@ function Pagination({ pageCount, onPageChange }) {
       nextLinkClassName="px-3 py-1"
       breakClassName="bg-white border border-gray-300 rounded cursor-pointer hover:bg-gray-200 flex items-center justify-center"
       breakLinkClassName="px-3 py-1"
-      initialPage={1}
+      forcePage={0}
       disabledClassName="bg-gray-200 cursor-not-allowed"
     />
   );
