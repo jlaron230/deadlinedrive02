@@ -28,9 +28,9 @@ const WelcomeHome = () => {
           <div className="bg-cover bg-center h-[60vh] rounded-[45px] max-[800px]" style={{ backgroundImage: `url(${bookOpenWhite})` }}>
             <div className="flex items-center h-full bg-opacity-50">
               <p className="text-custom-black text-xl font-bold m-8 text-center ">
-              Ici vous pouvez définir vos deadlines personnelles, accéder à de nombreuses citations inspirantes et participer à la vie de la communauté.             
-                <p className="text-custom-black text-xl font-bold m-8 text-center ">
-                Pour commencer à utiliser nos fonctionnalités, inscrivez vous sur notre plateforme !              </p>
+              Ici vous pouvez définir vos deadlines personnelles, accéder à de nombreuses citations inspirantes et participer à la vie de la communauté.     
+              <br />     
+                Pour commencer à utiliser nos fonctionnalités, inscrivez vous sur notre plateforme !                
               </p>
             </div>
         </div>
