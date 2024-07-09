@@ -5,8 +5,9 @@ import addingImg from "../../assets/addingImg.jpg";
 
 function CardFeatures() {
   return (
-    <ul className="list-disc flex flex-row flex-wrap justify-center p-2 space-x-4">
-      <li className="mb-4 p-4 border-2 rounded-md border-custom-main-orange shadow w-96 min-h-80 flex flex-col">
+    <div>
+    <ul className=" list-disc flex flex-row flex-wrap justify-center p-2 	">
+      <li className="m-2 p-4 border-2 rounded-md border-custom-main-orange shadow w-96 min-h-80 flex flex-col">
         <h3>Cliquez ici pour :</h3>
         <p>
           Accéder à un calendrier interactif pour visualiser vos deadlines et
@@ -20,7 +21,7 @@ function CardFeatures() {
           />
         </Link>
       </li>
-      <li className="mb-4 p-4 border-2 rounded-md border-custom-main-orange shadow w-96 min-h-80 flex flex-col">
+      <li className="m-2 p-4 border-2 rounded-md border-custom-main-orange shadow w-96 min-h-80 flex flex-col">
         <h3>Cliquez ici pour :</h3>
         <p>
           Trouvez les citations qui vous inspirent grâce à notre page dédiée !
@@ -33,7 +34,7 @@ function CardFeatures() {
           />
         </Link>
       </li>
-      <li className="mb-4 p-4 border-2 rounded-md border-custom-main-orange shadow w-96 min-h-40 flex flex-col">
+      <li className="m-2 p-4 border-2 rounded-md border-custom-main-orange shadow w-96 min-h-40 flex flex-col">
         <h3>Cliquez ici pour :</h3>
         <p>
           Ajouter une nouvelle citation pour partager vos coups de cœur !
@@ -47,6 +48,7 @@ function CardFeatures() {
         </Link>
       </li>
     </ul>
+    </div>
   );
 }
 

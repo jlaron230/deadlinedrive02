@@ -1,7 +1,7 @@
 // Importation des bibliothèques React et des hooks nécessaires
 // Importation de React pour pouvoir utiliser JSX et les fonctionnalités de React
 import React, { createContext, useContext, useState, useEffect } from 'react';  // Import React library
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';  // Import necessary components from react-router-dom for routing
+import { Route, Routes } from 'react-router-dom';  // Import necessary components from react-router-dom for routing
 
 // Import the components for the different pages
 import Home from './pages/Home';
@@ -39,7 +39,6 @@ function App() {
       UserAccountProps
          }}>
     
-    <Router>
       <NavBar />
       <Routes>
 
@@ -60,7 +59,6 @@ function App() {
         <Route path="*" element={<NotFound />} />  {/* Route for handling 404 Not Found */}
       </Routes>
       <Footer />
-    </Router>
     
     </PostsContext.Provider>
   );
