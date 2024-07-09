@@ -56,7 +56,7 @@ router.delete('/favorites/:quoteId', quoteControllers.removeFavorite);
 
 // routes for tasks, post, get, delete, put
 // Route to get a random or daily quote
-router.get('/daily-quote', verifyToken, quoteControllers.getDailyQuote);
+router.get('/daily-quote', quoteControllers.getDailyQuote);
 router.put("/quotes/:id", verifyToken, quoteControllers.edit);
 router.post("/quotes", verifyToken, quoteControllers.add);
 router.delete("/quotes/:id", verifyToken, quoteControllers.destroy);
@@ -119,4 +119,3 @@ module.exports = router;
 //  authentication wall : verifyToken is activated for each route after this line
 //  router.use(verifyToken); 
 
-module.exports = router;
