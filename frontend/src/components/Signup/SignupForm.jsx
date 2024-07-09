@@ -5,6 +5,8 @@ import { motion } from "framer-motion"; // Import Framer Motion for animations
 import { useNavigate } from "react-router-dom"; // Import useNavigate from react-router-dom
 import axios from "axios"; // Import axios
 import logo from "../../assets/log-in.webp"; // Import logo image
+import { Link } from 'react-router-dom';
+
 
 const SignupForm = () => {
   // Animation parameters for the image
@@ -153,9 +155,9 @@ const SignupForm = () => {
 
                 <div className="mt-4"> {/* Link to login page */}
                   Vous avez déjà un compte?{" "}
-                  <a href="/login" className="text-caramel">
+                  <Link to="/login" className="text-caramel">
                     Connectez-vous!
-                  </a>
+                  </Link>
                 </div>
               </Form>
             )}
