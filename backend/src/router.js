@@ -1,6 +1,7 @@
 const express = require("express"); // Import the Express framework
 const router = express.Router(); // Create an instance of Express router
-
+//import express validator
+const { body } =  require ('express-validator');
 // Import controllers functions
 const userControllers = require("./controllers/userControllers");
 const categoryControllers = require("./controllers/categoryControllers");
@@ -20,18 +21,18 @@ const {
 
   //routes for user login with middlewares
   router.post(
-    "/users/login",
-    userControllers.getUserByEmailWithPasswordAndPassToNext,verifyPassword
+    "/users/login",[body("email").trim().isEmail().withMessage("le champ email est incorrecte"), body("firstName").trim().isString(), body("lastName").trim().isString()], userControllers.getUserByEmailWithPasswordAndPassToNext,verifyPassword
   );
 
 router.post("/quotes", quoteControllers.add);  
-router.post("/users", hashPassword, userControllers.add); // Route to add a new user
+router.post("/users", [body("email").trim().isEmail().withMessage("le champ email est incorrecte"), body("firstName").trim().isString(), body("lastName").trim().isString()], hashPassword, userControllers.add); // Route to add a new user
 router.get("/users", userControllers.browse); // Route to browse all users
 
 // Protected routes
 router.get('/users/:id', userControllers.read);
-router.put('/users/:id', verifyToken, verifyId, userControllers.edit);
-router.delete('/users/:id',  userControllers.destroy);
+//incorporation validator for the route (email, firstName, lastName)
+router.put('/users/:id',[body("email").trim().isLength({min: 1}).isEmail().withMessage("le champ email est incorrecte"), body("firstName").trim().isString(), body("lastName").trim().isString()], verifyToken, verifyId, userControllers.edit);
+router.delete('/users/:id', userControllers.destroy);
 router.put('/users/:id/password',userControllers.getUserByEmailWithPasswordAndPassToNext, verifyToken, userControllers.changePassword);
 
   
