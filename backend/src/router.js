@@ -1,5 +1,6 @@
 const express = require("express"); // Import the Express framework
 const router = express.Router(); // Create an instance of Express router
+const { body } = require('express-validator');
 
 // Import controllers functions
 const userControllers = require("./controllers/userControllers");
@@ -89,8 +90,20 @@ router.delete("/quote_category/:id", quote_categoryControllers.destroy);
 router.get("/comments", commentControllers.browse);
 router.get("/comment/:id", commentControllers.read);
 router.get("/comments/by-quote/:quoteId", commentControllers.findByQuote);
-router.put("/comment/:id", commentControllers.edit);
-router.post("/comment", commentControllers.add);
+// Route for update an existing comment with express validator verificaiton
+router.put('/comments/:id', [
+    body('content').optional().trim().isLength({ min: 1 }).withMessage('Content cannot be empty'),
+    body('content').optional().isLength({ max: 500 }).withMessage('Content too long, maximum 500 characters'),
+    body('id_user').optional().isNumeric().withMessage('User ID must be numeric'),
+    body('id_quote').optional().isNumeric().withMessage('Quote ID must be numeric if provided')
+], commentControllers.edit);
+// Route for add comment with express validator verification
+router.post('/comments', [
+  body('content').trim().isLength({ min: 1 }).withMessage('Content cannot be empty'),
+  body('content').isLength({ max: 500 }).withMessage('Content too long, maximum 500 characters'),
+  body('id_user').isNumeric().withMessage('User ID must be numeric'),
+  body('id_quote').optional().isNumeric().withMessage('Quote ID must be numeric if provided')
+], commentControllers.add);
 router.delete("/comment/:id", commentControllers.destroy);
 
 

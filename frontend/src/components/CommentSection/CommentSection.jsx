@@ -65,7 +65,7 @@ function CommentSection({
       id_user: userId,
       id_quote: quote.id,
     };
-    axios.post(`${import.meta.env.VITE_BACKEND_URL}/comment`, commentData)
+    axios.post(`${import.meta.env.VITE_BACKEND_URL}/comments`, commentData)
       .then(response => {
         // Update comments locally without needing to refetch from the server.
         const updatedComments = [...comments, {
@@ -98,7 +98,7 @@ function CommentSection({
 
   // Updates an existing comment and syncs with the backend.
   const handleUpdateComment = (commentId) => {
-    axios.put(`${import.meta.env.VITE_BACKEND_URL}/comment/${commentId}`, {
+    axios.put(`${import.meta.env.VITE_BACKEND_URL}/comments/${commentId}`, {
       content: editedContent,
       id_user: userId,
       id_quote: quote.id
@@ -213,7 +213,10 @@ return (
                 </button>
               </div>
             ) : (
-              <p className="text-sm">{comment.content}</p>
+              <div>
+                <div style={{ height: '1px', backgroundColor: 'black', marginBottom: '20px' }}></div>
+                <p className="text-sm">{comment.content}</p>
+              </div>
             )}
             <div className="flex space-x-2 mt-2 justify-end">
               <button
