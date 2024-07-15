@@ -1,7 +1,5 @@
 const express = require("express"); // Import the Express framework
 const router = express.Router(); // Create an instance of Express router
-//import express validator
-const { body } =  require ('express-validator');
 // Import controllers functions
 const userControllers = require("./controllers/userControllers");
 const categoryControllers = require("./controllers/categoryControllers");
