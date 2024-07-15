@@ -25,7 +25,7 @@ const {
   );
 
 router.post("/quotes", quoteControllers.add);  
-router.post("/users", [body("email").trim().isEmail().withMessage("le champ email est incorrecte"), body("firstName").trim().isString(), body("lastName").trim().isString()], hashPassword, userControllers.add); // Route to add a new user
+router.post("/users", hashPassword, userControllers.add); // Route to add a new user
 router.get("/users", userControllers.browse); // Route to browse all users
 
 // Protected routes
