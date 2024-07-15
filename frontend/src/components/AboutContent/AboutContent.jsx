@@ -46,9 +46,11 @@ const AboutContent = () => {
     <main className="md:min-h-[87vh] mx-auto px-4 sm:px-6 lg:px-8"> {/* Main container with minimum height, centered content */}
       <div className="max-w-6xl mx-auto">
         <section className="my-8 px-2 py-8">
+          <div>
           <h1 className="text-4xl text-caramel font-bold text-center mb-4">
-            L'Histoire de DeadLineDrive
+            L'Histoire de DeadlineDrive
           </h1>
+          </div>
           <div className="flex flex-wrap gap-8 md:items-center">
             <div className="flex-1 basis-80">
               <img
