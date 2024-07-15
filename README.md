@@ -2,14 +2,12 @@
 ## Project Initialization
 Clone the repository and navigate into it:
 
-Copier le code
 ```bash
 git clone <repository_url>
 cd <repository_name>
 ```
 Install dependencies using npm:
 
-Copier le code
 ```bash
 npm install
 Backend Server Setup:
@@ -18,7 +16,6 @@ Backend Server Setup:
 The backend is hosted on port 5000, and the frontend on port 5173.
 Configure the backend .env file with your database credentials for AlwaysData.
 plaintext
-Copier le code
 
 # backend/.env
 
@@ -31,25 +28,21 @@ PORT=5000
 Available Commands
 migrate: Run database migration scripts.
 
-Copier le code
 ```bash
 npm run migrate
 dev: Start both frontend and backend servers concurrently.
 ```
 
-Copier le code
 ```bash
 npm run dev
 ```
 dev-front: Start only the React frontend server.
 
-Copier le code
 ```bash
 npm run dev-front
 ```
 dev-back: Start only the Express backend server.
 
-Copier le code
 ```bash
 npm run dev-back
 ```
@@ -66,6 +59,8 @@ Includes authentication middleware using Argon2 for password hashing.
 Defines database schemas and interacts with the database.
 Frontend Details
 
+# Frontend Details
+
 ## Framework: 
 Built with React for the frontend user interface.
 
@@ -78,6 +73,8 @@ Manages multiple commands in a single CLI window.
 ## Nodemon: 
 Monitors file changes and restarts the server automatically.
 Features Overview
+
+# Features Overview
 
 ## Deadlines Management: 
 Users can create and track deadlines using a calendar interface.
@@ -94,7 +91,8 @@ Contact Admins: Via a Formik-based contact form for user inquiries.
 
 ## Legal Information:
 Access to privacy policy and terms of use.
-Tools Used
+
+# Tools Used
 
 ## React: 
 Frontend framework for building user interfaces.
@@ -113,6 +111,7 @@ Used for secure password hashing.
 This manual now includes details about the backend setup, server configurations, middleware usage, and additional information about controllers and models related to the database. Adjust the content further based on specific functionalities and configurations unique to your project.
 
 # Additional Details
+
 ## Backend Structure
 
 ## Authentication: 
@@ -133,6 +132,9 @@ Built with React for a responsive and interactive user experience.
 Utilizes React hooks and context API for state management.
 Component Library: Tailwind CSS for styling components and UI elements.
 
+## Component Library
+Tailwind CSS for styling components and UI elements.
+
 # Project Architecture
 
 ## Client-Server Interaction: 
@@ -151,7 +153,6 @@ Deploy frontend and backend separately, ensuring backend is configured with corr
 ## Folder Structure
 
 ## plaintext
-Copier le code
 
 ```bash
 project-root/
@@ -193,5 +194,44 @@ Fast build tool that provides a modern development experience for frontend devel
 ## Tailwind CSS: 
 Utility-first CSS framework for styling components.
 Support and Contact
+
+## Formik and Yup: 
+For form management and validation.
+
+## Ant Design: 
+A component library beneficial for our project.
+
+## Axios:
+For making API requests.
+
+## jwt-decode:
+For generating and managing tokens.
+
+## anime.js:
+For adding stylized animations to the site.
+
+## React Router DOM: 
+For component and page routing.
+
+## jsonwebtoken:
+For JWT token management.
+
+## FullCalendar:
+For implementing our task calendar.
+
+## Heroicons:
+For icons used across the site.
+
+## Framer Motion:
+For additional animations.
+
+## Swiper:
+For carousel components useful on the quote page.
+
+## Database management :
+
+For database management, we utilized phpMyAdmin, and for hosting, we selected Alwaysdata, ensuring a reliable and high-performance infrastructure.
+
+All these technological choices were made in consultation with our Scrum Master and the rest of the team, ensuring maximum cohesion and efficiency. These dependencies were installed to create a high-performance and enjoyable application to use, meeting the needs of our Deadline Drive project.
 
 For any issues or questions related to the application, please contact us at support@example.com or visit our support page for more information.
