@@ -182,14 +182,12 @@ return (
         <button className="rounded bg-custom-main-orange w-36 text-white font-normal cursor-pointer">
           Partager
         </button>
-        <div>
           <QuotesFavoris
             quote={quote}
             favIcon={favIcon}
             toggleFavorite={toggleFavorite}
             fav={fav}
           />
-        </div>
       </footer>
       <div className="w-full mt-4">
         {comments.map((comment, index) => (
