@@ -11,6 +11,7 @@ import { motion } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import QuotesFavoris from "@components/Favorites/QuotesFavoris";
+import formatDateCommentary from "@services/formatDateCommentary";
 
 function CommentSection({
   quote,
@@ -115,10 +116,10 @@ function CommentSection({
   };
 
   // Utility function to format dates for display.
-  const formatDate = (dateString) => {
-    const options = { year: "numeric", month: "2-digit", day: "2-digit" };
-    return new Date(dateString).toLocaleDateString("fr-FR", options);
-  };
+  // const formatDate = (dateString) => {
+  //   const options = { year: "numeric", month: "2-digit", day: "2-digit" };
+  //   return new Date(dateString).toLocaleDateString("fr-FR", options);
+  // };
 
   // Retrieves user's first name from local storage, defaulting to "Anonyme" if not found.
   const getUserFirstNameFromLocalStorage = () => {
@@ -182,14 +183,12 @@ return (
         <button className="rounded bg-custom-main-orange w-36 text-white font-normal cursor-pointer">
           Partager
         </button>
-        <div>
           <QuotesFavoris
             quote={quote}
             favIcon={favIcon}
             toggleFavorite={toggleFavorite}
             fav={fav}
           />
-        </div>
       </footer>
       <div className="w-full mt-4">
         {comments.map((comment, index) => (
@@ -197,7 +196,7 @@ return (
             <p className="text-lg font-bold">
               {getUserFirstName(comment.id_user)}
             </p>
-            <p className="text-sm">{formatDate(comment.created_at)}</p>
+            <p className="text-sm">{formatDateCommentary(comment.created_at)}</p>
             {editingComment === comment.id && parseInt(userId) === comment.id_user ? (
               <div className="flex flex-col">
                 <textarea
