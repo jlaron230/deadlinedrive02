@@ -1,9 +1,9 @@
-import '@testing-library/jest-dom';
-import formatDateCommentary from '../services/formatDateCommentary'; // Ajustez le chemin si nécessaire
+import '@testing-library/jest-dom'; //import jest test library
+import formatDateCommentary from '../services/formatDateCommentary'; //import component formatDateCommentary
 
-// Groupe de tests pour formatDateCommentary
+// Test group for formatDate Commentary
 describe('formatDateCommentary', () => {
-  // Cas de test pour vérifier le formatage correct de la date
+  // Test case to check correct date format
   it('should format the date string correctly', () => {
     const inputDate = '2023-07-16';
     const expectedOutput = '16/07/2023';
@@ -13,13 +13,13 @@ describe('formatDateCommentary', () => {
     expect(output).toBe(expectedOutput);
   });
 
-  // Test pour une date invalide
+  // test for invalid date
   it('should handle invalid date inputs gracefully', () => {
     const invalidInputDate = 'not-a-date';
     expect(() => formatDateCommentary(invalidInputDate)).toThrow('Invalid Date');
   });
 
-  // Test pour une date avec une timezone différente
+  // Test for a date with a different time zone
   it('should handle dates with different timezones consistently', () => {
     const inputDateWithTimezone = '2023-07-16T23:59:00Z'; // UTC timezone
     const expectedOutput = '17/07/2023'; // Expected output in French locale, depending on timezone handling
