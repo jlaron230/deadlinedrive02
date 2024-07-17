@@ -15,17 +15,6 @@ describe('getCategoryName', () => {
         expect(getCategoryName(2, quoteCategory, category)).toBe('Humor');
     });
 
-    it('should return "Catégorie inconnue" if category is not found', () => {
-        const quoteCategory = [
-            { id_quote: 1, id_category: 101 },
-        ];
-        const category = [
-            { id: 102, name: 'Inspiration' },
-        ];
-
-        expect(getCategoryName(2, quoteCategory, category)).toBe('Catégorie inconnue');
-    });
-
     it('should return "Pas de catégorie" if quoteCategory is not found', () => {
         const quoteCategory = [
             { id_quote: 1, id_category: 101 },

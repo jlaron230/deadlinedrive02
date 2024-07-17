@@ -2,7 +2,8 @@ import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { AnimatePresence,motion } from "framer-motion";
 import { jwtDecode } from "jwt-decode";
-import { XMarkIcon, ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/24/solid";
+import { XMarkIcon } from "@heroicons/react/24/solid";
+import getCategoryName from "@services/getCategoryName";
 
 export default function QuoteManage() {
   const [myQuotes, setMyQuotes] = useState([]);
