@@ -117,6 +117,5 @@ You can find all these routes declared in the file src/router.js. You can add yo
 auth: Middleware for authentication and authorization using JSON Web Tokens (JWT).
 
 ---
-
-Cette version Markdown utilise la syntaxe de bloc de code ```bash ``` pour formater les commandes et les exemples de routes de manière appropriée. Vous pouvez l'utiliser directement dans votre documentation README.md.
+This Markdown version uses the bash code block syntax to format commands and route examples appropriately. You can use it directly in your README.md documentation.
 
