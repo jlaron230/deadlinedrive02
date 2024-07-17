@@ -33,6 +33,7 @@ function CommentSection({
   const [editedContent, setEditedContent] = useState("");
   // State to hold the user ID from local storage for authentication purposes.
   const [userId, setUserID] = useState(localStorage.getItem("id"));
+  const [quoteState, setQuoteState] = useState(quote);
   // Ref to manage clicks outside the modal to close it.
   const modalRef = useRef(null);
   const [favIcon, setFavIcon] = useState(false);
@@ -139,6 +140,52 @@ function CommentSection({
     }
   };
 
+  const handleUpvote = async (quoteId) => {
+    console.log(`Upvoting quote ID: ${quoteId}`);
+    try {
+      const token = localStorage.getItem("token"); // Assuming you store the token in localStorage
+      const response = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/quotes/${quoteId}/upvote`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log("Upvote response:", response.data);
+        setQuoteState((prevQuote) =>
+          prevQuote.id === quoteId ? { ...prevQuote, vote: prevQuote.vote + 1 } : prevQuote
+        );
+      console.log("Upvote successful");
+    } catch (error) {
+      console.error("Failed to upvote", error);
+    }
+  };
+  
+  const handleDownvote = async (quoteId) => {
+    console.log(`Downvoting quote ID: ${quoteId}`);
+    try {
+      const token = localStorage.getItem("token"); // Assuming you store the token in localStorage
+      const response = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/quotes/${quoteId}/downvote`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log("Downvote response:", response.data);
+      setQuoteState((prevQuote) =>
+        prevQuote.id === quoteId ? { ...prevQuote, vote: prevQuote.vote - 1 } : prevQuote
+      );
+      console.log("Downvote successful");
+    } catch (error) {
+      console.error("Failed to downvote", error);
+    }
+  };
+
 // Main component render method, including modal and interactive elements.
 return (
   <motion.div
@@ -174,11 +221,22 @@ return (
         </div>
       </div>
       <p className="mb-6 mt-1 w-full text-xl text-custom-black text-center">Catégorie : {category}</p>
-      <footer className="mt-4 text-lg font-semibold flex w-full justify-center gap-2">
-        <section className="flex items-center border-2 border-dashed border-custom-main-orange rounded p-px px-4">
-          <ChevronUpIcon className="w-6 hover:fill-green-500 cursor-pointer" />
-          <p className="text-2xl px-1">{quote.vote}</p>
-          <ChevronDownIcon className="w-6 hover:fill-red-500 cursor-pointer" />
+      <footer 
+      className="mt-4 text-lg font-semibold flex w-full justify-center gap-2"
+      onClick={(e) => e.stopPropagation()}
+      >
+        <section className="flex items-center border-2 border-dashed border-custom-main-orange rounded p-px px-4"
+        onClick={(e) => e.stopPropagation()}
+        >
+          <ChevronUpIcon 
+          className="w-6 hover:fill-green-500 cursor-pointer" 
+          onClick={(e) => { e.stopPropagation(); handleUpvote(quoteState.id); }}
+          />
+          <p className="text-2xl px-1">{quoteState.vote}</p>
+          <ChevronDownIcon 
+          className="w-6 hover:fill-red-500 cursor-pointer" 
+          onClick={(e) => { e.stopPropagation(); handleDownvote(quoteState.id); }} 
+          />
         </section>
         <button className="rounded bg-custom-main-orange w-36 text-white font-normal cursor-pointer">
           Partager
