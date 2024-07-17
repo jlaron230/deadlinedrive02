@@ -11,6 +11,7 @@ import { motion } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import QuotesFavoris from "@components/Favorites/QuotesFavoris";
+import GetUserFirstName from "@services/GetUserFirstName";
 
 function CommentSection({
   quote,
@@ -125,11 +126,11 @@ function CommentSection({
     return localStorage.getItem("firstName") || "Anonyme";
   };
 
-  // Looks up a user's first name using their ID from the loaded user data.
-  const getUserFirstName = (userId) => {
-    const user = users.find(user => user.id === parseInt(userId, 10));
-    return user ? user.firstName : "Unknown User";
-  };
+  // // Looks up a user's first name using their ID from the loaded user data.
+  // const getUserFirstName = (userId) => {
+  //   const user = users.find(user => user.id === parseInt(userId, 10));
+  //   return user ? user.firstName : "Unknown User";
+  // };
 
   // Handles clicks outside of the modal to close it.
   const handleClickOutside = (event) => {
@@ -195,7 +196,7 @@ return (
         {comments.map((comment, index) => (
           <div key={index} className="bg-gray-100 p-3 rounded-lg mb-2">
             <p className="text-lg font-bold">
-              {getUserFirstName(comment.id_user)}
+              {GetUserFirstName(comment.id_user, users)}
             </p>
             <p className="text-sm">{formatDate(comment.created_at)}</p>
             {editingComment === comment.id && parseInt(userId) === comment.id_user ? (
