@@ -1,4 +1,4 @@
-import getCategoryName from "../src/services/getCategoryName";
+import getCategoryName from "../services/getCategoryName";
 
 describe('getCategoryName', () => {
     it('should return the correct category name', () => {

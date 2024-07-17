@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom';
-import formatDateCommentary from '../src/services/formatDateCommentary'; // Ajustez le chemin si nécessaire
+import formatDateCommentary from '../services/formatDateCommentary'; // Ajustez le chemin si nécessaire
 
 // Groupe de tests pour formatDateCommentary
 describe('formatDateCommentary', () => {
