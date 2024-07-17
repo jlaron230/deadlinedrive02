@@ -1,6 +1,6 @@
 import React from 'react';
 import '@testing-library/jest-dom';
-import formatDateCalendar from '../src/services/formatDateCalendar';
+import formatDateCalendar from '../services/formatDateCalendar';
 
 describe('formatDateCalendar', () => {
     it('should format the date correctly', () => {
