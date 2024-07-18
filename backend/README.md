@@ -1,107 +1,136 @@
-# MVC Express
+# MVC Express Backend
 
-## Description
-This repository is a simple Express MVC structure from scratch.
+This repository contains a simple Express MVC framework designed to facilitate rapid development of web applications. Follow the steps below to set up and run the server.
 
-## Steps
-1. Clone the repo from Github.
-2. Run `npm install`.
-3. Create `.env` from `.env.sample` file and add your DB parameters. Don't delete the `.sample` file, it must be kept.
+## Setup
+
+**Clone the Repository**
    ```bash
-   DB_HOST=your_db_host
-   DB_PORT=your_db_port
-   DB_USER=your_db_user
-   DB_PASSWORD=your_db_password
-   DB_NAME=your_db_name
+   git clone <repository-url>
+Install Dependencies
+   ```
+```bash
+npm install
+```
 
-4. Adapt database.sql with your own tables. Import the script into your SQL server manually or run migrate script (either using npm run migrate or yarn run migrate).
+Environment Setup
+**Create a .env file based on the .env.sample provided. Fill in your database parameters:**
 
-5. Start the server in dev mode with npm run dev or yarn run dev. This will run index.js using nodemon.
+```bash
+DB_HOST=your_db_host
+DB_PORT=your_db_port
+DB_USER=your_db_user
+DB_PASSWORD=your_db_password
+DB_NAME=your_db_name
+```
 
-6. Go to localhost:5000 with your favorite browser.
-From this starter kit, create your own web application.
+Database Setup
 
-# Windows Users
-If you develop on Windows, you should edit your git configuration to change your end of line rules with this command :
+**Adapt the database.sql script to include your own tables. You can import this script into your SQL server manually or run a migration script:**
 
-```bash git config --global core.autocrlf true```
+   ```bash
+npm run migrate
+Start the Server
+```
+**Run the server in development mode:**
 
-## Example
-An example (a basic list of items) is provided (you can load the database.sql file in a test database). The accessible URLs are:
+```bash
+npm run dev
+```
 
-* Home page: GET `localhost:5000/`
+Access the Application
+**Open your browser and go to http://localhost:5000 to start using the application.**
 
-* User browse: GET `localhost:5000/users`
- 
-* User read: GET `localhost:5000/users/:id`
+# API Endpoints
 
-* User edit: PUT `localhost:5000/users/:id`
+Below are the available API endpoints grouped by functionality. Ensure you have set up your .env and database configurations properly to use these endpoints.
 
-* User add: POST `localhost:5000/users`
- 
-* User deletion: DELETE `localhost:5000/users/:id`
- 
-* Quote browse: GET `localhost:5000/quotes`
+# User Management
 
-* Quote read: GET `localhost:5000/quotes/:id`
+* List Users
+* GET /users
+* Get User
+* GET /users/:id
+* Create User
+* POST /users
+* Middleware: hashPassword
+* Update User
+* PUT /users/:id
+* Middleware: verifyToken, verifyId
+* Delete User
+* DELETE /users/:id
+* User Login
+* POST /users/login
+* Validations: Checks for email and name formats.
 
-* Quote edit: PUT `localhost:5000/quotes/:id`
+# Quotes Management
 
-* Quote add: POST `localhost:5000/quotes`
+* List Quotes
+* GET /quotes
+* Get Quote
+* GET /quotes/:id
+* Create Quote
+* POST /quotes
+* Update Quote
+* PUT /quotes/:id
+* Delete Quote
+* DELETE /quotes/:id
 
-* Quote deletion: DELETE `localhost:5000/quotes/:id`
+# Categories Management
 
-* Comment browse: GET `localhost:5000/comments`
+* List Categories
+* GET /categories
+* Get Category
+* GET /categories/:id
+* Create Category
+* POST /categories
+* Update Category
+* PUT /categories/:id
+* Delete Category
+* DELETE /categories/:id
 
-* Comment read: GET `localhost:5000/comments/:id`
+# List Tasks
 
-* Comment edit: PUT `localhost:5000/comments/:id`
+* GET /tasks
+* Get Task
+* GET /tasks/:id
+* Create Task
+* POST /tasks
+* Update Task
+* PUT /tasks/:id
+* Delete Task
+* DELETE /tasks/:id
 
-* Comment add: POST `localhost:5000/comments`
+# List Deadlines
 
-* Comment deletion: DELETE `localhost:5000/comments/:id`
+* GET /deadlines
+* Get Deadline
+* GET /deadlines/:id
+* Create Deadline
+* POST /deadlines
+* Update Deadline
+* PUT /deadlines/:id
+* Delete Deadline
+* DELETE /deadlines/:id
 
-* Category browse: GET `localhost:5000/categories`
+## Additional Features
 
-* Category read: GET `localhost:5000/categories/:id`
- 
-* Category edit: PUT `localhost:5000/categories/:id`
+* Manage Favorites
+* Add, view, and delete favorite quotes.
+* User Votes
+* Users can upvote or downvote quotes.
+* Notifications
+* Manage user notifications.
+* Development Notes
 
-* Category add: POST `localhost:5000/categories`
+## Windows Users: Set Git to handle line endings correctly for your platform:
 
-* Category deletion: DELETE `localhost:5000/categories/:id`
+```bash
+git config --global core.autocrlf true
+For more detailed API documentation, including request and response formats, refer to the inline comments in the router.js and controller files. Ensure your database and .env settings are configured correctly to avoid connection issues.
+```
 
-* Deadline browse: GET `localhost:5000/deadlines`
-
-* Deadline read: GET `localhost:5000/deadlines/:id`
-
-* Deadline edit: PUT `localhost:5000/deadlines/:id`
-
-* Deadline add: POST `localhost:5000/deadlines`
-
-* Deadline deletion: `DELETE localhost:5000/deadlines/:id`
-
-* Quote-Category browse: GET `localhost:5000/quote_categories`
-
-* Quote-Category read: GET `localhost:5000/quote_categories/:id`
-
-* Quote-Category edit: PUT `localhost:5000/quote_categories/:id`
-
-* Quote-Category add: POST `localhost:5000/quote_categories`
-
-* Quote-Category deletion: DELETE `localhost:5000/* quote_categories/:id`
-
-* Task browse: GET `localhost:5000/tasks`
-
-* Task read: GET `localhost:5000/tasks/:id`
-
-* Task edit: PUT `localhost:5000/tasks/:id`
-
-* Task add: POST `localhost:5000/tasks`
-
-* Task deletion: DELETE `localhost:5000/tasks/:id`
-
-You can find all these routes declared in the file src/router.js. You can add your own new routes, controllers, and models.
+This documentation is organized and provides an overview of the setup process, as well as detailed descriptions of the API endpoints. You can adapt the details as necessary to match your specific configurations and setup.
 
 ## Controllers
 * userManager : Handles user-related operations.
