@@ -155,7 +155,7 @@ return (
       onClick={(e) => e.stopPropagation()} // Prevents propagation of click events to the modal's backdrop.
     >
       <div className="flex justify-end mb-4">
-        <button onClick={onClose} className="text-white">
+        <button aria-label="Fermer le menu" onClick={onClose} className="text-white">
           <XMarkIcon className="bg-red-500 w-6 h-6" />
         </button>
       </div>
@@ -180,7 +180,7 @@ return (
           <p className="text-2xl px-1">{quote.vote}</p>
           <ChevronDownIcon className="w-6 hover:fill-red-500 cursor-pointer" />
         </section>
-        <button className="rounded bg-custom-main-orange w-36 text-white font-normal cursor-pointer">
+        <button aria-label="Partager la citation" className="rounded bg-custom-main-orange w-36 text-white font-normal cursor-pointer">
           Partager
         </button>
           <QuotesFavoris
@@ -204,7 +204,7 @@ return (
                   value={editedContent}
                   onChange={(e) => setEditedContent(e.target.value)}
                 />
-                <button
+                <button aria-label="Comfirmer la modification du commentaire"
                   className="mt-2 bg-butterscotch hover:bg-caramel text-white font-bold py-2 px-4 rounded w-/4"
                   onClick={() => handleUpdateComment(comment.id)}
                 >
@@ -218,13 +218,13 @@ return (
               </div>
             )}
             <div className="flex space-x-2 mt-2 justify-end">
-              <button
+              <button aria-label="Modifier le commentaire"
                 className="text-blue-500 hover:text-blue-700"
                 onClick={() => handleEditComment(comment.id)}
               >
                 {parseInt(userId) === comment.id_user && <PencilIcon className="w-5 h-5" />}
               </button>
-              <button
+              <button aria-label="Supprimer le commentaire"
                 className="text-red-500 hover:text-red-700"
                 onClick={() => handleDeleteComment(comment.id)}
               >
@@ -240,11 +240,11 @@ return (
             value={newComment}
             onChange={(e) => setNewComment(e.target.value)}
           />
-          <button
+          <button aria-label="publier le commentaire"
             className="mt-2 bg-butterscotch hover:bg-caramel text-white font-bold py-2 px-4 rounded"
             onClick={handleAddComment}
           >
-            Envoyer
+            Publier
           </button>
         </div>
       </div>

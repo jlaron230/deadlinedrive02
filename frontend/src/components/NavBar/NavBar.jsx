@@ -117,7 +117,7 @@ const NavBar = () => {
                   </motion.div>
                 </Link>
               ) : (
-                <motion.button whileHover="hover" onClick={item.onClick} className="text-custom-black hover:text-gray-200" key={index}>
+                <motion.button aria-label="Navigation" whileHover="hover" onClick={item.onClick} className="text-custom-black hover:text-gray-200" key={index}>
                   <motion.div variants={linkVariants}>
                     {item.icon}
                   </motion.div>
@@ -126,7 +126,7 @@ const NavBar = () => {
             ))}
           </div>
           <div className="-mr-2 flex md:hidden">
-            <motion.button onClick={toggleMenu} className="text-custom-black hover:text-gray-200 inline-flex items-center justify-center p-2 rounded-md focus:outline-none">
+            <motion.button aria-label="Fermer le menu" onClick={toggleMenu} className="text-custom-black hover:text-gray-200 inline-flex items-center justify-center p-2 rounded-md focus:outline-none">
               <motion.div variants={linkVariants}>
                 {isOpen ? <XMarkIcon className="h-6 w-6" /> : <Bars3Icon className="h-6 w-6" />}
               </motion.div>
