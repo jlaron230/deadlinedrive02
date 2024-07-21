@@ -59,7 +59,7 @@ function ChooseAuthor({ selectedAuthor, onSelectAuthor }) {
 
   return (
     <>
-    <div className="relative">
+    <main className="relative">
       <input
         type="text"
         value={searchTerm}
@@ -91,7 +91,7 @@ function ChooseAuthor({ selectedAuthor, onSelectAuthor }) {
           ))}
         </ul>
       )}
-    </div>
+    </main>
     </>
   );
 }

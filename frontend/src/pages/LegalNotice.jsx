@@ -2,7 +2,7 @@ import React from "react";
 
 export default function LegalNotice() {
   return (
-    <div className="container mx-auto p-5">
+    <main className="container mx-auto p-5">
       {/* Main title */}
       <h1 className="text-3xl font-bold mb-5">Mentions Légales</h1>
 
@@ -94,6 +94,6 @@ export default function LegalNotice() {
           Informations personnelles : « les informations qui permettent, sous quelque forme que ce soit, directement ou non, l'identification des personnes physiques auxquelles elles s'appliquent » (article 4 de la loi n° 78-17 du 6 janvier 1978).
         </p>
       </section>
-    </div>
+    </main>
   );
 }

@@ -34,8 +34,10 @@ export default function Calendar() {
 
   return (
     <>
+    <main>
       <YoursEvents tasks={tasks} setTasks={setTasks} fetchTasks={fetchTasks}/>
       <CalendarComponents tasks={tasks} setTasks={setTasks} fetchTasks={fetchTasks}/>
+      </main>
     </>
   );
 }

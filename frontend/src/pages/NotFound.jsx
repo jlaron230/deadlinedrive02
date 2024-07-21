@@ -3,7 +3,7 @@ import React from "react";
 function NotFound() {
   return (
     <>
-      <section className="relative z-10 bg-404 py-[30px] min-h-screen">
+      <Main className="relative z-10 bg-404 py-[30px] min-h-screen">
         {/* Container for centering content */}
         <div className="container mx-auto pt-20">
           <div className="flex">
@@ -43,7 +43,7 @@ function NotFound() {
           </div>
           <div className="h-full w-1/3 bg-gradient-to-b"></div>
         </div>
-      </section>
+      </Main>
     </>
   );
 }
