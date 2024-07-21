@@ -58,6 +58,19 @@ Bienvenue dans la documentation de l'API RESTful de Deadline Drive. Cette API pe
 - **Add:** POST `localhost:5000/tasks`
 - **Deletion:** DELETE `localhost:5000/tasks/:id`
 
+### Favorites
+- **Add:** POST `localhost:5000/favorites`
+- **Get:** GET `localhost:5000/favorites/:id`
+- **Remove:** DELETE `localhost:5000/favorites/:quoteId`
+
+### Notifications
+- **Browse** GET `localhost:5000/notifications`
+- **Read** GET `localhost:5000/notifications/:id`
+- **Create** POST `localhost:5000/notifications`
+- **Mark** PUT `localhost:5000/notifications/:id/read`
+- **Delete** DELETE `localhost:5000/notifications/:id`
+- **Find** GET `localhost:5000/notifications/user/:userId`
+
 # Exemple Utilisateurs
 
 ## Récupérer tous les utilisateurs
