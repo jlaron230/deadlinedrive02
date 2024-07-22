@@ -150,7 +150,7 @@ function Password() {
               {errorMessage && <p className="text-red-500">{errorMessage}</p>}{" "}
               {/* Display error message if present */}
               <div className="mt-4">
-                <button
+                <button aria-label="Sauvegarder nouveau mot de passe"
                   onClick={handleSaveClick}
                   className="inline-block shadow-2xl rounded-md bg-black px-3.5 py-2.5 text-sm font-semibold text-white hover:bg-gray-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
                 >

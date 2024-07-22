@@ -101,9 +101,9 @@ function NotificationsComponent({ isOpen, onClose }) {
                                 </div>
                             )}
                         </div>
-                        <button
+                        <button aria-label="Fermer le menu"
                             className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
-                            onClick={onClose} // Close button to dismiss the modal
+                            onClick={onClose} 
                         >
                             Fermer
                         </button>

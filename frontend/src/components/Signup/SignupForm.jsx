@@ -141,7 +141,7 @@ const SignupForm = () => {
                   Se souvenir de moi
                 </div>
 
-                <button
+                <button aria-label="Inscription"
                   type="submit"
                   className="bg-custom-main-orange text-white py-2 rounded" // Submit button with styles
                   disabled={isSubmitting} // Disable the button during submission
