@@ -12,10 +12,10 @@ function QuoteCard() {
   const [quoteCategory, setQuoteCategory] = useState([]);
   const [currentQuotes, setCurrentQuotes] = useState([]);
   const [itemOffset, setItemOffset] = useState(0);
-  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState("All");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedQuote, setSelectedQuote] = useState(null);
-  const [isMenuOpen, setIsMenuOpen] = useState(false); // Ajout de l'état pour le menu déroulant
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const itemsPerPage = 9;
 
@@ -27,30 +27,38 @@ function QuoteCard() {
         axios.get(`${import.meta.env.VITE_BACKEND_URL}/quote_category`),
       ]);
       setQuote(resQuote.data);
-      setCategory(resCategory.data);
+      setCategory([{ id: 0, name: "All" }, ...resCategory.data]);
       setQuoteCategory(resQuoteCategory.data);
       console.log("Fetched data:", resQuoteCategory.data);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
-
+  
   useEffect(() => {
     fetchData();
   }, []);
+  
+  const shuffleArray = (array) => {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  };
 
   useEffect(() => {
     const endOffset = itemOffset + itemsPerPage;
-    const filteredQuotes = selectedCategory
-      ? quote.filter((q) => getCategoryName(q.id) === selectedCategory)
-      : quote;
+    const filteredQuotes = selectedCategory === "All"
+      ? shuffleArray([...quote])
+      : quote.filter((q) => getCategoryName(q.id) === selectedCategory)
     setCurrentQuotes(filteredQuotes.slice(itemOffset, endOffset));
   }, [itemOffset, quote, selectedCategory]);
 
   const handlePageClick = (event) => {
-    const filteredQuotes = selectedCategory
-      ? quote.filter((q) => getCategoryName(q.id) === selectedCategory)
-      : quote;
+    const filteredQuotes = selectedCategory === "All"
+      ? shuffleArray([...quote])
+      : quote.filter((q) => getCategoryName(q.id) === selectedCategory);
     const newOffset = (event.selected * itemsPerPage) % filteredQuotes.length;
     setItemOffset(newOffset);
   };
@@ -130,6 +138,7 @@ function QuoteCard() {
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
+
   
   return (
     <>
@@ -262,7 +271,7 @@ function QuoteCard() {
         </AnimatePresence>{" "}
         <Pagination
           pageCount={Math.ceil(
-            (selectedCategory
+            (selectedCategory === "All"
               ? quote.filter((q) => getCategoryName(q.id) === selectedCategory)
               : quote
             ).length / itemsPerPage
