@@ -3,7 +3,7 @@ import ChooseAuthor from "@components/ChooseAuthor/ChooseAuthor";
 import InspirationalImage from "../assets/prateek-katyal-8Aq6t-Khe5k-unsplash.jpg";
 import YoursQuote from "../components/YoursQuotes/YoursQuotes";
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
