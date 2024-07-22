@@ -18,8 +18,6 @@ export default function CustomizeQuotes() {
   const [errorMessage, setErrorMessage] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const navigate = useNavigate();
-
   const token = localStorage.getItem('token');
   console.log('token:', token)
 
