@@ -113,7 +113,7 @@ const LoginForm = () => {
                   </Link>
                 </div>
 
-                <button
+                <button aria-label="Connexion"
                   type="submit"
                   className="bg-butterscotch text-white py-2 rounded flex items-center justify-center" // Submit button with styles
                   disabled={isSubmitting} // Disable the button during submission

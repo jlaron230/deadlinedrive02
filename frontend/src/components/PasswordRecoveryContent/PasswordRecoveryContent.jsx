@@ -44,7 +44,7 @@ const PasswordRecoveryContent = ({ onRecoverPassword }) => {
               {errors.email && touched.email ? (
                 <div className="text-red-500 text-xs mt-1">{errors.email}</div>
               ) : null}
-              <button
+              <button aria-label="Récuperer mot de passe"
                 type="submit"
                 className="mt-4 w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-butterscotch hover:bg-caramel focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               >
