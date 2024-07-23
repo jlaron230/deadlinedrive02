@@ -29,7 +29,6 @@ function QuoteCard() {
       setQuote(resQuote.data);
       setCategory([{ id: 0, name: "All" }, ...resCategory.data]);
       setQuoteCategory(resQuoteCategory.data);
-      console.log("Fetched data:", resQuoteCategory.data);
     } catch (error) {
       console.error("Error fetching data:", error);
     }

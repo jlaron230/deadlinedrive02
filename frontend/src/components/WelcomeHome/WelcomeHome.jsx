@@ -13,7 +13,7 @@ const WelcomeHome = () => {
             transition={{ duration: 1 }}
         >
           <h1 className=" p-8 font-semibold text-3xl flex justify-center items-center">
-            Bienvenue sur Deadline Drive, votre allié pour rester motivé !
+            Bienvenue sur Deadline Drive, votre alliè pour rester motivè !
           </h1>
       </motion.div>
       <article className="flex flex-row flex-wrap p-4 m-2 ">

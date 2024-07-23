@@ -85,7 +85,7 @@ const AboutContent = () => {
         </section>
         <section className="my-8 px-2 py-8">
           <h2 className="text-4xl text-caramel font-bold text-center mb-2">
-            Nos Catégories
+            Nos Catègories
           </h2>
           <h3 className="text-2xl text-custom-black font-bold text-center mb-4">
             Auteur, Manga, Série, Film, Animé, Histoire, Poésie, Personnalités
