@@ -23,20 +23,20 @@ input:disabled {
   opacity: 0.6; /* Slightly transparent */
 }
 
-.disabled-input:disabled {
+.disabled-input {
   background-color: #f0f0f0;
   color: black;
   cursor: not-allowed;
   opacity: 0.6;
 }
 
-
+@layer base {
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Laila', sans-serif!important;
+    font-family: 'Laila', sans-serif;
     font-weight: 700; /* Correspond à la définition de @font-face */
     font-style: normal;
     color: var(--theme1);
-  
+  }
   .btn{
     background-color: var(--theme1)!important;
     color: white!important;
@@ -51,7 +51,7 @@ input:disabled {
     background-color: black!important;
   }
     html{
-      font-family: "Imprima", sans-serif!important;
+      font-family: "Imprima", sans-serif;
     }
     
 @layer base {
