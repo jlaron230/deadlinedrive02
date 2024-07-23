@@ -114,7 +114,7 @@ export default function CustomizeQuotes() {
       transition={{ duration: 1, ease: "easeOut" }}
       className="flex flex-col max-w-7xl m-auto"
     >
-      <h1 className="text-3xl py-6 font-semibold flex justify-center">Créer une citation</h1>
+      <h1 className="text-3xl py-6 font-semibold flex justify-center">Crèer une citation</h1>
       <div className="flex flex-row flex-wrap gap-20 px-2 max-sm:gap-0">
         <div className="flex flex-col w-2/5 max-sm:w-full">
           {successMessage && (
