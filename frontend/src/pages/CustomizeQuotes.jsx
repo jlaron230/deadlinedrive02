@@ -101,7 +101,7 @@ export default function CustomizeQuotes() {
       addQuote(newQuote, token);
     } else {
       setErrorMessage(
-        <>Vous devez être connecté pour créer une citation. <Link to="/login" className="text-blue-500 hover:text-blue-700 underline">Connectez-vous ici.</Link></>);
+        <>Vous devez être connecté(e) pour créer une citation. <Link to="/login" className="text-blue-500 hover:text-blue-700 underline">Connectez-vous ici.</Link></>);
       setTimeout(() => setErrorMessage(""), 5000);
     }
   };

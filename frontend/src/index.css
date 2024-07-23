@@ -23,7 +23,7 @@ input:disabled {
   opacity: 0.6; /* Slightly transparent */
 }
 
-.disabled-input {
+.disabled-input:disabled {
   background-color: #f0f0f0;
   color: black;
   cursor: not-allowed;
