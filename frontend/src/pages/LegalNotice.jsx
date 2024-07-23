@@ -1,9 +1,8 @@
 import React from "react";
-import { Link } from 'react-router-dom';
 
 export default function LegalNotice() {
   return (
-    <main className="container mx-auto p-5">
+    <div className="container mx-auto p-5">
       {/* Main title */}
       <h1 className="text-3xl font-bold mb-5">Mentions Légales</h1>
 
@@ -11,11 +10,11 @@ export default function LegalNotice() {
       <section className="mb-5">
         <h2 className="text-2xl font-semibold">1. Éditeur du site</h2>
         <p className="mt-2">
-          Nom de la société : Deadline Drive Inc. <br />
-          Adresse : 33 Avenue Victor Hugo 13100 Aix-en-Provence <br />
-          Téléphone : +00 00 00 00 00<br />
-          Email : DeadlineDrive@mail.com <br />
-          Directeur de la publication : Amir NINACH
+          Nom de la société : [Votre Société]<br />
+          Adresse : [Votre Adresse]<br />
+          Téléphone : [Votre Numéro de Téléphone]<br />
+          Email : [Votre Email]<br />
+          Directeur de la publication : [Nom du Directeur]
         </p>
       </section>
 
@@ -23,8 +22,9 @@ export default function LegalNotice() {
       <section className="mb-5">
         <h2 className="text-2xl font-semibold">2. Hébergement du site</h2>
         <p className="mt-2">
-          Nom de l'hébergeur : Render<br />
-          Adresse de l'hébergeur : 525 Brannan St Suite 300, San Francisco, CA 94107, United States<br />
+          Nom de l'hébergeur : [Nom de l'Hébergeur]<br />
+          Adresse de l'hébergeur : [Adresse de l'Hébergeur]<br />
+          Téléphone de l'hébergeur : [Numéro de Téléphone de l'Hébergeur]
         </p>
       </section>
 
@@ -32,7 +32,7 @@ export default function LegalNotice() {
       <section className="mb-5">
         <h2 className="text-2xl font-semibold">3. Propriété intellectuelle</h2>
         <p className="mt-2">
-          Le contenu du site (textes, images, graphismes, logo, icônes, sons, logiciels, etc.) est la propriété de Deadline Drive ou de ses partenaires. Toute reproduction, représentation, modification, publication, adaptation de tout ou partie des éléments du site, quel que soit le moyen ou le procédé utilisé, est interdite, sauf autorisation écrite préalable de Deadline Drive.
+          Le contenu du site (textes, images, graphismes, logo, icônes, sons, logiciels, etc.) est la propriété de [Votre Société] ou de ses partenaires. Toute reproduction, représentation, modification, publication, adaptation de tout ou partie des éléments du site, quel que soit le moyen ou le procédé utilisé, est interdite, sauf autorisation écrite préalable de [Votre Société].
         </p>
       </section>
 
@@ -40,10 +40,10 @@ export default function LegalNotice() {
       <section className="mb-5">
         <h2 className="text-2xl font-semibold">4. Limitation de responsabilité</h2>
         <p className="mt-2">
-          Deadline Drive ne pourra être tenue responsable des dommages directs et indirects causés au matériel de l'utilisateur lors de l'accès au site, et résultant soit de l'utilisation d'un matériel ne répondant pas aux spécifications indiquées, soit de l'apparition d'un bug ou d'une incompatibilité.
+          [Votre Société] ne pourra être tenue responsable des dommages directs et indirects causés au matériel de l'utilisateur lors de l'accès au site, et résultant soit de l'utilisation d'un matériel ne répondant pas aux spécifications indiquées, soit de l'apparition d'un bug ou d'une incompatibilité.
         </p>
         <p className="mt-2">
-          Deadline Drive ne pourra également être tenue responsable des dommages indirects (tels par exemple qu'une perte de marché ou perte d'une chance) consécutifs à l'utilisation du site.
+          [Votre Société] ne pourra également être tenue responsable des dommages indirects (tels par exemple qu'une perte de marché ou perte d'une chance) consécutifs à l'utilisation du site.
         </p>
       </section>
 
@@ -54,7 +54,7 @@ export default function LegalNotice() {
           L'utilisateur est informé des réglementations concernant la communication marketing, la loi du 21 Juin 2014 pour la confiance dans l'Économie Numérique, la Loi Informatique et Liberté du 06 Août 2004 ainsi que du Règlement Général sur la Protection des Données (RGPD : n° 2016-679).
         </p>
         <p className="mt-2">
-          Pour plus d'informations, veuillez consulter notre <Link to="/privacy-policy" className="text-blue-600 hover:underline">politique de confidentialité</Link>.
+          Pour plus d'informations, veuillez consulter notre <a href="/PrivacyPolicy" className="text-blue-600 hover:underline">politique de confidentialité</a>.
         </p>
       </section>
 
@@ -62,10 +62,10 @@ export default function LegalNotice() {
       <section className="mb-5">
         <h2 className="text-2xl font-semibold">6. Liens hypertextes et cookies</h2>
         <p className="mt-2">
-          Le site Deadline Drive contient un certain nombre de liens hypertextes vers d’autres sites, mis en place avec l’autorisation de Deadline Drive. Cependant, Deadline Drive n’a pas la possibilité de vérifier le contenu des sites ainsi visités, et n’assumera en conséquence aucune responsabilité de ce fait.
+          Le site [Votre Site] contient un certain nombre de liens hypertextes vers d’autres sites, mis en place avec l’autorisation de [Votre Société]. Cependant, [Votre Société] n’a pas la possibilité de vérifier le contenu des sites ainsi visités, et n’assumera en conséquence aucune responsabilité de ce fait.
         </p>
         <p className="mt-2">
-          La navigation sur le site Deadline Drive est susceptible de provoquer l’installation de cookie(s) sur l’ordinateur de l’utilisateur. Un cookie est un fichier de petite taille, qui ne permet pas l’identification de l’utilisateur, mais qui enregistre des informations relatives à la navigation d’un ordinateur sur un site. Les données ainsi obtenues visent à faciliter la navigation ultérieure sur le site, et ont également vocation à permettre diverses mesures de fréquentation.
+          La navigation sur le site [Votre Site] est susceptible de provoquer l’installation de cookie(s) sur l’ordinateur de l’utilisateur. Un cookie est un fichier de petite taille, qui ne permet pas l’identification de l’utilisateur, mais qui enregistre des informations relatives à la navigation d’un ordinateur sur un site. Les données ainsi obtenues visent à faciliter la navigation ultérieure sur le site, et ont également vocation à permettre diverses mesures de fréquentation.
         </p>
       </section>
 
@@ -73,7 +73,7 @@ export default function LegalNotice() {
       <section className="mb-5">
         <h2 className="text-2xl font-semibold">7. Droit applicable et attribution de juridiction</h2>
         <p className="mt-2">
-          Tout litige en relation avec l’utilisation du site Deadline Drive est soumis au droit français. Il est fait attribution exclusive de juridiction aux tribunaux compétents de Aix-en-Provence.
+          Tout litige en relation avec l’utilisation du site [Votre Site] est soumis au droit français. Il est fait attribution exclusive de juridiction aux tribunaux compétents de [Ville du Tribunal].
         </p>
       </section>
 
@@ -94,6 +94,6 @@ export default function LegalNotice() {
           Informations personnelles : « les informations qui permettent, sous quelque forme que ce soit, directement ou non, l'identification des personnes physiques auxquelles elles s'appliquent » (article 4 de la loi n° 78-17 du 6 janvier 1978).
         </p>
       </section>
-    </main>
+    </div>
   );
 }

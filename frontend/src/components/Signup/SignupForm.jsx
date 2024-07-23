@@ -22,7 +22,7 @@ const SignupForm = () => {
   const navigate = useNavigate(); // Use useNavigate to obtain the navigate function
 
   return (
-    <main className="md:min-h-[87vh] flex flex-col p-2 items-center justify-center"> {/* Main container with minimum height, centered content */}
+    <div className="md:min-h-[87vh] flex flex-col p-2 items-center justify-center"> {/* Main container with minimum height, centered content */}
       <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-8"> {/* Responsive grid for large screens */}
         <motion.div variants={imageVariants} initial="hidden" animate="visible"> {/* Animated component for the image */}
           <img
@@ -164,7 +164,7 @@ const SignupForm = () => {
           </Formik>
         </div>
       </div>
-    </main>
+    </div>
   );
 };
 

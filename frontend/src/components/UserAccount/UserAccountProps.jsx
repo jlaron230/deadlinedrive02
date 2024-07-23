@@ -57,7 +57,7 @@ function UserAccountProps() {
   }, []);
 
   return (
-    <main className="flex items-center justify-center bg-gray-50 ">
+    <div className="flex items-center justify-center bg-gray-50 ">
       {/* Modal for account deletion confirmation */}
       <Modal isOpen={isModalOpen} onClose={handleCloseModal} deletes={deleting} />
 
@@ -184,7 +184,7 @@ function UserAccountProps() {
           </div>
             </div>
       </div>
-    </main>
+    </div>
   );
 }
 

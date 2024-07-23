@@ -6,7 +6,7 @@ import bookOpenWhite from "../../assets/bookOpenWhite.jpg";
 
 const WelcomeHome = () => {
   return (
-    <main className=" flex flex-col p-2 items-center justify-center">
+    <div className=" flex flex-col p-2 items-center justify-center">
        <motion.div
             initial={{ y: -100, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
@@ -42,7 +42,7 @@ const WelcomeHome = () => {
       </article>
 
       
-    </main>
+    </div>
   );
 };
 

@@ -5,7 +5,7 @@ import addingImg from "../../assets/addingImg.jpg";
 
 function CardFeatures() {
   return (
-    <main>
+    <div>
     <ul className=" list-disc flex flex-row flex-wrap justify-center p-2 	">
       <li className="m-2 p-4 border-2 rounded-md border-custom-main-orange shadow w-96 min-h-80 flex flex-col">
         <h3>Cliquez ici pour :</h3>
@@ -48,7 +48,7 @@ function CardFeatures() {
         </Link>
       </li>
     </ul>
-    </main>
+    </div>
   );
 }
 

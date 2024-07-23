@@ -1,6 +1,6 @@
 export default function PrivacyPolicy() {
   return (
-    <main className="container mx-auto p-5">
+    <div className="container mx-auto p-5">
       {/* Main title of the privacy policy */}
       <h1 className="text-3xl font-bold mb-5">Politique de confidentialité</h1>
 
@@ -81,6 +81,6 @@ export default function PrivacyPolicy() {
           Si vous avez des questions ou des préoccupations concernant cette politique de confidentialité, veuillez nous contacter à : DeadlineDrive@mail.com
         </p>
       </section>
-    </main>
+    </div>
   );
 }

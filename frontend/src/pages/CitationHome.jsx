@@ -12,7 +12,6 @@ export default function CitationHome() {
 
   return (
     <>
-     <main>
       {!showCustomizeQuotes ? (
         <motion.div
           initial={{ opacity: 0, y: 50 }}
@@ -73,7 +72,6 @@ export default function CitationHome() {
           <CustomizeQuotes />
         </motion.div>
       )}
-      </main>
     </>
   );
 }

@@ -43,7 +43,7 @@ const AboutContent = () => {
   ];
 
   return (
-    <main className="md:min-h-[87vh] mx-auto px-4 sm:px-6 lg:px-8"> {/* Main container with minimum height, centered content */}
+    <div className="md:min-h-[87vh] mx-auto px-4 sm:px-6 lg:px-8"> {/* Main container with minimum height, centered content */}
       <div className="max-w-6xl mx-auto">
         <section className="my-8 px-2 py-8">
           <div>
@@ -159,7 +159,7 @@ const AboutContent = () => {
         <Faq /> {/* FAQ component */}
       </div>
       <ScrollToTopButton />
-    </main>
+    </div>
   );
 };
 
