@@ -21,7 +21,13 @@ const {
 
   //routes for user login with middlewares
   router.post(
-    "/users/login",[body("email").trim().isEmail().withMessage("le champ email est incorrecte"), body("firstName").trim().isString(), body("lastName").trim().isString()], userControllers.getUserByEmailWithPasswordAndPassToNext,verifyPassword
+    "/users/login", 
+    [
+      body("email").trim().isEmail().withMessage("Le champ email est incorrect."),
+      body("password").trim().notEmpty().withMessage("Le mot de passe est requis.") // Ajoutez cette ligne pour le mot de passe
+    ],
+    userControllers.getUserByEmailWithPasswordAndPassToNext,
+    verifyPassword
   );
 
 router.post("/quotes", quoteControllers.add);  
@@ -34,6 +40,8 @@ router.get('/users/:id', userControllers.read);
 router.put('/users/:id',[body("email").trim().isLength({min: 1}).isEmail().withMessage("le champ email est incorrecte"), body("firstName").trim().isString(), body("lastName").trim().isString()], verifyToken, verifyId, userControllers.edit);
 router.delete('/users/:id', userControllers.destroy);
 router.put('/users/:id/password',userControllers.getUserByEmailWithPasswordAndPassToNext, verifyToken, userControllers.changePassword);
+router.post('/recovery', userControllers.findRecoveryPassword);
+router.put('/reset-password', userControllers.resetPassword);
 
   
 // Similar setup for categories, quotes, favoris, tasks, deadlines, quote categories, comments

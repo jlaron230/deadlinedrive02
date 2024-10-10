@@ -1,7 +1,8 @@
 const models = require("../models");
 const argon2 = require("argon2");
+const jwt = require('jsonwebtoken');
 const { validationResult } = require('express-validator');
-
+const { sendPasswordResetEmail } = require('./../services/sendPasswordResetEmail');
 // Function to get all users
 const browse = (req, res) => {
   models.user
@@ -136,6 +137,61 @@ const destroy = (req, res) => {
     });
 };
 
+
+const findRecoveryPassword = async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    const user = await models.user.findUserByEmailRecovery(email);
+    console.log("Résultat de la recherche utilisateur :", user); // Ajoute ce log
+
+    if (user[0] != null) { //vérifie la présence d'un user dans la bdd
+      console.log("Email de l'utilisateur :", email); // Vérifie que l'email est bien accessible ici
+      await sendPasswordResetEmail(user[0], email);
+      return res.status(200).json({ message: 'Mail envoyé' });
+    } else {
+      return res.status(404).send('User not found');
+    }
+
+
+  } catch (err) {
+    console.error('Erreur lors de la récupération du mot de passe:', err);
+    return res.status(500).json({ message: 'Erreur serveur' });
+  }
+};
+
+const resetPassword = async (req, res) => {
+  const { token, newPassword } = req.body; // Récupération des paramètres
+
+  try {
+    // Vérification du token
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const email = decoded.email;
+    const userId = decoded.id;
+
+    // Recherche de l'utilisateur par email
+    const user = await models.user.findUserByEmail(email);
+    console.log("Utilisateur trouvé :", user);
+
+    if (!user) {
+      return res.status(404).send('User not found'); // Utilisateur non trouvé
+    }
+
+    // Hachage du nouveau mot de passe
+    const hashPassword = await argon2.hash(newPassword); // Utiliser newPassword directement
+
+    // Modification du mot de passe dans la base de données
+    await models.user.modifyPassword(userId, hashPassword);
+    
+        return res.status(200).json({ message: "Mot de passe mis à jour avec succès !" });
+
+  } catch (err) {
+    console.error('Erreur lors de la modification du mot de passe:', err);
+    return res.status(500).json({ message: "Erreur serveur" });
+  }
+};
+
+
 // Function to get a user by email and pass the user to the next middleware
 const getUserByEmailWithPasswordAndPassToNext = (req, res, next) => {
   const { email } = req.body;
@@ -153,8 +209,11 @@ const getUserByEmailWithPasswordAndPassToNext = (req, res, next) => {
     .catch((err) => {
       console.error(err);
       res.status(500).send("Error retrieving data from database"); // Send a 500 status on error
+      consolelog("Error retrieving data from database", err)
     });
 };
+
+
 
 module.exports = {
   browse,
@@ -163,5 +222,7 @@ module.exports = {
   changePassword,
   add,
   destroy,
-  getUserByEmailWithPasswordAndPassToNext,
+  findRecoveryPassword,
+  resetPassword,
+  getUserByEmailWithPasswordAndPassToNext
 };

@@ -3,6 +3,7 @@ import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import logo from "../../assets/Logo-Deadlines.svg";
 import { motion } from 'framer-motion';
+import axios from 'axios';
 
 
 const PasswordRecoverySchema = Yup.object().shape({
@@ -25,13 +26,24 @@ const PasswordRecoveryContent = ({ onRecoverPassword }) => {
         <Formik
           initialValues={{ email: '' }}
           validationSchema={PasswordRecoverySchema}
-          onSubmit={(values, { setSubmitting }) => {
-            onRecoverPassword(values.email);
-            setSubmitting(false);
+          onSubmit={async (values, { setSubmitting }) => {
+            try {
+              // Envoi de la requête de récupération de mot de passe via axios
+              console.log(values);
+              const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/recovery`, values);
+              console.log(response);
+              // Optionnel : Informer l'utilisateur que l'email a été envoyé
+              alert('Email de récupération envoyé !');
+            } catch (error) {
+              console.error('Erreur lors de l\'envoi de l\'email:', error);
+              alert('Erreur lors de l\'envoi de l\'email. Veuillez réessayer.');
+            } finally {
+              setSubmitting(false);
+            }
           }}
         >
           {({ errors, touched }) => (
-            <Form className="w-full max-w-lg">
+            <Form  className="w-full max-w-lg">
               <label htmlFor="email" className="block text-sm text-center font-bold text-gray-700">
                 Votre Adresse email
               </label>
@@ -46,6 +58,7 @@ const PasswordRecoveryContent = ({ onRecoverPassword }) => {
               ) : null}
               <button aria-label="Récuperer mot de passe"
                 type="submit"
+                //onClick={handlesubmit}
                 className="mt-4 w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-butterscotch hover:bg-caramel focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               >
                 Envoyer
