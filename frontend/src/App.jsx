@@ -23,6 +23,7 @@ import ManageMyQuotes from "./pages/ManageMyQuotes";
 // Import Navbar and Footer
 import NavBar from "@components/NavBar/NavBar";
 import Footer from "@components/Footer/Footer";
+import PasswordRecoveryPage from "./pages/PasswordRecoveryPage";
 
 //`createContext` est utilisé pour créer un contexte pour le partage d'état dans une hiérarchie de composants
 const PostsContext = createContext();
@@ -51,6 +52,11 @@ function App() {
           <Route
             path="/password-recovery"
             element={<PasswordRecovery />}
+          />{" "}
+          {/* Route for password recovery page */}
+          <Route
+            path="/password-recovery-page"
+            element={<PasswordRecoveryPage />}
           />{" "}
           {/* Route for password recovery page */}
           <Route path="/signup" element={<Signup />} />{" "}

@@ -1,39 +1,55 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
+import { useNavigate } from "react-router-dom";
 
-function Password() {
+function RecoveryPassword() {
   const [isEditing, setIsEditing] = useState(false); // State to toggle edit mode
-  const [user, setUser] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-  });
   const [passwords, setPasswords] = useState({
     newPassword: "",
     confirmPassword: "",
   }); // State to manage password inputs
   const [errorMessage, setErrorMessage] = useState(""); // State for error messages
   const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
+  const [IsTokenValid, setIsTokenValid] = useState([]); // State to
+  const [isNewPassword, setIsNewPassword] = useState(false); 
+  const [loading, setLoading] = useState(true);
+  const location = useLocation()
+  const token = new URLSearchParams(location.search).get("token");
+  console.log("Token:", token);
   const userId = localStorage.getItem("id");
+  const navigate = useNavigate();
 
-  const fetchUserData = async () => {
+  useEffect (() => {
+    console.log(isNewPassword)
+    if (!isNewPassword) {
+   const verifyToken = async () => {
     try {
-      const token = localStorage.getItem("token");
-      //get user data
       const response = await axios.get(
-        `${import.meta.env.VITE_BACKEND_URL}/users/${userId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        `${import.meta.env.VITE_BACKEND_URL}/password-recovery-page?token=${token}`,
       );
-      setUser(response.data);
-    } catch (error) {
-      console.error("Error fetching user data:", error);
+      console.log(response);
+      setIsTokenValid(response.data.valid);
     }
-  };
+    catch (error) {
+      console.error("Error verifying token:", error.response ? error.response.data : error.message);
+    }
+     finally {
+    setLoading(false); // Met à jour l'état de chargement une fois la vérification terminée
+  }
+
+}
+console.log(token)
+verifyToken()
+  } else if (isNewPassword) {
+    
+    navigate("/login")
+    console.log(isNewPassword)
+  }
+  
+},[token])
+
  // change values of password
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -47,6 +63,10 @@ function Password() {
     setShowPassword(!showPassword);
   };
 
+  const Edit = () => {
+    setIsEditing(!isEditing); // Toggle edit mode
+  };
+
   const handleSaveClick = async () => {
     if (passwords.newPassword !== passwords.confirmPassword) {
       setErrorMessage("Les mots de passe ne correspondent pas"); // Set error message if passwords do not match
@@ -57,43 +77,34 @@ function Password() {
     }
 
     try {
-      const token = localStorage.getItem("token");
       await axios.put(
-        `${import.meta.env.VITE_BACKEND_URL}/users/${userId}/password`,
-        { ...user, newPassword: passwords }, // Update user password in the backend
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      setIsEditing(false);
-      fetchUserData(); // Refresh user data after password change
-      setErrorMessage(""); // Clear error message
+      `${import.meta.env.VITE_BACKEND_URL}/reset-password`, {
+          token: token, // Token reçu par e-mail
+          newPassword: passwords.newPassword, // Nouveau mot de passe
+        });
+      localStorage.clear();
+      navigate("/login")
+      setIsNewPassword(isNewPassword);
+      // Redirection ou message de succès
     } catch (error) {
       console.error("Error updating password:", error);
       setErrorMessage("Erreur lors de la mise à jour du mot de passe");
     }
   };
 
-  const Edit = () => {
-    setIsEditing(!isEditing); // Toggle edit mode
-  };
-
-  useEffect(() => {
-    // Fetch user data on component mount and when userId changes
-    fetchUserData();
-  }, [userId]);
-
   return (
     <>
-      {user ? ( // Check if user data is available
-        <>
+      {loading ? ( // Check if user data is available
+        <p>Loading...</p>
+      ) : IsTokenValid ? (
+        <div className="max-sm:min-h-[87.5vh] sm:min-h-[87.5vh] flex flex-col p-2 items-center justify-center">
             <div>
+              <h1 className="text-4xl font-bold text-dark dark:text-white mb-8">
+                Réinitialiser votre mot de passe</h1>
               <label className="mb-3 block text-base font-medium text-dark dark:text-white">
                 Nouveau Mot de passe
               </label>
-              <div className="relative">
+              <div className="relative mb-7">
                 <input
                   type={showPassword ? "text" : "password"}
                   name="newPassword"
@@ -147,12 +158,42 @@ function Password() {
                 </button>
               </div>
             </div>
-        </>
+            </div>
       ) : (
-        <p>Loading...</p> // Loading state while fetching user data
-      )}
+       <p>{errorMessage || "Le token est invalide."}</p>
+     )}
     </>
   );
+  // // return (
+  // //   <>
+  // //     {loading ? (
+  // //       <p>Loading...</p>
+  // //     ) : IsTokenValid ? (
+  // //       <div>
+  // //         <label>Nouveau Mot de passe</label>
+  // //         <input
+  // //           type={showPassword ? "text" : "password"}
+  // //           name="newPassword"
+  // //           placeholder="Nouveau mot de passe"
+  // //           value={passwords.newPassword}
+  // //           onChange={handleInputChange}
+  // //         />
+  // //         <label>Confirmation du nouveau Mot de passe</label>
+  // //         <input
+  // //           type={showPassword ? "text" : "password"}
+  // //           name="confirmPassword"
+  // //           placeholder="Confirmer le mot de passe"
+  // //           value={passwords.confirmPassword}
+  // //           onChange={handleInputChange}
+  // //         />
+  // //         {errorMessage && <p>{errorMessage}</p>}
+  // //         <button onClick={handleSaveClick}>Sauvegarder</button>
+  // //       </div>
+  // //     ) : (
+  // //       <p>{errorMessage || "Le token est invalide."}</p>
+  // //     )}
+  // //   </>
+  // // );
 }
 
-export default Password;
+export default RecoveryPassword;

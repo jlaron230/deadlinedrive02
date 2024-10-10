@@ -36,6 +36,18 @@ class UserManager extends AbstractManager {
     );
   }
 
+
+  // Method to find a user by their email for one user or null
+  findUserByEmailRecovery(email) {
+    return this.database.query(
+        `SELECT * FROM ${this.table} WHERE email = ?`, 
+        [email]
+    ).then(results => {
+        // S'assurer que nous renvoyons un seul utilisateur ou null
+        return results.length > 0 ? results[0] : null;
+    });
+}
+
   // Method to modify the user's password in the database
    modifyPassword(id, hashPassword){
      return this.database.query(
